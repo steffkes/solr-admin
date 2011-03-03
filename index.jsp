@@ -24,7 +24,13 @@
     
     <div id="wrapper">
     
-        <p id="header"><a href="./"><span>Apache SOLR</span></a></p>
+        <div id="header">
+            
+            <a href="./"><span>Apache SOLR</span></a>
+
+            <p id="environment">&nbsp;</p>
+
+        </div>
         
         <div id="main" class="clearfix">
         

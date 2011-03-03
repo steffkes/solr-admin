@@ -63,6 +63,7 @@ ul
 #header
 {
     padding-bottom: 10px;
+    position: relative;
 }
 
 #header a
@@ -120,6 +121,39 @@ ul
 #meta .irc a { background-image: url( ../img/ico/users.png ); }
 #meta .mailinglist a { background-image: url( ../img/ico/mail.png ); }
 #meta .wiki-query-syntax a { background-image: url( ../img/ico/script-code.png ); }
+
+#environment
+{
+    background-image: url( ../img/ico/box.png );
+    background-position: 10px 50%;
+    border: 1px solid #c0c0c0;
+    display: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    padding-left: 31px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#environment.prod
+{
+    background-color: #c37f7f;
+    border-color: #b15757;
+    color: #fff;
+}
+
+#environment.test
+{
+    background-color: #f5f5b2;
+    border-color: #e4e433;
+}
+
+#environment.dev
+{
+    background-color: #cce7cc;
+    border-color: #66b866;
+}
 
 #menu-wrapper
 {

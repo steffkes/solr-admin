@@ -23,8 +23,62 @@ var sammy = $.sammy
             'run',
             function( event, config )
             {
+                var environment = $( '#environment' );
+                $.ajax
+                (
+                    {
+                        url : $( 'li[id]:first-child', app.menu_element ).attr( 'data-basepath' ) + '/admin/system?wt=json',
+                        dataType : 'json',
+                        beforeSend : function( arr, form, options )
+                        {
+                            environment
+                                .show();
+                            
+                            loader.show( environment );
+                        },
+                        success : function( response )
+                        {
+                            var environment_args = null;
+
+                            if( response.jvm && response.jvm.jmx && response.jvm.jmx.commandLineArgs )
+                            {
+                                environment_args = response.jvm.jmx.commandLineArgs.join( ' | ' )
+                                                        .match( /-Dsolr.environment=((dev|test|prod)?[\w\d]+)/i );
+                            }
+
+                            if( !environment_args )
+                            {
+                                environment
+                                    .hide();
+                            }
+
+                            if( environment_args && environment_args[1] )
+                            {
+                                environment
+                                    .html( environment_args[1] );
+                            }
+
+                            if( environment_args && environment_args[2] )
+                            {
+                                environment
+                                    .addClass( environment_args[2] );
+                            }
+                        },
+                        error : function()
+                        {
+                            environment
+                                .remove();
+                        },
+                        complete : function()
+                        {
+                            loader.hide( environment );
+                        }
+                    }
+                );
+
                 if( 0 === config.start_url.length )
                 {
+
                     location.href = $( 'li[id]:first-child a', app.menu_element ).attr( 'href' );
                     return false;
                 }
