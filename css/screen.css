@@ -1,0 +1,726 @@
+*
+{
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+}
+
+body, h1, h2, h3, h4, h5, h6, a, button, input, select, option, textarea, th, td
+{
+    color: #333;
+    font: 12px/1.6em "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+}
+
+body
+{
+    padding: 20px;
+    text-align: center;
+}
+
+a, button
+{
+    cursor: pointer;
+}
+
+button, input, select, textarea
+{
+    border: 1px solid #c0c0c0;
+    padding: 2px;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+pre
+{
+    color: #333;
+    text-align: left;
+}
+
+ul
+{
+    list-style: none;
+}
+
+.clearfix:after { clear: both; content: "."; display: block; font-size: 0; height: 0; visibility: hidden; }
+.clearfix       { display: block; }
+
+.loader
+{
+    background-image: url( ../img/loader.gif ) !important;
+}
+
+#wrapper
+{
+    margin: 0 auto;
+    text-align: left;
+    width: 1002px;
+}
+
+#header
+{
+    padding-bottom: 10px;
+}
+
+#header a
+{
+    background-image: url( ../img/solr.png );
+    display: block;
+    height: 78px;
+    width: 200px;
+}
+
+#header a span
+{
+    display: none;
+}
+
+#main
+{
+    background-image: url( ../img/div.gif );
+    background-position: 200px 0;
+    background-repeat: repeat-y;
+    border: 1px solid #c0c0c0;
+    min-height: 600px;
+    position: relative;
+}
+
+#meta
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: -26px;
+}
+
+#meta li
+{
+    float: left;
+}
+
+#meta li a
+{
+    background-position: 10px 50%;
+    display: block;
+    height: 25px;
+    line-height: 25px;
+    padding-left: 31px;
+    padding-right: 10px;
+}
+
+#meta li a:hover
+{
+    background-color: #f0f0f0;
+}
+
+#meta .documentation a { background-image: url( ../img/ico/document-text.png ); }
+#meta .issues a { background-image: url( ../img/ico/bug.png ); }
+#meta .mailinglist a { background-image: url( ../img/ico/mail.png ); }
+#meta .wiki-query-syntax a { background-image: url( ../img/ico/script-code.png ); }
+
+#menu-wrapper
+{
+    float: left;
+    width: 201px;
+}
+
+#menu a
+{
+    display: block;
+    padding: 4px 2px;
+}
+
+#menu .active
+{
+    background-color: #fafafa;
+}
+
+#menu p a
+{
+    background-position: 97% 50%;
+    background-image: url( ../img/ico/status-offline.png );
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#menu .active p a
+{
+    background-color: #c0c0c0; /* #a5a5a6 */
+    font-weight: bold;
+}
+
+#menu p a small
+{
+    color: #b5b5b5;
+    font-weight: normal;
+}
+
+#menu p a small span.txt
+{
+    display: none;
+}
+
+#menu p a small:hover span.txt
+{
+    display: inline;
+}
+
+#menu .busy
+{
+    border-right-color: #f6f5d9;
+}
+
+#menu .busy p a
+{
+    background-color: #f6f5d9;
+    background-image: url( ../img/ico/status-away.png );
+}
+
+#menu .offline
+{
+    border-right-color: #eccfcf;
+}
+
+#menu .offline p a
+{
+    background-color: #eccfcf;
+    background-image: url( ../img/ico/status-busy.png );
+}
+
+#menu .online
+{
+    border-right-color: #cfecd3;
+}
+
+#menu .online p a
+{
+    background-color: #cfecd3;
+    background-image: url( ../img/ico/status.png );
+}
+
+#menu .ping small
+{
+    color: #c0c0c0;
+}
+
+#menu li
+{
+    border-bottom: 1px solid #c0c0c0;
+    /*border-right: 1px solid #f0f0f0;*/
+}
+
+#menu li:last-child
+{
+    border-bottom: 0;
+}
+
+#menu ul ul
+{
+    display: none;
+    padding-bottom: 5px;
+}
+
+#menu ul .active ul
+{
+    display: block;
+}
+
+#menu ul ul li
+{
+    border-bottom: 0;
+    /*border-right: 0;*/
+    border-right: 1px solid #f0f0f0;
+}
+
+#menu ul ul li a
+{
+    background-position: 7px 50%;
+    border-bottom: 1px solid #f0f0f0;
+    color: #bbb;
+    margin-left: 15px;
+    padding-left: 26px;
+}
+
+#menu ul ul li:last-child a
+{
+    border-bottom: 0;
+}
+
+#menu ul ul li a:hover
+{
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+#menu ul ul li.active
+{
+    background-color: #fff;
+    border-right-color: #fff;
+}
+
+#menu ul ul li.active a
+{
+    color: #333;
+}
+
+#menu ul ul li.active a:hover
+{
+    background-color: transparent;
+}
+
+#menu .query a { background-image: url( ../img/ico/magnifier.png ); }
+#menu .schema a { background-image: url( ../img/ico/table.png ); }
+#menu .config a { background-image: url( ../img/ico/gear.png ); }
+#menu .analysis a { background-image: url( ../img/ico/funnel.png ); }
+#menu .schema-browser a { background-image: url( ../img/ico/book-open-text.png ); }
+#menu .stats a { background-image: url( ../img/ico/chart.png ); }
+#menu .info a { background-image: url( ../img/ico/information.png ); }
+#menu .replication a { background-image: url( ../img/ico/node.png ); }
+#menu .distribution a { background-image: url( ../img/ico/node-select.png ); }
+#menu .zookeeper a { background-image: url( ../img/ico/network-cloud.png ); }
+#menu .ping a { background-image: url( ../img/ico/system-monitor.png ); }
+#menu .logging a { background-image: url( ../img/ico/inbox-document-text.png ); }
+#menu .plugins a { background-image: url( ../img/ico/block.png ); }
+#menu .java-properties a { background-image: url( ../img/ico/jar.png ); }
+
+#content-wrapper
+{
+    float: right;
+    width: 799px;
+}
+
+#content
+{
+    padding: 10px;
+}
+
+#content.single
+{
+    padding: 0;
+}
+
+#content iframe
+{
+    border: 0;
+    display: block;
+    min-height: 400px;
+    width: 100%;
+}
+
+#content .block
+{
+    margin-bottom: 10px;
+}
+
+#content .block h2
+{
+    background-color: #fafafa;
+    background-position: 5px 50%;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: bold;
+    padding: 5px;
+    padding-left: 26px;
+}
+
+#content .block.disabled,
+#content .block.disabled h2
+{
+    color: #c0c0c0;
+}
+
+#content .block .message,
+#content .block .content
+{
+    padding: 5px;
+}
+
+#content .block .message
+{
+    display: none;
+}
+
+/* dashboard */
+
+#content #dashboard .block
+{
+    width: 49%;
+}
+
+#content #dashboard #system
+{
+    background-color: #ff0;
+    float: left;
+}
+
+#content #dashboard #replication
+{
+    float: right;
+}
+
+#content #dashboard #replication .is-replicating
+{
+    background-position: 99% 50%;
+    display: block;
+}
+
+#content #dashboard #replication.is-master .slave
+{
+    display: none;
+}
+
+#content #dashboard #replication table
+{
+    border-collapse: collapse;
+}
+
+#content #dashboard #replication table th,
+#content #dashboard #replication table td
+{
+    border: 1px solid #f0f0f0;
+    padding: 2px 5px;
+}
+
+#content #dashboard #replication table thead td
+{
+    border: 0;
+}
+
+#content #dashboard #replication table thead th,
+#content #dashboard #replication table tbody td
+{
+    border-right: 0;
+}
+
+#content #dashboard #replication table thead th
+{
+    border-top: 0;
+    font-weight: bold;
+}
+
+#content #dashboard #replication table tbody th,
+#content #dashboard #replication table tbody td
+{
+    border-bottom: 0;
+    text-align: right;
+}
+
+#content #dashboard #replication table tbody th
+{
+    border-left: 0;
+}
+
+#content #dashboard #replication table tbody th,
+#content #dashboard #replication dt
+{
+    width: 100px;
+}
+
+#content #dashboard #replication dl
+{
+    display: none;
+    margin-top: 10px;
+}
+
+#content #dashboard #replication dt,
+#content #dashboard #replication dd
+{
+    display: block;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+#content #dashboard #replication dt
+{
+    border-right: 1px solid #f0f0f0;
+    float: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-right: 3px;
+    text-align: right;
+}
+
+
+#content #dashboard #statistics
+{
+    background-color: #00f;
+    float: left;
+}
+
+#content #dashboard #dataimport
+{
+    background-color: #0ff;
+    float: right;
+}
+
+#content #dashboard #system h2 { background-image: url( ../img/ico/server.png ); }
+#content #dashboard #statistics h2 { background-image: url( ../img/ico/chart.png ); }
+#content #dashboard #replication h2 { background-image: url( ../img/ico/node.png ); }
+#content #dashboard #replication.is-master h2 { background-image: url( ../img/ico/node-master.png ); }
+#content #dashboard #replication.is-slave h2 { background-image: url( ../img/ico/node-slave.png ); }
+#content #dashboard #dataimport h2 { background-image: url( ../img/ico/document-import.png ); }
+
+/* analysis */
+
+#content #analysis .settings
+{
+    clear: both;
+    padding-top: 10px;
+}
+
+#content #analysis .settings select.loader
+{
+    background-position: 3px 50%;
+    padding-left: 21px;
+}
+
+#content #analysis .settings select optgroup
+{
+    font-style: normal;
+    padding: 5px;
+}
+
+#content #analysis .settings select option
+{
+    padding-left: 10px;
+}
+
+#content #analysis .settings div
+{
+    float: right;
+    width: 49%;
+}
+
+#content #analysis .settings button
+{
+    float: right;
+}
+
+#content #analysis .index label,
+#content #analysis .query label
+{
+    display: block;
+}
+
+#content #analysis .index textarea,
+#content #analysis .query textarea
+{
+    display: block;
+    width: 100%;
+}
+
+#content #analysis .index
+{
+    float: left;
+    width: 49%;
+}
+
+#content #analysis .query
+{
+    float: right;
+    width: 49%;
+}
+
+#content #analysis .analysis-result .index
+{
+    background-color: #ff0;
+}
+
+#content #analysis .analysis-result .query
+{
+    background-color: #f00;
+}
+
+/* plugins */
+
+#content #plugins .loader
+{
+    background-position: 0 50%;
+    padding-left: 21px;
+}
+
+#content #plugins .block h2 { background-image: url( ../img/ico/block-small.png ); }
+#content #plugins #core h2 { background-image: url( ../img/ico/terminal.png ); }
+#content #plugins #queryhandler h2 { background-image: url( ../img/ico/magnifier.png ); }
+#content #plugins #updatehandler h2 { background-image: url( ../img/ico/arrow-circle.png ); }
+#content #plugins #cache h2 { background-image: url( ../img/ico/disk-black.png ); }
+#content #plugins #highlighting h2 { background-image: url( ../img/ico/highlighter-text.png ); }
+
+#content #plugins .block li
+{
+    clear: left;
+    padding-top: 10px;
+}
+
+#content #plugins .block li a
+{
+    background-image: url( ../img/ico/chevron-small-expand.png );
+    background-position: 0 50%;
+    display: block;
+    font-weight: bold;
+    padding-left: 21px;
+}
+
+#content #plugins .block dl
+{
+    display: none;
+    padding-top: 5px;
+    margin-left: 21px;
+}
+
+#content #plugins .block dt
+{
+    clear: left;
+    float: left;
+    margin-right: 5px;
+    width: 80px;
+}
+
+#content #plugins .block li.expanded a
+{
+    background-image: url( ../img/ico/chevron-small.png );
+}
+
+#content #plugins .block li.expanded dl
+{
+    display: block;
+}
+
+/* query */
+
+#content #query
+{
+    background-image: url( ../img/div.gif );
+    background-position: 180px 0;
+    background-repeat: repeat-y;
+}
+
+#content #query #form
+{
+    float: left;
+    width: 170px;
+}
+
+#content #query #form label
+{
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+}
+
+#content #query #form input,
+#content #query #form textarea
+{
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+#content #query #form #start
+{
+    float: left;
+    margin-right: 2%;
+    width: 49%;
+}
+
+#content #query #form #rows
+{
+    width: 49%;
+}
+
+#content #query #form .checkbox input
+{
+    margin-bottom: 0;
+    width: auto;
+}
+
+#content #query #form fieldset,
+#content #query #form .optional.expanded
+{
+    border: 1px solid #fff;
+    border-top: 1px solid #c0c0c0;
+    margin-bottom: 10px;
+}
+
+#content #query #form fieldset legend,
+#content #query #form .optional.expanded legend
+{
+    display: block;
+    margin-left: 10px;
+    padding: 0px 5px;
+}
+
+#content #query #form fieldset legend label
+{
+    margin-top: 0;
+}
+
+#content #query #form fieldset .fieldset
+{
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+#content #query #form .optional
+{
+    border: 0;
+}
+
+#content #query #form .optional .fieldset
+{
+    display: none;
+}
+
+#content #query #form .optional legend
+{
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#content #query #form .optional.expanded .fieldset
+{
+    display: block;
+}
+
+#content #query #result
+{
+    display: none;
+    float: right;
+    width: 590px;
+}
+
+#content #query #result #url
+{
+    margin-bottom: 10px;
+}
+
+#content #query #result #url input
+{
+    background-image: url( ../img/ico/ui-address-bar.png );
+    background-position: 5px 50%;
+    border-color: #f0f0f0;
+    box-shadow: 1px 1px 0 #f0f0f0;
+    -moz-box-shadow: 1px 1px 0 #f0f0f0;
+    -webkit-box-shadow: 1px 1px 0 #f0f0f0;
+    color: #c0c0c0;
+    display: block;
+    padding: 5px;
+    padding-left: 26px;
+    width: 100%;
+}
+
+#content #query #result #url input:focus,
+#content #query #result #url input:hover
+{
+    border-color: #c0c0c0;
+    box-shadow: 1px 1px 0 #d8d8d8;
+    -moz-box-shadow: 1px 1px 0 #d8d8d8;
+    -webkit-box-shadow: 1px 1px 0 #d8d8d8;
+    color: #333;
+}
+
+#content #query #result #response
+{
+}
