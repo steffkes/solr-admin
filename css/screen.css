@@ -55,6 +55,7 @@ ul
 #wrapper
 {
     margin: 0 auto;
+    margin-bottom: 30px;
     text-align: left;
     width: 1002px;
 }
@@ -90,9 +91,8 @@ ul
 #meta
 {
     position: absolute;
-    top: 0;
+    bottom: -26px;
     right: 0;
-    margin-top: -26px;
 }
 
 #meta li
@@ -117,6 +117,7 @@ ul
 
 #meta .documentation a { background-image: url( ../img/ico/document-text.png ); }
 #meta .issues a { background-image: url( ../img/ico/bug.png ); }
+#meta .irc a { background-image: url( ../img/ico/users.png ); }
 #meta .mailinglist a { background-image: url( ../img/ico/mail.png ); }
 #meta .wiki-query-syntax a { background-image: url( ../img/ico/script-code.png ); }
 

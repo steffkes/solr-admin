@@ -109,7 +109,8 @@ if( null != cores )
                     
                     <li class="documentation"><a href="http://lucene.apache.org/solr/"><span>Documentation</span></a></li>
                     <li class="issues"><a href="http://issues.apache.org/jira/browse/SOLR"><span>Issue Tracker</span></a></li>
-                    <li class="mailinglist"><a href="mailto:solr-user@lucene.apache.org"><span>Send Email</span></a></li>
+                    <li class="irc"><a href="http://webchat.freenode.net/?channels=#solr"><span>IRC Channel</span></a></li>
+                    <li class="mailinglist"><a href="http://wiki.apache.org/solr/UsingMailingLists"><span>Community forum</span></a></li>
                     <li class="wiki-query-syntax"><a href="http://wiki.apache.org/solr/SolrQuerySyntax"><span>Solr Query Syntax</span></a></li>
                     
                 </ul>
