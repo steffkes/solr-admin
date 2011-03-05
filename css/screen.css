@@ -52,6 +52,11 @@ ul
     background-image: url( ../img/loader.gif ) !important;
 }
 
+.loader-light
+{
+    background-image: url( ../img/loader-light.gif ) !important;
+}
+
 #wrapper
 {
     margin: 0 auto;
@@ -159,6 +164,14 @@ ul
 {
     float: left;
     width: 201px;
+}
+
+#menu p.loader
+{
+    background-position: 5px 50%;
+    color: #c0c0c0;
+    margin-top: 5px;
+    padding-left: 26px;
 }
 
 #menu a
@@ -304,6 +317,13 @@ ul
 #menu ul ul li.active a:hover
 {
     background-color: transparent;
+}
+
+#menu #index p a
+{
+    background-image: url( ../img/ico/dashboard.png );
+    background-position: 5px 50%;
+    padding-left: 26px;
 }
 
 #menu .query a { background-image: url( ../img/ico/magnifier.png ); }

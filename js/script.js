@@ -23,11 +23,97 @@ var sammy = $.sammy
             'run',
             function( event, config )
             {
+                $.ajax
+                (
+                    {
+                        url : app_config.solr_path + app_config.core_admin_path + '?wt=json',
+                        dataType : 'json',
+                        beforeSend : function( arr, form, options )
+                        {
+                            app.menu_element
+                                .after( '<p class="loader loader-light">Loading Core Data ...</p>' );
+                        },
+                        success : function( response )
+                        {
+                            app.is_multicore = 'undefined' === typeof response.status[''];
+                            app.check_environment = false;
+
+                            for( var core_name in response.status )
+                            {
+                                var core_path = app_config.solr_path + '/' + core_name;
+
+                                if( !core_name )
+                                {
+                                    core_name = 'singlecore';
+                                    core_path = app_config.solr_path
+                                }
+
+                                if( !app.check_environment )
+                                {
+                                    app.check_environment = true;
+
+                                    sammy.trigger
+                                    (
+                                        'check_environment',
+                                        { basepath : core_path }
+                                    );
+                                }
+
+                                var core_tpl = '<li id="' + core_name + '" data-basepath="' + core_path + '">' + "\n"
+                                             + '    <p><a href="#/' + core_name + '">' + core_name + '</a></p>' + "\n"
+                                             + '    <ul>' + "\n"
+        
+                                             + '        <li class="query"><a rel="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n"
+                                             + '        <li class="schema"><a href="' + core_path + '/admin/file/?file=schema.xml" rel="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n"
+                                             + '        <li class="config"><a href="' +core_path + '/admin/file/?file=solrconfig.xml" rel="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
+                                             + '        <li class="replication"><a href="' + core_path + '/admin/replication/index.jsp"><span>Replication</span></a></li>' + "\n"
+                                             + '        <li class="analysis"><a href="' + core_path + '/admin/analysis.jsp?highlight=on" rel="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
+                                             + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp"><span>Schema Browser</span></a></li>' + "\n"
+                                             + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp"><span>Statistics</span></a></li>' + "\n"
+                                             + '        <li class="info"><a href="' + core_path + '/admin/registry.jsp"><span>Info</span></a></li>' + "\n"
+                                             + '        <li class="zookeeper"><a href="' + core_path + '/admin/zookeeper.jsp"><span>ZooKeeper</span></a></li>' + "\n"
+                                             + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
+                                             + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
+                                             + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/plugins"><span>Plugins</span></a></li>' + "\n"
+                                             + '        <li class="java-properties"><a href="' + core_path + '/admin/get-properties.jsp"><span>Java-Properties</span></a></li>' + "\n"
+        
+                                             + '    </ul>' + "\n"
+                                             + '</li>';
+
+                                app.menu_element
+                                    .append( core_tpl );
+                            }
+                        },
+                        error : function()
+                        {
+                        },
+                        complete : function()
+                        {
+                            app.menu_element.next( 'p' )
+                                .remove();
+                        }
+                    }
+                );
+
+                if( 0 === config.start_url.length )
+                {
+
+                    location.href = '#/';
+                    return false;
+                }
+            }
+        );
+      
+        this.bind
+        (
+            'check_environment',
+            function( event )
+            {
                 var environment = $( '#environment' );
                 $.ajax
                 (
                     {
-                        url : $( 'li[id]:first-child', app.menu_element ).attr( 'data-basepath' ) + '/admin/system?wt=json',
+                        url : this.params.basepath + '/admin/system?wt=json',
                         dataType : 'json',
                         beforeSend : function( arr, form, options )
                         {
@@ -75,13 +161,6 @@ var sammy = $.sammy
                         }
                     }
                 );
-
-                if( 0 === config.start_url.length )
-                {
-
-                    location.href = $( 'li[id]:first-child a', app.menu_element ).attr( 'href' );
-                    return false;
-                }
             }
         );
         
@@ -148,11 +227,19 @@ var sammy = $.sammy
                 
                 $( 'ul li.active', app.menu_element )
                     .removeClass( 'active' );
-                
-                this.active_core = $( '#' + this.params.splat[0], app.menu_element );
-                
-                this.active_core
-                    .addClass( 'active' );
+
+                if( this.params.splat )
+                {
+                    this.active_core = $( '#' + this.params.splat[0], app.menu_element );
+                    
+                    this.active_core
+                        .addClass( 'active' );
+                }
+                else
+                {
+                    $( '#index', app.menu_element )
+                        .addClass( 'active' );
+                }
             }
         );
 
@@ -952,12 +1039,28 @@ var sammy = $.sammy
                 );
             }
         );
+        
+        // #/
+        this.get
+        (
+            /^#\/$/,
+            function( context )
+            {
+                var content_element = $( '#content' );
+
+                content_element
+                    .html( 'solr-admin index' );
+            }
+        );
     }
 );
 
 var solr_admin = function()
 {
-    menu_element : null,
+    menu_element = null,
+
+    is_multicore = null,
+    check_environment = null,
     
     this.init_menu = function()
     {
