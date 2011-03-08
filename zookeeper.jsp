@@ -70,7 +70,7 @@ static class ZKPrinter
 		keeperAddr = addr;
 		if (addr == null)
 		{
-			response.setIntHeader("Status", 404);
+			response.setStatus(404);
 			out.println
 			(
 				"{" +
@@ -88,7 +88,7 @@ static class ZKPrinter
 		}
 		catch (TimeoutException e)
 		{
-			response.setIntHeader("Status", 503);
+			response.setStatus(503);
 			out.println
 			(
 				"{" +
@@ -103,7 +103,7 @@ static class ZKPrinter
 		{
 			// Restore the interrupted status
 			Thread.currentThread().interrupt();
-			response.setIntHeader("Status", 503);
+			response.setStatus(503);
 			out.println
 			(
 				"{" +
@@ -184,7 +184,7 @@ static class ZKPrinter
 	{
 		try
 		{
-			response.setIntHeader("Status", 500);
+			response.setStatus(500);
 			out.println
 			(
 				"{" +
