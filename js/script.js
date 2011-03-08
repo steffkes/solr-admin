@@ -1106,7 +1106,166 @@ var sammy = $.sammy
                 var content_element = $( '#content' );
 
                 content_element
-                    .html( 'solr-admin index' );
+                    .html( '<div id="index"></div>' );
+
+                $.ajax
+                (
+                    {
+                        url : app_config.solr_path + app_config.core_admin_path + '?wt=json',
+                        dataType : 'json',
+                        context : $( '#index', content_element ),
+                        beforeSend : function( arr, form, options )
+                        {
+                            this
+                                .html( '<div class="loader">Loading Dashboard ...</div>' );
+                        },
+                        success : function( response )
+                        {
+                            var system_url = false;
+
+                            for( var core_name in response.status )
+                            {
+                                if( core_name )
+                                {
+                                    core_name = '/' + core_name;
+                                }
+
+                                system_url = app_config.solr_path + core_name + '/admin/system';
+
+                                if( system_url )
+                                {
+                                    break;
+                                }
+                            }
+
+                            $.ajax
+                            (
+                                {
+                                    url : system_url + '?wt=json',
+                                    dataType : 'json',
+                                    context : this,
+                                    beforeSend : function( arr, form, options )
+                                    {
+                                    },
+                                    success : function( response )
+                                    {
+                                        $.ajax
+                                        (
+                                            {
+                                                url : 'tpl/index.html',
+                                                context : this,
+                                                beforeSend : function( arr, form, options )
+                                                {
+                                                },
+                                                success : function( template )
+                                                {
+                                                    this
+                                                        .html( template );
+                                    
+                                                    var data = {
+                                                        'start_time' : response['jvm']['jmx']['startTime'],
+                                                        'host' : response['core']['host'],
+                                                        'cwd' : response['core']['directory']['cwd'],
+                                                        'jvm' : response['jvm']['name'] + ' (' + response['jvm']['version'] + ')',
+                                                        'solr_spec_version' : response['lucene']['solr-spec-version'],
+                                                        'solr_impl_version' : response['lucene']['solr-impl-version'],
+                                                        'lucene_spec_version' : response['lucene']['lucene-spec-version'],
+                                                        'lucene_impl_version' : response['lucene']['lucene-impl-version'],
+                                                        'memory-bar-max' : parseInt( response['jvm']['memory']['raw']['max'] ),
+                                                        'memory-bar-total' : parseInt( response['jvm']['memory']['raw']['total'] ),
+                                                        'memory-bar-used' : parseInt( response['jvm']['memory']['raw']['used'] )
+                                                    };
+                                    
+                                                    for( var key in data )
+                                                    {                                                        
+                                                        $( '.value.' + key, this )
+                                                            .html( data[key] );
+                                                    }
+
+                                                    var cmd_arg_key_element = $( 'dt.command_line_args', this );
+                                                    var cmd_arg_element = $( '.value.command_line_args', this );
+
+                                                    for( var key in response['jvm']['jmx']['commandLineArgs'] )
+                                                    {
+                                                        cmd_arg_element = cmd_arg_element.clone();
+                                                        cmd_arg_element.html( response['jvm']['jmx']['commandLineArgs'][key] );
+
+                                                        cmd_arg_key_element
+                                                            .after( cmd_arg_element );
+                                                    }
+
+                                                    $( '.value.command_line_args:last', this )
+                                                        .remove();
+
+                                                    $( '.timeago', this )
+                                                        .timeago();
+
+                                                    $( 'dt:odd', this )
+                                                        .addClass( 'odd' );
+                                                    
+                                                    var max_height = Math.round( $( '#memory-bar-max', this ).height() );
+
+                                                    var total_height = Math.round( ( data['memory-bar-total'] * max_height ) / data['memory-bar-max'] );
+                                                    $( '#memory-bar-total', this )
+                                                        .height( total_height );
+
+                                                    var used_height = Math.round( ( data['memory-bar-used'] * max_height ) / data['memory-bar-max'] );
+                                                    $( '#memory-bar-used', this )
+                                                        .height( used_height );
+
+                                                    var memory_percentage = ( ( data['memory-bar-used'] / data['memory-bar-max'] ) * 100 ).toFixed(1);
+                                                    var headline = $( '#memory h2 span', this );
+                                                        
+                                                    headline
+                                                        .html( headline.html() + ' (' + memory_percentage + '%)' );
+
+                                                    $( '#memory-bar .value', this )
+                                                        .each
+                                                        (
+                                                            function()
+                                                            {
+                                                                var self = $( this );
+
+                                                                var byte_value = parseInt( self.html() );
+
+                                                                self
+                                                                    .attr( 'title', 'raw: ' + byte_value + ' B' );
+
+                                                                byte_value /= 1024;
+                                                                byte_value /= 1024;
+                                                                byte_value = byte_value.toFixed( 2 ) + ' MB';
+
+                                                                self
+                                                                    .html( byte_value );
+                                                            }
+                                                        );
+                                                },
+                                                error : function( xhr, text_status, error_thrown)
+                                                {
+                                                },
+                                                complete : function( xhr, text_status )
+                                                {
+                                                }
+                                            }
+                                        );
+                                    },
+                                    error : function( xhr, text_status, error_thrown)
+                                    {
+                                    },
+                                    complete : function( xhr, text_status )
+                                    {
+                                    }
+                                }
+                            );
+                        },
+                        error : function( xhr, text_status, error_thrown)
+                        {
+                        },
+                        complete : function( xhr, text_status )
+                        {
+                        }
+                    }
+                );
             }
         );
     }
