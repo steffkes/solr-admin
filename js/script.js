@@ -71,7 +71,7 @@ var sammy = $.sammy
                                              + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp"><span>Schema Browser</span></a></li>' + "\n"
                                              + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp"><span>Statistics</span></a></li>' + "\n"
                                              + '        <li class="info"><a href="' + core_path + '/admin/registry.jsp"><span>Info</span></a></li>' + "\n"
-                                             + '        <li class="zookeeper"><a href="' + core_path + '/admin/zookeeper.jsp"><span>ZooKeeper</span></a></li>' + "\n"
+                                             + '        <li class="zookeeper"><a href="' + core_path + '/solr-admin/zookeeper.jsp" rel="#/' + core_name + '/zookeeper"><span>ZooKeeper</span></a></li>' + "\n"
                                              + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                              + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
                                              + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/plugins"><span>Plugins</span></a></li>' + "\n"
@@ -240,6 +240,63 @@ var sammy = $.sammy
                     $( '#index', app.menu_element )
                         .addClass( 'active' );
                 }
+            }
+        );
+
+        // #/:core/zookeeper
+        this.get
+        (
+            /^#\/([\w\d]+)\/(zookeeper)$/,
+            function( context )
+            {
+                var content_element = $( '#content' );
+                var menu_item = $( 'li.' + context.params.splat[1], this.active_core );
+
+                menu_item
+                    .addClass( 'active' );
+                
+                content_element
+                    .html( '<div id="zookeeper"></div>' );
+
+                $.ajax
+                (
+                    {
+                        url : $( 'a', menu_item ).attr( 'href' ),
+                        dataType : 'json',
+                        context : $( '#zookeeper', content_element ),
+                        beforeSend : function( xhr, settings )
+                        {
+                            this
+                                .html( '<div class="loader">Loading ...</div>' );
+                        },
+                        success : function( response, text_status, xhr )
+                        {
+                            this
+                                .html( '<div id="zookeeper-tree" class="tree"></div>' );
+                            
+                            $( '#zookeeper-tree', this )
+                                .jstree
+                                (
+                                    {
+                                        "plugins" : [ "json_data" ],
+                                        "json_data" : {
+                                            "data" : response.tree,
+                                            "progressive_render" : true
+                                        },
+                                        "core" : {
+                                            "animation" : 0
+                                        }
+                                    }
+                                );
+                        },
+                        error : function( xhr, text_status, error_thrown)
+                        {
+                        },
+                        complete : function( xhr, text_status )
+                        {
+                        }
+                    }
+                );
             }
         );
 
