@@ -969,6 +969,13 @@ ul
     white-space: nowrap;
 }
 
+#content #index #memory div .value.upper
+{
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
 #content #index #memory #memory-bar-max
 {
     background-color: #f0f0f0;

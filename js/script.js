@@ -1204,14 +1204,23 @@ var sammy = $.sammy
                                                         .addClass( 'odd' );
                                                     
                                                     var max_height = Math.round( $( '#memory-bar-max', this ).height() );
-
                                                     var total_height = Math.round( ( data['memory-bar-total'] * max_height ) / data['memory-bar-max'] );
+                                                    var used_height = Math.round( ( data['memory-bar-used'] * max_height ) / data['memory-bar-max'] );
+
+                                                    var memory_bar_total_value = $( '#memory-bar-total span', this ).first();
+
                                                     $( '#memory-bar-total', this )
                                                         .height( total_height );
-
-                                                    var used_height = Math.round( ( data['memory-bar-used'] * max_height ) / data['memory-bar-max'] );
+                                                    
                                                     $( '#memory-bar-used', this )
                                                         .height( used_height );
+
+                                                    if( used_height < total_height + memory_bar_total_value.height() )
+                                                    {
+                                                        memory_bar_total_value
+                                                            .addClass( 'upper' )
+                                                            .css( 'margin-top', memory_bar_total_value.height() * -1 );
+                                                    }
 
                                                     var memory_percentage = ( ( data['memory-bar-used'] / data['memory-bar-max'] ) * 100 ).toFixed(1);
                                                     var headline = $( '#memory h2 span', this );
