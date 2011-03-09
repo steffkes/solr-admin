@@ -129,7 +129,7 @@ var sammy = $.sammy
                             if( response.jvm && response.jvm.jmx && response.jvm.jmx.commandLineArgs )
                             {
                                 environment_args = response.jvm.jmx.commandLineArgs.join( ' | ' )
-                                                        .match( /-Dsolr.environment=((dev|test|prod)?[\w\d]+)/i );
+                                                        .match( /-Dsolr.environment=((dev|test|prod)?[\w\d]*)/i );
                             }
 
                             if( !environment_args )
