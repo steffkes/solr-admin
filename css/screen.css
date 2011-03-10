@@ -268,7 +268,8 @@ ul
 #menu ul ul
 {
     display: none;
-    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 10px;
 }
 
 #menu ul .active ul
