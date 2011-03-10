@@ -437,32 +437,50 @@ var sammy = $.sammy
                                 {
                                     var content = '';
                                     
-                                    content += '<optgroup label="Fields">' + "\n";
+                                    var fields = [];
                                     for( var field_name in response.schema.fields )
                                     {
-                                        content += '<option value="fieldname=' + field_name + '">';
-                                        content += field_name;
-                                        content += '</option>' + "\n";
+                                        fields.push
+                                        (
+                                            '<option value="fieldname=' + field_name + '">' + field_name + '</option>'
+                                        );
                                     }
-                                    content += '</optgroup>' + "\n";
+                                    if( 0 !== fields.length )
+                                    {
+                                        content += '<optgroup label="Fields">' + "\n";
+                                        content += fields.join( "\n" ) + "\n";
+                                        content += '</optgroup>' + "\n";
+                                    }
                                     
-                                    content += '<optgroup label="Types">' + "\n";
+                                    var types = [];
                                     for( var type_name in response.schema.types )
                                     {
-                                        content += '<option value="fieldtype=' + type_name + '">';
-                                        content += type_name;
-                                        content += '</option>' + "\n";
+                                        types.push
+                                        (
+                                            '<option value="fieldtype=' + type_name + '">' + type_name + '</option>'
+                                        );
                                     }
-                                    content += '</optgroup>' + "\n";
+                                    if( 0 !== types.length )
+                                    {
+                                        content += '<optgroup label="Types">' + "\n";
+                                        content += types.join( "\n" ) + "\n";
+                                        content += '</optgroup>' + "\n";
+                                    }
                                     
-                                    content += '<optgroup label="DynamicFields">' + "\n";
+                                    var dynamic_fields = [];
                                     for( var type_name in response.schema.dynamicFields )
                                     {
-                                        content += '<option value="fieldtype=' + type_name + '">';
-                                        content += type_name;
-                                        content += '</option>' + "\n";
+                                        dynamic_fields.push
+                                        (
+                                            '<option value="fieldtype=' + type_name + '">' + type_name + '</option>'
+                                        );
                                     }
-                                    content += '</optgroup>' + "\n";
+                                    if( 0 !== dynamic_fields.length )
+                                    {
+                                        content += '<optgroup label="DynamicFields">' + "\n";
+                                        content += dynamic_fields.join( "\n" ) + "\n";
+                                        content += '</optgroup>' + "\n";
+                                    }
                                     
                                     this
                                         .html( content );
