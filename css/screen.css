@@ -194,6 +194,11 @@ ul
     padding-bottom: 5px;
 }
 
+#menu p a:hover
+{
+    background-color: #f0f0f0;
+}
+
 #menu .active p a
 {
     background-color: #c0c0c0; /* #a5a5a6 */
