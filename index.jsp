@@ -20,6 +20,7 @@
     
     app_config.solr_path = '<%= request.getContextPath() %>';
     app_config.core_admin_path = '<%= cores.getAdminPath() %>';
+    app_config.zookeeper_path = 'zookeeper.jsp';
     
     </script>
     

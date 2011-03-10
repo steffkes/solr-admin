@@ -341,7 +341,6 @@ ul
 #menu .info a { background-image: url( ../img/ico/information.png ); }
 #menu .replication a { background-image: url( ../img/ico/node.png ); }
 #menu .distribution a { background-image: url( ../img/ico/node-select.png ); }
-#menu .zookeeper a { background-image: url( ../img/ico/network-cloud.png ); }
 #menu .ping a { background-image: url( ../img/ico/system-monitor.png ); }
 #menu .logging a { background-image: url( ../img/ico/inbox-document-text.png ); }
 #menu .plugins a { background-image: url( ../img/ico/block.png ); }
@@ -882,6 +881,7 @@ ul
 
 #content #index #data h2 { background-image: url( ../img/ico/server.png ); }
 #content #index #memory h2 { background-image: url( ../img/ico/battery.png ); }
+#content #index #zookeeper h2 { background-image: url( ../img/ico/network-cloud.png ); }
 
 #content #index #data .odd
 {

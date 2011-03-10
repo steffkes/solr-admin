@@ -116,59 +116,6 @@ var sammy = $.sammy
             }
         );
 
-        // #/:core/zookeeper
-        this.get
-        (
-            /^#\/([\w\d]+)\/(zookeeper)$/,
-            function( context )
-            {
-                var content_element = $( '#content' );
-               
-                content_element
-                    .html( '<div id="zookeeper"></div>' );
-
-                $.ajax
-                (
-                    {
-                        url : $( 'a', menu_item ).attr( 'href' ),
-                        dataType : 'json',
-                        context : $( '#zookeeper', content_element ),
-                        beforeSend : function( xhr, settings )
-                        {
-                            this
-                                .html( '<div class="loader">Loading ...</div>' );
-                        },
-                        success : function( response, text_status, xhr )
-                        {
-                            this
-                                .html( '<div id="zookeeper-tree" class="tree"></div>' );
-                            
-                            $( '#zookeeper-tree', this )
-                                .jstree
-                                (
-                                    {
-                                        "plugins" : [ "json_data" ],
-                                        "json_data" : {
-                                            "data" : response.tree,
-                                            "progressive_render" : true
-                                        },
-                                        "core" : {
-                                            "animation" : 0
-                                        }
-                                    }
-                                );
-                        },
-                        error : function( xhr, text_status, error_thrown)
-                        {
-                        },
-                        complete : function( xhr, text_status )
-                        {
-                        }
-                    }
-                );
-            }
-        );
-
         // #/:core/plugins
         this.get
         (
@@ -1045,6 +992,8 @@ var sammy = $.sammy
                             $( 'dt:odd', this )
                                 .addClass( 'odd' );
                             
+                            // -- memory bar
+
                             var max_height = Math.round( $( '#memory-bar-max', this ).height() );
                             var total_height = Math.round( ( data['memory-bar-total'] * max_height ) / data['memory-bar-max'] );
                             var used_height = Math.round( ( data['memory-bar-used'] * max_height ) / data['memory-bar-max'] );
@@ -1090,6 +1039,68 @@ var sammy = $.sammy
                                             .html( byte_value );
                                     }
                                 );
+                            
+                            // -- zookeeper tree
+
+                            var zookeeper_element = $( '#zookeeper', this );
+
+                            var has_zookeeper = false;
+                            zookeeper_element.hide();
+
+                            for( var key in app.dashboard_values['jvm']['jmx']['commandLineArgs'] )
+                            {
+                                if( 0 === app.dashboard_values['jvm']['jmx']['commandLineArgs'][key].indexOf( '-Dzk' ) )
+                                {
+                                    has_zookeeper = true;
+                                    break;
+                                }
+                            }
+
+                            if( has_zookeeper )
+                            {
+                                zookeeper_element
+                                    .show();
+
+                                $.ajax
+                                (
+                                    {
+                                        url : app.config.zookeeper_path,
+                                        dataType : 'json',
+                                        context : $( '.content', zookeeper_element ),
+                                        beforeSend : function( xhr, settings )
+                                        {
+                                            this
+                                                .html( '<div class="loader">Loading ...</div>' );
+                                        },
+                                        success : function( response, text_status, xhr )
+                                        {
+                                            this
+                                                .html( '<div id="zookeeper-tree" class="tree"></div>' );
+                                            
+                                            $( '#zookeeper-tree', this )
+                                                .jstree
+                                                (
+                                                    {
+                                                        "plugins" : [ "json_data" ],
+                                                        "json_data" : {
+                                                            "data" : response.tree,
+                                                            "progressive_render" : true
+                                                        },
+                                                        "core" : {
+                                                            "animation" : 0
+                                                        }
+                                                    }
+                                                );
+                                        },
+                                        error : function( xhr, text_status, error_thrown)
+                                        {
+                                        },
+                                        complete : function( xhr, text_status )
+                                        {
+                                        }
+                                    }
+                                );
+                            }
                         },
                         error : function( xhr, text_status, error_thrown)
                         {
@@ -1110,6 +1121,7 @@ var solr_admin = function()
 
     is_multicore = null,
     active_core = null,
+    environment_basepath = null,
 
     config = null,
     params = null,
@@ -1177,8 +1189,6 @@ $( document ).ready
                 {
                     app.is_multicore = 'undefined' === typeof response.status[''];
 
-                    var environment_basepath = null;
-
                     for( var core_name in response.status )
                     {
                         var core_path = app.config.solr_path + '/' + core_name;
@@ -1189,9 +1199,9 @@ $( document ).ready
                             core_path = app.config.solr_path
                         }
 
-                        if( !environment_basepath )
+                        if( !app.environment_basepath )
                         {
-                            environment_basepath = core_path;
+                            app.environment_basepath = core_path;
                         }
 
                         var core_tpl = '<li id="' + core_name + '" data-basepath="' + core_path + '">' + "\n"
@@ -1206,7 +1216,6 @@ $( document ).ready
                                      + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp"><span>Schema Browser</span></a></li>' + "\n"
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="info"><a href="' + core_path + '/admin/registry.jsp"><span>Info</span></a></li>' + "\n"
-                                     + '        <li class="zookeeper"><a href="' + core_path + '/solr-admin/zookeeper.jsp" rel="#/' + core_name + '/zookeeper"><span>ZooKeeper</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/plugins"><span>Plugins</span></a></li>' + "\n"
@@ -1222,7 +1231,7 @@ $( document ).ready
                     $.ajax
                     (
                         {
-                            url : environment_basepath + '/admin/system?wt=json',
+                            url : app.environment_basepath + '/admin/system?wt=json',
                             dataType : 'json',
                             context : $( '#environment' ),
                             beforeSend : function( arr, form, options )
