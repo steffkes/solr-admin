@@ -123,11 +123,7 @@ var sammy = $.sammy
             function( context )
             {
                 var content_element = $( '#content' );
-                var menu_item = $( 'li.' + context.params.splat[1], this.active_core );
-
-                menu_item
-                    .addClass( 'active' );
-                
+               
                 content_element
                     .html( '<div id="zookeeper"></div>' );
 
@@ -659,10 +655,6 @@ var sammy = $.sammy
             function( context )
             {
                 var content_element = $( '#content' );
-                var menu_item = $( 'li.' + context.params.splat[1], this.active_core );
-
-                menu_item
-                    .addClass( 'active' );
 
                 content_element
                     //.addClass( 'single' )
