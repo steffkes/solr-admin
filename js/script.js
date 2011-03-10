@@ -1133,11 +1133,6 @@ var solr_admin = function()
                 }
             );
     }
-
-    this.config = function()
-    {
-        return this.config;
-    }
     
     this.__construct = function()
     {
