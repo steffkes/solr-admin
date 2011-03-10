@@ -874,7 +874,7 @@ ul
     width: 24%;
 }
 
-#content #index #data h2 { background-image: url( ../img/ico/dashboard.png ); }
+#content #index #data h2 { background-image: url( ../img/ico/server.png ); }
 #content #index #memory h2 { background-image: url( ../img/ico/battery.png ); }
 
 #content #index #data .odd
