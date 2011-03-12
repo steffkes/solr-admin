@@ -660,14 +660,14 @@ ul
 #content #query
 {
     background-image: url( ../img/div.gif );
-    background-position: 180px 0;
+    background-position: 210px 0;
     background-repeat: repeat-y;
 }
 
 #content #query #form
 {
     float: left;
-    width: 170px;
+    width: 200px;
 }
 
 #content #query #form label
@@ -755,7 +755,7 @@ ul
 {
     display: none;
     float: right;
-    width: 590px;
+    width: 560px;
 }
 
 #content #query #result #url
