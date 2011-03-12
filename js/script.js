@@ -948,6 +948,51 @@ var sammy = $.sammy
                         );
                         //*/
                         
+                        $.ajax
+                        (
+                            {
+                                url : core_basepath + '/admin/file/?file=admin-extra.html',
+                                dataType : 'html',
+                                context : $( '#admin-extra', dashboard_element ),
+                                beforeSend : function( xhr, settings )
+                                {
+                                    $( 'h2', this )
+                                        .addClass( 'loader' );
+                                    
+                                    $( '.message', this )
+                                        .show()
+                                        .html( 'Loading' );
+
+                                    $( '.content', this )
+                                        .hide();
+                                },
+                                success : function( response, text_status, xhr )
+                                {
+                                    $( '.message', this )
+                                        .hide()
+                                        .empty();
+
+                                    $( '.content', this )
+                                        .show()
+                                        .html( response );
+                                },
+                                error : function( xhr, text_status, error_thrown)
+                                {
+                                    this
+                                        .addClass( 'disabled' );
+                                    
+                                    $( '.message', this )
+                                        .show()
+                                        .html( 'We found no "admin-extra.html" file.' );
+                                },
+                                complete : function( xhr, text_status )
+                                {
+                                    $( 'h2', this )
+                                        .removeClass( 'loader' );
+                                }
+                            }
+                        );
+                        
                     }
                 );
             }
