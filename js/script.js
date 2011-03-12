@@ -624,6 +624,32 @@ var sammy = $.sammy
                 content_element
                     .removeClass( 'single' );
                 
+                var core_menu = $( 'ul', this.active_core );
+                if( !core_menu.data( 'admin-extra-loaded' ) )
+                {
+                    core_menu.data( 'admin-extra-loaded', new Date() );
+
+                    $.get
+                    (
+                        core_basepath + '/admin/file/?file=admin-extra.menu-top.html',
+                        function( menu_extra )
+                        {
+                            core_menu
+                                .prepend( menu_extra );
+                        }
+                    );
+                    
+                    $.get
+                    (
+                        core_basepath + '/admin/file/?file=admin-extra.menu-bottom.html',
+                        function( menu_extra )
+                        {
+                            core_menu
+                                .append( menu_extra );
+                        }
+                    );
+                }
+                
                 $.get
                 (
                     'tpl/dashboard.html',
