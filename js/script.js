@@ -723,7 +723,6 @@ var sammy = $.sammy
                         );
                         //*/
                         
-                        /*
                         $.ajax
                         (
                             {
@@ -737,7 +736,10 @@ var sammy = $.sammy
                                     
                                     $( '.message', this )
                                         .show()
-                                        .html( 'Loading' );
+                                        .html( 'Loading ...' );
+                                    
+                                    $( '.content' )
+                                        .hide();
                                 },
                                 success : function( response, text_status, xhr )
                                 {
@@ -745,15 +747,12 @@ var sammy = $.sammy
                                         .empty()
                                         .hide();
                                     
-                                    $( 'dl', this )
+                                    $( '.content', this )
                                         .show();
                                         
                                     var data = {
                                         'index_num-docs' : response['index']['numDocs'],
                                         'index_max-doc' : response['index']['maxDoc'],
-                                        'index_optimized' : response['index']['optimized'] ? 'true' : 'false',
-                                        'index_current' : response['index']['current'] ? 'true' : 'false',
-                                        'index_has-deletions' : response['index']['hasDeletions'] ? 'true' : 'false',
                                         'index_last-modified' : response['index']['lastModified']
                                     };
                                     
@@ -765,6 +764,97 @@ var sammy = $.sammy
                                         $( '.value.' + key, this )
                                             .html( data[key] );
                                     }
+
+                                    var optimized_element = $( '.value.index_optimized', this );
+                                    if( response['index']['optimized'] )
+                                    {
+                                        optimized_element
+                                            .addClass( 'ico-1' );
+
+                                        $( 'span', optimized_element )
+                                            .html( 'yes' );
+                                    }
+                                    else
+                                    {
+                                        optimized_element
+                                            .addClass( 'ico-0' );
+
+                                        $( 'span', optimized_element )
+                                            .html( 'no' );
+                                    }
+
+                                    var current_element = $( '.value.index_current', this );
+                                    if( response['index']['current'] )
+                                    {
+                                        current_element
+                                            .addClass( 'ico-1' );
+
+                                        $( 'span', current_element )
+                                            .html( 'yes' );
+                                    }
+                                    else
+                                    {
+                                        current_element
+                                            .addClass( 'ico-0' );
+
+                                        $( 'span', current_element )
+                                            .html( 'no' );
+                                    }
+
+                                    var deletions_element = $( '.value.index_has-deletions', this );
+                                    if( response['index']['hasDeletions'] )
+                                    {
+                                        deletions_element.prev()
+                                            .show();
+                                        
+                                        deletions_element
+                                            .show()
+                                            .addClass( 'ico-0' );
+
+                                        $( 'span', deletions_element )
+                                            .html( 'yes' );
+                                    }
+
+                                    $( 'a', optimized_element )
+                                        .die( 'click' )
+                                        .live
+                                        (
+                                            'click',
+                                            function( event )
+                                            {                        
+                                                $.ajax
+                                                (
+                                                    {
+                                                        url : core_basepath + '/update?optimize=true&waitFlush=true&wt=json',
+                                                        dataType : 'json',
+                                                        context : $( this ),
+                                                        beforeSend : function( xhr, settings )
+                                                        {
+                                                            this
+                                                                .addClass( 'loader' );
+                                                        },
+                                                        success : function( response, text_status, xhr )
+                                                        {
+                                                            this.parents( 'dd' )
+                                                                .removeClass( 'ico-0' )
+                                                                .addClass( 'ico-1' );
+                                                        },
+                                                        error : function( xhr, text_status, error_thrown)
+                                                        {
+                                                            console.warn( 'd0h, optimize broken!' );
+                                                        },
+                                                        complete : function( xhr, text_status )
+                                                        {
+                                                            this
+                                                                .removeClass( 'loader' );
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        );
+
+                                    $( '.timeago', this )
+                                         .timeago();
                                 },
                                 error : function( xhr, text_status, error_thrown)
                                 {
@@ -782,7 +872,6 @@ var sammy = $.sammy
                                 }
                             }
                         );
-                        //*/
                         
                         $.ajax
                         (
