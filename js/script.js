@@ -618,6 +618,7 @@ var sammy = $.sammy
             /^#\/([\w\d]+)$/,
             function( context )
             {
+                var self = this;
                 var core_basepath = this.active_core.attr( 'data-basepath' );
                 var content_element = $( '#content' );
                 
@@ -971,6 +972,9 @@ var sammy = $.sammy
                                     $( '.message', this )
                                         .show()
                                         .html( 'Replication is not configured' );
+                                    
+                                    $( '.replication', self.active_core )
+                                        .hide();
                                 },
                                 complete : function( xhr, text_status )
                                 {
