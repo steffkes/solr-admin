@@ -697,12 +697,22 @@ ul
     margin-left: 21px;
 }
 
+#content #plugins .block dt,
+#content #plugins .block dd
+{
+    float: left;
+}
+
 #content #plugins .block dt
 {
     clear: left;
-    float: left;
-    margin-right: 5px;
-    width: 80px;
+    margin-right: 1%;
+    width: 11%;
+}
+
+#content #plugins .block dd
+{
+    width: 85%;
 }
 
 #content #plugins .block li.expanded a
@@ -713,6 +723,23 @@ ul
 #content #plugins .block li.expanded dl
 {
     display: block;
+}
+
+#content #plugins .block dl dl
+{
+    display: block;
+    padding-top: 0;
+    margin-left: 0;
+}
+
+#content #plugins .block dl dl dt
+{
+    width: 28%;
+}
+
+#content #plugins .block dl dl dd
+{
+    width: 70%;
 }
 
 /* query */

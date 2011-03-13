@@ -116,7 +116,7 @@ var sammy = $.sammy
             }
         );
 
-        // #/:core/info(/statistics)
+        // #/:core/info(/stats)
         this.get
         (
             /^#\/([\w\d]+)\/info/,
@@ -124,9 +124,18 @@ var sammy = $.sammy
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
                 var content_element = $( '#content' );
+                var show_stats = 0 <= this.path.indexOf( 'stats' );
                 
-                $( 'li.plugins', this.active_core )
-                    .addClass( 'active' );
+                if( show_stats )
+                {
+                    $( 'li.stats', this.active_core )
+                        .addClass( 'active' );
+                }
+                else
+                {
+                    $( 'li.plugins', this.active_core )
+                        .addClass( 'active' );
+                }
                 
                 content_element
                     .html( '<div id="plugins"></div>' );
@@ -198,7 +207,7 @@ var sammy = $.sammy
                                     for( var i = 0; i < sort_key_length; i++ )
                                     {
                                         content += '<li><a>' + sort_table[key][sort_key][i] + '</a>' + "\n";
-                                        content += '<dl>' + "\n";
+                                        content += '<dl class="clearfix">' + "\n";
                                         
                                         var details = response.plugins[key][ sort_table[key][sort_key][i] ];
                                         for( var detail_key in details )
@@ -207,6 +216,21 @@ var sammy = $.sammy
                                             {
                                                 content += '<dt>' + detail_key + ':</dt>' + "\n";
                                                 content += '<dd>' + details[detail_key] + '</dd>' + "\n";
+                                            }
+                                            else if( 'stats' === detail_key && details[detail_key] && show_stats )
+                                            {
+                                                content += '<dt>' + detail_key + ':</dt>' + "\n";
+                                                content += '<dd>' + "\n";
+
+                                                content += '<dl class="clearfix">' + "\n";
+                                                    for( var stats_key in details[detail_key] )
+                                                    {
+                                                        content += '<dt>' + stats_key + ':</dt>' + "\n";
+                                                        content += '<dd>' + details[detail_key][stats_key] + '</dd>' + "\n";
+                                                    }
+                                                content += '</dl>' + "\n";
+
+                                                content += '</dd>' + "\n";
                                             }
                                         }
                                         
@@ -1396,7 +1420,7 @@ $( document ).ready
                                      + '        <li class="replication"><a href="' + core_path + '/admin/replication/index.jsp"><span>Replication</span></a></li>' + "\n"
                                      + '        <li class="analysis"><a href="' + core_path + '/admin/analysis.jsp?highlight=on" rel="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
                                      + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp"><span>Schema Browser</span></a></li>' + "\n"
-                                     + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp"><span>Statistics</span></a></li>' + "\n"
+                                     + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
