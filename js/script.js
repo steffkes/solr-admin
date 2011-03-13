@@ -116,10 +116,10 @@ var sammy = $.sammy
             }
         );
 
-        // #/:core/plugins
+        // #/:core/info(/statistics)
         this.get
         (
-            /^#\/([\w\d]+)\/plugins$/,
+            /^#\/([\w\d]+)\/info/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -134,7 +134,7 @@ var sammy = $.sammy
                 $.ajax
                 (
                     {
-                        url : core_basepath + '/admin/plugins?wt=json',
+                        url : core_basepath + '/admin/mbeans?stats=true&wt=json',
                         dataType : 'json',
                         context : $( '#plugins', content_element ),
                         beforeSend : function( xhr, settings )
@@ -147,6 +147,21 @@ var sammy = $.sammy
                             var sort_table = {};
                             var content = '';
                             
+                            response.plugins = {};
+                            var plugin_key = null;
+
+                            for( var i = 0; i < response['solr-mbeans'].length; i++ )
+                            {
+                                if( !( i % 2 ) )
+                                {
+                                    plugin_key = response['solr-mbeans'][i];
+                                }
+                                else
+                                {
+                                    response.plugins[plugin_key] = response['solr-mbeans'][i];
+                                }
+                            }
+
                             for( var key in response.plugins )
                             {
                                 sort_table[key] = {
@@ -188,8 +203,11 @@ var sammy = $.sammy
                                         var details = response.plugins[key][ sort_table[key][sort_key][i] ];
                                         for( var detail_key in details )
                                         {
-                                            content += '<dt>' + detail_key + ':</dt>' + "\n";
-                                            content += '<dd>' + details[detail_key] + '</dd>' + "\n";
+                                            if( 'stats' !== detail_key )
+                                            {
+                                                content += '<dt>' + detail_key + ':</dt>' + "\n";
+                                                content += '<dd>' + details[detail_key] + '</dd>' + "\n";
+                                            }
                                         }
                                         
                                         content += '</dl>' + "\n";
@@ -1381,7 +1399,7 @@ $( document ).ready
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
-                                     + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/plugins"><span>Plugins</span></a></li>' + "\n"
+                                     + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
                                      + '        <li class="java-properties"><a href="' + core_path + '/admin/get-properties.jsp"><span>Java-Properties</span></a></li>' + "\n"
 
                                      + '    </ul>' + "\n"
