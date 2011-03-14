@@ -116,6 +116,297 @@ var sammy = $.sammy
             }
         );
 
+        this.bind
+        (
+            'schema_browser_load',
+            function( event, params )
+            {
+                var core_basepath = params.active_core.attr( 'data-basepath' );
+                var content_element = $( '#content' );
+
+                if( app.schema_browser_data )
+                {
+                    var schema_browser_element = $( '#schema-browser', content_element );
+                    params.callback( schema_browser_element );
+                }
+                else
+                {
+                    content_element
+                        .html( '<div id="schema-browser"><div class="loader">Loading ...</div></div>' );
+                    
+                    $.ajax
+                    (
+                        {
+                            url : core_basepath + '/admin/luke?wt=json',
+                            dataType : 'json',
+                            beforeSend : function( xhr, settings )
+                            {
+                            },
+                            success : function( response, text_status, xhr )
+                            {
+                                app.schema_browser_data = {
+                                    default_search_field : null,
+                                    unique_key_field : null,
+                                    key : {},
+                                    fields : {},
+                                    dynamic_fields : {},
+                                    types : {}
+                                };
+
+                                app.schema_browser_data.fields = response.fields;
+                                app.schema_browser_data.key = response.info.key;
+
+                                $.ajax
+                                (
+                                    {
+                                        url : core_basepath + '/admin/luke?show=schema&wt=json',
+                                        dataType : 'json',
+                                        beforeSend : function( xhr, settings )
+                                        {
+                                        },
+                                        success : function( response, text_status, xhr )
+                                        {
+                                            app.schema_browser_data.default_search_field = response.schema.defaultSearchField;
+                                            app.schema_browser_data.unique_key_field = response.schema.uniqueKeyField;
+
+                                            app.schema_browser_data.dynamic_fields = response.schema.dynamicFields;
+                                            app.schema_browser_data.types = response.schema.types;
+
+                                            var lukeArrayToHash = function( array )
+                                            {
+                                                var hash = {};
+                                                for( var i = 0; i < array.length; i += 2 )
+                                                {
+                                                    hash[ array[i] ] = array[i+1];
+                                                }
+                                                return hash;
+                                            }
+
+                                            for( var field in response.schema.fields )
+                                            {
+                                                app.schema_browser_data.fields[field] = $.extend
+                                                (
+                                                    {},
+                                                    app.schema_browser_data.fields[field],
+                                                    response.schema.fields[field]
+                                                );
+                                            }
+
+                                            for( var field in app.schema_browser_data.fields )
+                                            {
+                                                if( app.schema_browser_data.fields[field].histogram )
+                                                {
+                                                    app.schema_browser_data.fields[field].histogram = 
+                                                        lukeArrayToHash( app.schema_browser_data.fields[field].histogram );
+                                                }
+
+                                                if( app.schema_browser_data.fields[field].topTerms )
+                                                {
+                                                    app.schema_browser_data.fields[field].topTerms = 
+                                                        lukeArrayToHash( app.schema_browser_data.fields[field].topTerms );
+                                                }
+                                            }
+
+                                            $.get
+                                            (
+                                                'tpl/schema-browser.html',
+                                                function( template )
+                                                {
+                                                    content_element
+                                                        .html( template );
+                                                    
+                                                    var schema_browser_element = $( '#schema-browser', content_element );
+                                                    var related_element = $( '#related', schema_browser_element );
+                                                    var related_select_element = $( 'select', related_element );
+                                                    var data_element = $( '#data', schema_browser_element );
+
+                                                    var related_options = '';
+                                                    
+                                                    var fields = [];
+                                                    for( var field_name in app.schema_browser_data.fields )
+                                                    {
+                                                        fields.push
+                                                        (
+                                                            '<option value="/field/' + field_name + '">' + field_name + '</option>'
+                                                        );
+                                                    }
+                                                    if( 0 !== fields.length )
+                                                    {
+                                                        fields.sort();
+                                                        related_options += '<optgroup label="Fields">' + "\n";
+                                                        related_options += fields.join( "\n" ) + "\n";
+                                                        related_options += '</optgroup>' + "\n";
+                                                    }
+                                                    
+                                                    var dynamic_fields = [];
+                                                    for( var type_name in app.schema_browser_data.dynamic_fields )
+                                                    {
+                                                        dynamic_fields.push
+                                                        (
+                                                            '<option value="/dynamic-field/' + type_name + '">' + type_name + '</option>'
+                                                        );
+                                                    }
+                                                    if( 0 !== dynamic_fields.length )
+                                                    {
+                                                        dynamic_fields.sort();
+                                                        related_options += '<optgroup label="DynamicFields">' + "\n";
+                                                        related_options += dynamic_fields.join( "\n" ) + "\n";
+                                                        related_options += '</optgroup>' + "\n";
+                                                    }
+                                                    
+                                                    var types = [];
+                                                    for( var type_name in app.schema_browser_data.types )
+                                                    {
+                                                        types.push
+                                                        (
+                                                            '<option value="/type/' + type_name + '">' + type_name + '</option>'
+                                                        );
+                                                    }
+                                                    if( 0 !== types.length )
+                                                    {
+                                                        types.sort();
+                                                        related_options += '<optgroup label="Types">' + "\n";
+                                                        related_options += types.join( "\n" ) + "\n";
+                                                        related_options += '</optgroup>' + "\n";
+                                                    }
+
+                                                    related_select_element
+                                                        .attr( 'rel', '#/' + $( 'p a', params.active_core ).html() + '/schema-browser' )
+                                                        .append( related_options );
+                                                    
+                                                    related_select_element
+                                                        .die( 'change' )
+                                                        .live
+                                                        (
+                                                            'change',
+                                                            function( event )
+                                                            {
+                                                                var select_element = $( this );
+                                                                var option_element = $( 'option:selected', select_element );
+
+                                                                location.href = select_element.attr( 'rel' ) + option_element.val();
+                                                                return false;
+                                                            }
+                                                        );
+
+                                                    params.callback( schema_browser_element );
+                                                }
+                                            );
+                                        },
+                                        error : function( xhr, text_status, error_thrown)
+                                        {
+                                        },
+                                        complete : function( xhr, text_status )
+                                        {
+                                        }
+                                    }
+                                );
+
+                            },
+                            error : function( xhr, text_status, error_thrown)
+                            {
+                            },
+                            complete : function( xhr, text_status )
+                            {
+                            }
+                        }
+                    );
+                }
+            }
+        );
+
+        // #/:core/schema-browser
+        this.get
+        (
+            /^#\/([\w\d]+)\/(schema-browser)$/,
+            function( context )
+            {
+                var callback = function( schema_browser_element )
+                {
+                    $( '#data', schema_browser_element )
+                        .html( 'schema-browser/index' );
+                }
+
+                sammy.trigger
+                (
+                    'schema_browser_load',
+                    {
+                        callback : callback,
+                        active_core : this.active_core
+                    }
+                );
+            }
+        );
+
+        // #/:core/schema-browser/field/$field
+        this.get
+        (
+            /^#\/([\w\d]+)\/(schema-browser)\/field\/(.*)$/,
+            function( context )
+            {
+                var callback = function( schema_browser_element )
+                {
+                    $( '#data', schema_browser_element )
+                        .html( 'schema-browser/field' );
+                }
+
+                sammy.trigger
+                (
+                    'schema_browser_load',
+                    {
+                        callback : callback,
+                        active_core : this.active_core
+                    }
+                );
+            }
+        );
+
+        // #/:core/schema-browser/dynamic-field/$field
+        this.get
+        (
+            /^#\/([\w\d]+)\/(schema-browser)\/dynamic-field\/(.*)$/,
+            function( context )
+            {
+                var callback = function( schema_browser_element )
+                {
+                    $( '#data', schema_browser_element )
+                        .html( 'schema-browser/dynamic-field' );
+                }
+
+                sammy.trigger
+                (
+                    'schema_browser_load',
+                    {
+                        callback : callback,
+                        active_core : this.active_core
+                    }
+                );
+            }
+        );
+
+        // #/:core/schema-browser/type/$field
+        this.get
+        (
+            /^#\/([\w\d]+)\/(schema-browser)\/type\/(.*)$/,
+            function( context )
+            {
+                var callback = function( schema_browser_element )
+                {
+                    $( '#data', schema_browser_element )
+                        .html( 'schema-browser/type' );
+                }
+
+                sammy.trigger
+                (
+                    'schema_browser_load',
+                    {
+                        callback : callback,
+                        active_core : this.active_core
+                    }
+                );
+            }
+        );
+
         // #/:core/info(/stats)
         this.get
         (
@@ -1331,6 +1622,7 @@ var solr_admin = function()
     config = null,
     params = null,
     dashboard_values = null,
+    schema_browser_data = null,
     
     this.init_menu = function()
     {
@@ -1418,7 +1710,7 @@ $( document ).ready
                                      + '        <li class="config"><a href="' +core_path + '/admin/file/?file=solrconfig.xml" rel="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
                                      + '        <li class="replication optional"><a href="' + core_path + '/admin/replication/index.jsp"><span>Replication</span></a></li>' + "\n"
                                      + '        <li class="analysis"><a href="' + core_path + '/admin/analysis.jsp?highlight=on" rel="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
-                                     + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp"><span>Schema Browser</span></a></li>' + "\n"
+                                     + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp" rel="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"

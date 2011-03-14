@@ -1115,3 +1115,47 @@ ul
     border-color: #969696;
     color: #969696;
 }
+
+/* schema-browser */
+
+#content #schema-browser .loader
+{
+    background-position: 0 50%;
+    padding-left: 21px;   
+}
+
+#content #schema-browser.loaded
+{
+    background-image: url( ../img/div.gif );
+    background-position: 21% 0;
+    background-repeat: repeat-y;
+}
+
+#content #schema-browser #data
+{
+    background-color: #ff0;
+    float: right;
+    width: 78%;
+}
+
+#content #schema-browser #related
+{
+    float: left;
+    width: 20%;
+}
+
+#content #schema-browser #related select
+{
+    width: 100%;
+}
+
+#content #schema-browser #related select optgroup
+{
+    font-style: normal;
+    padding: 5px;
+}
+
+#content #schema-browser #related select option
+{
+    padding-left: 10px;
+}
