@@ -341,7 +341,7 @@ var sammy = $.sammy
         // #/:core/schema-browser/field/$field
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)\/field\/(.*)$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/field\/(.+))$/,
             function( context )
             {
                 var callback = function( schema_browser_element )
@@ -355,7 +355,8 @@ var sammy = $.sammy
                     'schema_browser_load',
                     {
                         callback : callback,
-                        active_core : this.active_core
+                        active_core : this.active_core,
+                        route_params : this.params
                     }
                 );
             }
@@ -364,7 +365,7 @@ var sammy = $.sammy
         // #/:core/schema-browser/dynamic-field/$field
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)\/dynamic-field\/(.*)$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/dynamic-field\/(.+))$/,
             function( context )
             {
                 var callback = function( schema_browser_element )
@@ -378,16 +379,17 @@ var sammy = $.sammy
                     'schema_browser_load',
                     {
                         callback : callback,
-                        active_core : this.active_core
+                        active_core : this.active_core,
+                        route_params : this.params
                     }
                 );
             }
         );
 
-        // #/:core/schema-browser/type/$field
+        // #/:core/schema-browser/type/$type
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)\/type\/(.*)$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/type\/(.+))$/,
             function( context )
             {
                 var callback = function( schema_browser_element )
@@ -401,7 +403,8 @@ var sammy = $.sammy
                     'schema_browser_load',
                     {
                         callback : callback,
-                        active_core : this.active_core
+                        active_core : this.active_core,
+                        route_params : this.params
                     }
                 );
             }
