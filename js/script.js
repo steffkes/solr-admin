@@ -660,7 +660,6 @@ var sammy = $.sammy
             /^#\/([\w\d]+)$/,
             function( context )
             {
-                var self = this;
                 var core_basepath = this.active_core.attr( 'data-basepath' );
                 var content_element = $( '#content' );
                 
@@ -943,6 +942,9 @@ var sammy = $.sammy
                                     $( '.content', this )
                                         .show();
                                     
+                                    $( '.replication', context.active_core )
+                                        .show();
+                                    
                                     var is_master = 'undefined' === typeof( response['details']['slave'] );
                                     var headline = $( 'h2 span', this );
 
@@ -1014,9 +1016,6 @@ var sammy = $.sammy
                                     $( '.message', this )
                                         .show()
                                         .html( 'Replication is not configured' );
-                                    
-                                    $( '.replication', self.active_core )
-                                        .hide();
                                 },
                                 complete : function( xhr, text_status )
                                 {
@@ -1417,7 +1416,7 @@ $( document ).ready
                                      + '        <li class="query"><a rel="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n"
                                      + '        <li class="schema"><a href="' + core_path + '/admin/file/?file=schema.xml" rel="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n"
                                      + '        <li class="config"><a href="' +core_path + '/admin/file/?file=solrconfig.xml" rel="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
-                                     + '        <li class="replication"><a href="' + core_path + '/admin/replication/index.jsp"><span>Replication</span></a></li>' + "\n"
+                                     + '        <li class="replication optional"><a href="' + core_path + '/admin/replication/index.jsp"><span>Replication</span></a></li>' + "\n"
                                      + '        <li class="analysis"><a href="' + core_path + '/admin/analysis.jsp?highlight=on" rel="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
                                      + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp"><span>Schema Browser</span></a></li>' + "\n"
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"

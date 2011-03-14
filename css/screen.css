@@ -265,6 +265,11 @@ ul
     /*border-right: 1px solid #f0f0f0;*/
 }
 
+#menu li.optional
+{
+    display: none;
+}
+
 #menu li:last-child
 {
     border-bottom: 0;
