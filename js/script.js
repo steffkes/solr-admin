@@ -322,20 +322,24 @@ var sammy = $.sammy
                                             {
                                                 if( app.schema_browser_data.fields[field].histogram )
                                                 {
+                                                    var histogram = app.schema_browser_data.fields[field].histogram;
+
                                                     app.schema_browser_data.fields[field].histogram = 
-                                                        luke_array_to_struct( app.schema_browser_data.fields[field].histogram );
+                                                        luke_array_to_struct( histogram );
                                                     
                                                     app.schema_browser_data.fields[field].histogram_hash = 
-                                                        luke_array_to_hash( app.schema_browser_data.fields[field].histogram );
+                                                        luke_array_to_hash( histogram );
                                                 }
 
                                                 if( app.schema_browser_data.fields[field].topTerms )
                                                 {
+                                                    var top_terms = app.schema_browser_data.fields[field].topTerms;
+
                                                     app.schema_browser_data.fields[field].topTerms = 
-                                                        luke_array_to_struct( app.schema_browser_data.fields[field].topTerms );
+                                                        luke_array_to_struct( top_terms );
 
                                                     app.schema_browser_data.fields[field].topTerms_hash = 
-                                                        luke_array_to_hash( app.schema_browser_data.fields[field].topTerms );
+                                                        luke_array_to_hash( top_terms );
                                                 }
 
                                                 app.schema_browser_data.relations.f_t[field] = app.schema_browser_data.fields[field].type;
