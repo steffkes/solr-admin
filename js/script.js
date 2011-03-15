@@ -199,7 +199,19 @@ var sammy = $.sammy
                         .html( navigation_content );
                 }
 
-                params.callback( app.schema_browser_data, params.schema_browser_element );
+                $.get
+                (
+                    'tpl/schema-browser_'+ type + '.html',
+                    function( template )
+                    {
+                        var data_element = $( '#data', params.schema_browser_element );
+                    
+                        data_element
+                            .html( template );
+
+                        params.callback( app.schema_browser_data, data_element );
+                    }
+                );
             }
         );
 
@@ -479,10 +491,9 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema-browser)(\/(field)\/(.+))$/,
             function( context )
             {
-                var callback = function( schema_browser_data, schema_browser_element )
+                var callback = function( schema_browser_data, data_element )
                 {
-                    $( '#data', schema_browser_element )
-                        .html( 'schema-browser/field' );
+                    console.debug( data_element );
                 }
 
                 sammy.trigger
@@ -503,10 +514,9 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema-browser)(\/(dynamic-field)\/(.+))$/,
             function( context )
             {
-                var callback = function( schema_browser_data, schema_browser_element )
+                var callback = function( schema_browser_data, data_element )
                 {
-                    $( '#data', schema_browser_element )
-                        .html( 'schema-browser/dynamic-field' );
+                    console.debug( data_element );
                 }
 
                 sammy.trigger
@@ -527,10 +537,9 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema-browser)(\/(type)\/(.+))$/,
             function( context )
             {
-                var callback = function( schema_browser_data, schema_browser_element )
+                var callback = function( schema_browser_data, data_element )
                 {
-                    $( '#data', schema_browser_element )
-                        .html( 'schema-browser/type' );
+                    console.debug( data_element );
                 }
 
                 sammy.trigger
