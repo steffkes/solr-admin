@@ -241,7 +241,7 @@ var sammy = $.sammy
                     $.ajax
                     (
                         {
-                            url : core_basepath + '/admin/luke?wt=json',
+                            url : core_basepath + '/admin/luke?numTerms=50&wt=json',
                             dataType : 'json',
                             beforeSend : function( xhr, settings )
                             {
@@ -518,6 +518,101 @@ var sammy = $.sammy
                 var callback = function( schema_browser_data, data_element )
                 {
                     var field = context.params.splat[4];
+
+                    if( schema_browser_data.fields[field].topTerms_hash )
+                    {
+                        var topterms_holder_element = $( '.topterms-holder', data_element );
+                        var topterms_table_element = $( 'table', topterms_holder_element );
+
+                        var topterms_navi_less = $( 'p.navi .less', topterms_holder_element );
+                        var topterms_navi_more = $( 'p.navi .more', topterms_holder_element );
+
+                        var topterms_count = schema_browser_data.fields[field].topTerms.keys.length; 
+                        var topterms_hash = schema_browser_data.fields[field].topTerms_hash;
+                        var topterms_content = '<tbody>';
+
+                        var i = 1;
+                        for( var term in topterms_hash )
+                        {
+                            topterms_content += '<tr>' + "\n" +
+                                                '<td class="position">' + i + '</td>' + "\n" + 
+                                                '<td class="term">' + term + '</td>' + "\n" + 
+                                                '<td class="frequency">' + topterms_hash[term] + '</td>' + "\n" + 
+                                                '</tr>' + "\n";
+
+                            if( i !== topterms_count && 0 === i % 10 )
+                            {
+                                topterms_content += '</tbody><tbody>';
+                            }
+
+                            i++;
+                        }
+
+                        topterms_content += '</tbody>';
+
+                        topterms_table_element
+                            .append( topterms_content );
+                        
+                        $( 'tbody', topterms_table_element )
+                            .die( 'change' )
+                            .live
+                            (
+                                'change',
+                                function()
+                                {
+                                    var blocks = $( 'tbody', topterms_table_element );
+                                    var visible_blocks = blocks.filter( ':visible' );
+                                    var hidden_blocks = blocks.filter( ':hidden' );
+
+                                    $( 'p.head .shown', topterms_holder_element )
+                                        .html( $( 'tr', visible_blocks ).size() );
+
+                                    0 < hidden_blocks.size()
+                                        ? topterms_navi_more.show()
+                                        : topterms_navi_more.hide();
+
+                                    1 < visible_blocks.size()
+                                        ? topterms_navi_less.show()
+                                        : topterms_navi_less.hide();
+                                }
+                            );
+
+                        $( 'tbody tr:odd', topterms_table_element )
+                            .addClass( 'odd' );
+
+                        $( 'tbody:first', topterms_table_element )
+                            .show()
+                            .trigger( 'change' );
+
+                        $( 'p.head .max', topterms_holder_element )
+                            .html( schema_browser_data.fields[field].distinct );
+
+                        topterms_navi_less
+                            .die( 'click' )
+                            .live
+                            (
+                                'click',
+                                function( event )
+                                {
+                                    $( 'tbody:visible', topterms_table_element ).last()
+                                        .hide()
+                                        .trigger( 'change' );
+                                }
+                            );
+
+                        topterms_navi_more
+                            .die( 'click' )
+                            .live
+                            (
+                                'click',
+                                function( event )
+                                {
+                                    $( 'tbody:hidden', topterms_table_element ).first()
+                                        .show()
+                                        .trigger( 'change' );
+                                }
+                            );
+                    }
 
                     if( schema_browser_data.fields[field].histogram_hash )
                     {

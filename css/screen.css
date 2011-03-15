@@ -1188,6 +1188,100 @@ ul
     color: #333;
 }
 
+#content #schema-browser #data #field .topterms-holder
+{
+    float: left;
+}
+
+#content #schema-browser #data #field .topterms-holder .head .max-holder
+{
+    color: #c0c0c0;
+}
+
+#content #schema-browser #data #field .topterms-holder table
+{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#content #schema-browser #data #field .topterms-holder th,
+#content #schema-browser #data #field .topterms-holder td
+{
+    border: 1px solid #f0f0f0;
+    padding: 1px 4px;
+}
+
+#content #schema-browser #data #field .topterms-holder thead tr
+{
+    background-color: #c0c0c0;
+}
+
+#content #schema-browser #data #field .topterms-holder thead th
+{
+    text-align: left;
+}
+
+#content #schema-browser #data #field .topterms-holder tbody
+{
+    display: none;
+}
+
+#content #schema-browser #data #field .topterms-holder tbody .odd
+{
+    background-color: #f0f0f0;
+}
+
+#content #schema-browser #data #field .topterms-holder tbody .position
+{
+    color: #c0c0c0;
+    text-align: right;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi
+{
+    margin-top: 5px;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi a
+{
+    color: #c0c0c0;
+    display: block;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    width: 49%;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi a:hover
+{
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi .less
+{
+    float: left;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi .less span
+{
+    background-image: url( ../img/ico/chevron-small.png );
+    background-position: 0 50%;
+    padding-left: 18px;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi .more
+{
+    float: right;
+    text-align: right;
+}
+
+#content #schema-browser #data #field .topterms-holder .navi .more span
+{
+    background-image: url( ../img/ico/chevron-small-expand.png );
+    background-position: 100% 50%;
+    padding-right: 18px;
+}
+
 #content #schema-browser #data #field .histogram-holder
 {
     display: none;
