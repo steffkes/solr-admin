@@ -84,6 +84,7 @@
     <script type="text/javascript" src="js/jquery.timeago.js"></script>
     <script type="text/javascript" src="js/jquery.form.js"></script>
     <script type="text/javascript" src="js/jquery.sammy.js"></script>
+    <script type="text/javascript" src="js/jquery.sparkline.js"></script>
     <script type="text/javascript" src="js/jquery.jstree.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
     
