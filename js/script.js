@@ -284,7 +284,21 @@ var sammy = $.sammy
                                             app.schema_browser_data.dynamic_fields = response.schema.dynamicFields;
                                             app.schema_browser_data.types = response.schema.types;
 
-                                            var lukeArrayToHash = function( array )
+                                            var luke_array_to_struct = function( array )
+                                            {
+                                                var struct = {
+                                                    keys : [],
+                                                    values : []
+                                                };
+                                                for( var i = 0; i < array.length; i += 2 )
+                                                {
+                                                    struct.keys.push( array[i] );
+                                                    struct.values.push( array[i+1] );
+                                                }
+                                                return struct;
+                                            }
+
+                                            var luke_array_to_hash = function( array )
                                             {
                                                 var hash = {};
                                                 for( var i = 0; i < array.length; i += 2 )
@@ -309,13 +323,19 @@ var sammy = $.sammy
                                                 if( app.schema_browser_data.fields[field].histogram )
                                                 {
                                                     app.schema_browser_data.fields[field].histogram = 
-                                                        lukeArrayToHash( app.schema_browser_data.fields[field].histogram );
+                                                        luke_array_to_struct( app.schema_browser_data.fields[field].histogram );
+                                                    
+                                                    app.schema_browser_data.fields[field].histogram_hash = 
+                                                        luke_array_to_hash( app.schema_browser_data.fields[field].histogram );
                                                 }
 
                                                 if( app.schema_browser_data.fields[field].topTerms )
                                                 {
                                                     app.schema_browser_data.fields[field].topTerms = 
-                                                        lukeArrayToHash( app.schema_browser_data.fields[field].topTerms );
+                                                        luke_array_to_struct( app.schema_browser_data.fields[field].topTerms );
+
+                                                    app.schema_browser_data.fields[field].topTerms_hash = 
+                                                        luke_array_to_hash( app.schema_browser_data.fields[field].topTerms );
                                                 }
 
                                                 app.schema_browser_data.relations.f_t[field] = app.schema_browser_data.fields[field].type;
