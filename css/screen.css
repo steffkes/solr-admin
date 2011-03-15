@@ -1159,3 +1159,32 @@ ul
 {
     padding-left: 10px;
 }
+
+#content #schema-browser #related dl
+{
+    margin-top: 15px;
+}
+
+#content #schema-browser #related dl dt,
+#content #schema-browser #related dl dd
+{
+    color: #c0c0c0;
+}
+
+#content #schema-browser #related dl dt
+{
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+#content #schema-browser #related dl dd
+{
+    padding-left: 10px;
+}
+
+#content #schema-browser #related .field .field,
+#content #schema-browser #related .dynamic-field .dynamic-field,
+#content #schema-browser #related .type .type
+{
+    color: #333;
+}

@@ -118,6 +118,93 @@ var sammy = $.sammy
 
         this.bind
         (
+            'schema_browser_navi',
+            function( event, params )
+            {
+                if( params.route_params )
+                {
+                    var related_navigation_element = $( '#related dl', params.schema_browser_element );
+                    var type = params.route_params.splat[3];
+                    var value = params.route_params.splat[4];
+
+                    var navigation_data = {
+                        'fields' : [],
+                        'dynamic_fields' : [],
+                        'types' : []
+                    }
+
+                    $( '#related select option[value=' + params.route_params.splat[2] + ']', params.schema_browser_element )
+                        .attr( 'selected', 'selected' );
+
+                    if( 'field' === type )
+                    {
+                        navigation_data.fields.push( value );
+                        navigation_data.types.push( app.schema_browser_data.relations.f_t[value] );
+
+                        if( app.schema_browser_data.relations.f_df[value] )
+                        {
+                            navigation_data.dynamic_fields.push( app.schema_browser_data.relations.f_df[value] );
+                        }
+                    }
+                    else if( 'dynamic-field' === type )
+                    {
+                        navigation_data.dynamic_fields.push( value );
+                        navigation_data.types.push( app.schema_browser_data.relations.df_t[value] );
+
+                        if( app.schema_browser_data.relations.df_f[value] )
+                        {
+                            navigation_data.fields = app.schema_browser_data.relations.df_f[value];
+                        }
+                    }
+                    else if( 'type' === type )
+                    {
+                        navigation_data.types.push( value );
+                        
+                        if( app.schema_browser_data.relations.t_f[value] )
+                        {
+                            navigation_data.fields = app.schema_browser_data.relations.t_f[value];
+                        }
+                        
+                        if( app.schema_browser_data.relations.t_df[value] )
+                        {
+                            navigation_data.dynamic_fields = app.schema_browser_data.relations.t_df[value];
+                        }
+                    }
+
+                    var navigation_content = '';
+
+                    if( 0 !== navigation_data.fields.length )
+                    {
+                        navigation_data.fields.sort();
+                        navigation_content += '<dt class="field">Fields</dt>' + "\n" +
+                                              '<dd class="field">' + navigation_data.fields.join( '</dd><dd class="field">' ) + '</dd>' + "\n";
+                    }
+
+                    if( 0 !== navigation_data.dynamic_fields.length )
+                    {
+                        navigation_data.dynamic_fields.sort();
+                        navigation_content += '<dt class="dynamic-field">Dynamic Fields</dt>' + "\n" +
+                                              '<dd class="dynamic-field">' + navigation_data.dynamic_fields.join( '</dd><dd class="dynamic-field">' ) + '</dd>' + "\n";
+                    }
+
+                    if( 0 !== navigation_data.types.length )
+                    {
+                        navigation_data.types.sort();
+                        navigation_content += '<dt class="type">Types</dt>' + "\n" +
+                                              '<dd class="type">' + navigation_data.types.join( '</dd><dd class="type">' ) + '</dd>' + "\n";
+                    }
+
+                    related_navigation_element
+                        .attr( 'class', type )
+                        .html( navigation_content );
+                }
+
+                params.callback( app.schema_browser_data, params.schema_browser_element );
+            }
+        );
+
+        this.bind
+        (
             'schema_browser_load',
             function( event, params )
             {
@@ -126,8 +213,13 @@ var sammy = $.sammy
 
                 if( app.schema_browser_data )
                 {
-                    var schema_browser_element = $( '#schema-browser', content_element );
-                    params.callback( schema_browser_element );
+                    params.schema_browser_element = $( '#schema-browser', content_element );
+
+                    sammy.trigger
+                    (
+                        'schema_browser_navi',
+                        params
+                    );
                 }
                 else
                 {
@@ -150,7 +242,15 @@ var sammy = $.sammy
                                     key : {},
                                     fields : {},
                                     dynamic_fields : {},
-                                    types : {}
+                                    types : {},
+                                    relations : {
+                                        f_df : {},
+                                        f_t  : {},
+                                        df_f : {},
+                                        df_t : {},
+                                        t_f  : {},
+                                        t_df : {}
+                                    }
                                 };
 
                                 app.schema_browser_data.fields = response.fields;
@@ -205,6 +305,36 @@ var sammy = $.sammy
                                                     app.schema_browser_data.fields[field].topTerms = 
                                                         lukeArrayToHash( app.schema_browser_data.fields[field].topTerms );
                                                 }
+
+                                                app.schema_browser_data.relations.f_t[field] = app.schema_browser_data.fields[field].type;
+
+                                                if( !app.schema_browser_data.relations.t_f[app.schema_browser_data.fields[field].type] )
+                                                {
+                                                    app.schema_browser_data.relations.t_f[app.schema_browser_data.fields[field].type] = [];
+                                                }
+                                                app.schema_browser_data.relations.t_f[app.schema_browser_data.fields[field].type].push( field );
+
+                                                if( app.schema_browser_data.fields[field].dynamicBase )
+                                                {
+                                                    app.schema_browser_data.relations.f_df[field] = app.schema_browser_data.fields[field].dynamicBase;
+
+                                                    if( !app.schema_browser_data.relations.df_f[app.schema_browser_data.fields[field].dynamicBase] )
+                                                    {
+                                                        app.schema_browser_data.relations.df_f[app.schema_browser_data.fields[field].dynamicBase] = [];
+                                                    }
+                                                    app.schema_browser_data.relations.df_f[app.schema_browser_data.fields[field].dynamicBase].push( field );
+                                                }
+                                            }
+
+                                            for( var dynamic_field in app.schema_browser_data.dynamic_fields )
+                                            {
+                                                app.schema_browser_data.relations.df_t[dynamic_field] = app.schema_browser_data.dynamic_fields[dynamic_field].type;
+
+                                                if( !app.schema_browser_data.relations.t_df[app.schema_browser_data.dynamic_fields[dynamic_field].type] )
+                                                {
+                                                    app.schema_browser_data.relations.t_df[app.schema_browser_data.dynamic_fields[dynamic_field].type] = [];
+                                                }
+                                                app.schema_browser_data.relations.t_df[app.schema_browser_data.dynamic_fields[dynamic_field].type].push( dynamic_field );
                                             }
 
                                             $.get
@@ -289,7 +419,12 @@ var sammy = $.sammy
                                                             }
                                                         );
 
-                                                    params.callback( schema_browser_element );
+                                                    params.schema_browser_element = schema_browser_element;
+                                                    sammy.trigger
+                                                    (
+                                                        'schema_browser_navi',
+                                                        params
+                                                    );
                                                 }
                                             );
                                         },
@@ -321,7 +456,7 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema-browser)$/,
             function( context )
             {
-                var callback = function( schema_browser_element )
+                var callback = function( schema_browser_data, schema_browser_element )
                 {
                     $( '#data', schema_browser_element )
                         .html( 'schema-browser/index' );
@@ -341,10 +476,10 @@ var sammy = $.sammy
         // #/:core/schema-browser/field/$field
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)(\/field\/(.+))$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/(field)\/(.+))$/,
             function( context )
             {
-                var callback = function( schema_browser_element )
+                var callback = function( schema_browser_data, schema_browser_element )
                 {
                     $( '#data', schema_browser_element )
                         .html( 'schema-browser/field' );
@@ -365,10 +500,10 @@ var sammy = $.sammy
         // #/:core/schema-browser/dynamic-field/$field
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)(\/dynamic-field\/(.+))$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/(dynamic-field)\/(.+))$/,
             function( context )
             {
-                var callback = function( schema_browser_element )
+                var callback = function( schema_browser_data, schema_browser_element )
                 {
                     $( '#data', schema_browser_element )
                         .html( 'schema-browser/dynamic-field' );
@@ -389,10 +524,10 @@ var sammy = $.sammy
         // #/:core/schema-browser/type/$type
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)(\/type\/(.+))$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/(type)\/(.+))$/,
             function( context )
             {
-                var callback = function( schema_browser_element )
+                var callback = function( schema_browser_data, schema_browser_element )
                 {
                     $( '#data', schema_browser_element )
                         .html( 'schema-browser/type' );
