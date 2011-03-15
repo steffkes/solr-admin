@@ -171,27 +171,43 @@ var sammy = $.sammy
                         }
                     }
 
+                    var sammy_basepath = '#/' + $( 'p a', params.active_core ).html() + '/schema-browser';
                     var navigation_content = '';
 
                     if( 0 !== navigation_data.fields.length )
                     {
                         navigation_data.fields.sort();
-                        navigation_content += '<dt class="field">Fields</dt>' + "\n" +
-                                              '<dd class="field">' + navigation_data.fields.join( '</dd><dd class="field">' ) + '</dd>' + "\n";
+                        navigation_content += '<dt class="field">Fields</dt>' + "\n";
+                        for( var i in navigation_data.fields )
+                        {
+                            var href = sammy_basepath + '/field/' + navigation_data.fields[i];
+                            navigation_content += '<dd class="field"><a href="' + href + '">' + 
+                                                  navigation_data.fields[i] + '</a></dd>' + "\n";
+                        }
                     }
 
                     if( 0 !== navigation_data.dynamic_fields.length )
                     {
                         navigation_data.dynamic_fields.sort();
-                        navigation_content += '<dt class="dynamic-field">Dynamic Fields</dt>' + "\n" +
-                                              '<dd class="dynamic-field">' + navigation_data.dynamic_fields.join( '</dd><dd class="dynamic-field">' ) + '</dd>' + "\n";
+                        navigation_content += '<dt class="dynamic-field">Dynamic Fields</dt>' + "\n";
+                        for( var i in navigation_data.dynamic_fields )
+                        {
+                            var href = sammy_basepath + '/dynamic-field/' + navigation_data.dynamic_fields[i];
+                            navigation_content += '<dd class="dynamic-field"><a href="' + href + '">' + 
+                                                  navigation_data.dynamic_fields[i] + '</a></dd>' + "\n";
+                        }
                     }
 
                     if( 0 !== navigation_data.types.length )
                     {
                         navigation_data.types.sort();
-                        navigation_content += '<dt class="type">Types</dt>' + "\n" +
-                                              '<dd class="type">' + navigation_data.types.join( '</dd><dd class="type">' ) + '</dd>' + "\n";
+                        navigation_content += '<dt class="type">Types</dt>' + "\n";
+                        for( var i in navigation_data.types )
+                        {
+                            var href = sammy_basepath + '/type/' + navigation_data.types[i];
+                            navigation_content += '<dd class="type"><a href="' + href + '">' + 
+                                                  navigation_data.types[i] + '</a></dd>' + "\n";
+                        }
                     }
 
                     related_navigation_element

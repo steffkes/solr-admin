@@ -1165,7 +1165,7 @@ ul
 }
 
 #content #schema-browser #related dl dt,
-#content #schema-browser #related dl dd
+#content #schema-browser #related dl dd a
 {
     color: #c0c0c0;
 }
@@ -1176,14 +1176,23 @@ ul
     margin-top: 5px;
 }
 
-#content #schema-browser #related dl dd
+#content #schema-browser #related dl dd a
 {
+    display: block;
     padding-left: 10px;
 }
 
+#content #schema-browser #related dl dd a:hover
+{
+    background-color: #f8f8f8;
+}
+
 #content #schema-browser #related .field .field,
+#content #schema-browser #related .field .field a,
 #content #schema-browser #related .dynamic-field .dynamic-field,
-#content #schema-browser #related .type .type
+#content #schema-browser #related .dynamic-field .dynamic-field a,
+#content #schema-browser #related .type .type,
+#content #schema-browser #related .type .type a
 {
     color: #333;
 }
