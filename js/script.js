@@ -534,10 +534,18 @@ var sammy = $.sammy
                 var callback = function( schema_browser_data, data_element )
                 {
                     var field = context.params.splat[4];
-
-                    if( schema_browser_data.fields[field].topTerms_hash )
+                    
+                    var topterms_holder_element = $( '.topterms-holder', data_element );
+                    if( !schema_browser_data.fields[field].topTerms_hash )
                     {
-                        var topterms_holder_element = $( '.topterms-holder', data_element );
+                        topterms_holder_element
+                            .hide();
+                    }
+                    else
+                    {
+                        topterms_holder_element
+                            .show();
+
                         var topterms_table_element = $( 'table', topterms_holder_element );
 
                         var topterms_navi_less = $( 'p.navi .less', topterms_holder_element );
@@ -630,9 +638,17 @@ var sammy = $.sammy
                             );
                     }
 
-                    if( schema_browser_data.fields[field].histogram_hash )
+                    var histogram_holder_element = $( '.histogram-holder', data_element );
+                    if( !schema_browser_data.fields[field].histogram_hash )
                     {
-                        var histogram_holder_element = $( '.histogram-holder', data_element );
+                        histogram_holder_element
+                            .hide();
+                    }
+                    else
+                    {
+                        histogram_holder_element
+                            .show();
+                        
                         var histogram_element = $( '.histogram', histogram_holder_element );
 
                         var histogram_values = schema_browser_data.fields[field].histogram_hash;
