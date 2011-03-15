@@ -517,7 +517,44 @@ var sammy = $.sammy
             {
                 var callback = function( schema_browser_data, data_element )
                 {
-                    console.debug( data_element );
+                    var field = context.params.splat[4];
+
+                    if( schema_browser_data.fields[field].histogram_hash )
+                    {
+                        var histogram_holder_element = $( '.histogram-holder', data_element );
+                        var histogram_element = $( '.histogram', histogram_holder_element );
+
+                        var histogram_values = schema_browser_data.fields[field].histogram_hash;
+                        var histogram_legend = '';
+
+                        histogram_holder_element
+                            .show();
+
+                        for( var key in histogram_values )
+                        {
+                            histogram_legend += '<dt><span>' + key + '</span></dt>' + "\n" +
+                                                '<dd title="' + key + '">' +
+                                                '<span>' + histogram_values[key] + '</span>' +
+                                                '</dd>' + "\n";
+                        }
+
+                        $( 'dl', histogram_holder_element )
+                            .html( histogram_legend );
+
+                        histogram_element
+                            .sparkline
+                            (
+                                schema_browser_data.fields[field].histogram.values,
+                                {
+                                    type : 'bar',
+                                    barColor : '#c0c0c0',
+                                    zeroColor : '#ffffff',
+                                    height : histogram_element.height(),
+                                    barWidth : 46,
+                                    barSpacing : 3
+                                }
+                            );
+                    }
                 }
 
                 sammy.trigger
