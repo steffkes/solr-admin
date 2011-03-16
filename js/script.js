@@ -563,6 +563,7 @@ var sammy = $.sammy
                     var field = context.params.splat[4];
                     
                     var options_element = $( '.options', data_element );
+                    var sammy_basepath = '#/' + $( 'p a', context.active_core ).html() + '/schema-browser'
 
                     var keystring_to_list = function( keystring )
                     {
@@ -666,6 +667,49 @@ var sammy = $.sammy
                             .after( '<dd>' + schema_browser_data.fields[field].positionIncrementGap + '</dd>' );
                     }
 
+                    // -- copied-from
+                    if( 0 !== schema_browser_data.fields[field].copySources.length )
+                    {
+                        var copied_from_element = $( '.copied-from', options_element );
+                        var copied_from_content = [];
+
+                        var copy_sources = schema_browser_data.fields[field].copySources;
+                        for( var i in copy_sources )
+                        {
+                            var href = sammy_basepath + '/field/' + copy_sources[i];
+                            copied_from_content.push( '<dd class="cf"><a href="' + href + '">' + copy_sources[i] + '</a>,</dd>' );
+                        }
+                        copied_from_content.sort();
+                        
+                        copied_from_content[copied_from_content.length-1] = 
+                            copied_from_content[copied_from_content.length-1].replace( /,/, '' );
+
+                        copied_from_element
+                            .show()
+                            .after( copied_from_content.join( "\n" ) );
+                    }
+
+                    // -- copied-to
+                    if( 0 !== schema_browser_data.fields[field].copyDests.length )
+                    {
+                        var copied_to_element = $( '.copied-to', options_element );
+                        var copied_to_content = [];
+
+                        var copy_dests = schema_browser_data.fields[field].copyDests;
+                        for( var i in copy_dests )
+                        {
+                            var href = sammy_basepath + '/field/' + copy_dests[i];
+                            copied_to_content.push( '<dd class="cf"><a href="' + href + '">' + copy_dests[i] + '</a>,</dd>' );
+                        }
+                        copied_to_content.sort();
+                        
+                        copied_to_content[copied_to_content.length-1] = 
+                            copied_to_content[copied_to_content.length-1].replace( /,/, '' );
+
+                        copied_to_element
+                            .show()
+                            .after( copied_to_content.join( "\n" ) );
+                    }
 
 
                     var topterms_holder_element = $( '.topterms-holder', data_element );
