@@ -1197,6 +1197,12 @@ ul
     color: #333;
 }
 
+#content #schema-browser #related .copyfield,
+#content #schema-browser #related .copyfield a
+{
+    color: #666;
+}
+
 #content #schema-browser #data #field .field-options
 {
     margin-bottom: 20px;
