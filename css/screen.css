@@ -1197,6 +1197,100 @@ ul
     color: #333;
 }
 
+#content #schema-browser #data #field .field-options
+{
+    margin-bottom: 20px;
+}
+
+#content #schema-browser #data #field .field-options .options dt,
+#content #schema-browser #data #field .field-options .options dd
+{
+    float: left;
+}
+
+#content #schema-browser #data #field .field-options .options dt
+{
+    clear: left;
+    display: none;
+    margin-right: 5px;
+    width: 100px;
+}
+
+#content #schema-browser #data #field .field-options .options dd
+{
+    margin-right: 5px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer
+{
+    
+}
+
+#content #schema-browser #data #field .field-options .analyzer p,
+#content #schema-browser #data #field .field-options .analyzer dl
+{
+    float: left;
+}
+
+#content #schema-browser #data #field .field-options .analyzer p
+{
+    margin-right: 5px;
+    text-align: right;
+    width: 100px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer li
+{
+    border-top: 1px solid #f0f0f0;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul
+{
+    clear: left;
+    margin-left: 30px;
+    padding-top: 5px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul li
+{
+    border-top: 1px solid #f8f8f8;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul p
+{
+    color: #999;
+    margin-right: 5px;
+    text-align: right;
+    width: 70px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul dd
+{
+    margin-left: 20px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul dd
+{
+    background-image: url( ../img/ico/document-list.png );
+    background-position: 0 50%;
+    color: #c0c0c0;
+    padding-left: 21px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul dd.ico-0
+{
+    background-image: url( ../img/ico/slash.png );
+}
+
+#content #schema-browser #data #field .field-options .analyzer ul dd.ico-1
+{
+    background-image: url( ../img/ico/tick.png );
+}
+
 #content #schema-browser #data #field .topterms-holder
 {
     float: left;

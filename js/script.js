@@ -535,6 +535,112 @@ var sammy = $.sammy
                 {
                     var field = context.params.splat[4];
                     
+                    var options_element = $( '.options', data_element );
+
+                    var keystring_to_list = function( keystring )
+                    {
+                        var key_list = keystring.replace( /-/g, '' ).split( '' );
+                        var list = [];
+
+                        for( var i in key_list )
+                        {
+                            var option_key = schema_browser_data.key[key_list[i]];
+
+                            if( !option_key )
+                            {
+                                option_key = schema_browser_data.key[key_list[i].toLowerCase()];
+                            }
+
+                            if( !option_key )
+                            {
+                                option_key = schema_browser_data.key[key_list[i].toUpperCase()];
+                            }
+
+                            if( option_key )
+                            {
+                                list.push( '<dd>' + option_key + ',</dd>' );
+                            }
+                        }
+
+                        list[list.length-1] = list[key_list.length-1].replace( /,/, '' );
+
+                        return list;
+                    }
+
+                    // -- properties
+                    if( schema_browser_data.fields[field].flags )
+                    {
+                        var properties_element = $( '.properties', options_element );
+                        var properties_keys = keystring_to_list( schema_browser_data.fields[field].flags );
+
+                        properties_element
+                            .show()
+                            .after( properties_keys.join( "\n" ) );
+                    }
+
+                    // -- schema
+                    if( schema_browser_data.fields[field].schema )
+                    {
+                        var schema_element = $( '.schema', options_element );
+                        var schema_keys = keystring_to_list( schema_browser_data.fields[field].schema );
+
+                        schema_element
+                            .show()
+                            .after( schema_keys.join( "\n" ) );
+                    }
+
+                    // -- index
+                    if( schema_browser_data.fields[field].index )
+                    {
+                        var index_element = $( '.index', options_element );
+                        var index_keys = [];
+
+                        if( 0 === schema_browser_data.fields[field].index.indexOf( '(' ) )
+                        {
+                            index_keys.push( '<dd>' + schema_browser_data.fields[field].index + '</dd>' );
+                        }
+                        else
+                        {
+                            index_keys = keystring_to_list( schema_browser_data.fields[field].index );
+                        }
+
+                        index_element
+                            .show()
+                            .after( index_keys.join( "\n" ) );
+                    }
+
+                    // -- docs
+                    if( schema_browser_data.fields[field].docs )
+                    { 
+                        var docs_element = $( '.docs', options_element );
+
+                        docs_element
+                            .show()
+                            .after( '<dd>' + schema_browser_data.fields[field].docs + '</dd>' );
+                    }
+
+                    // -- distinct 
+                    if( schema_browser_data.fields[field].distinct )
+                    {
+                        var distinct_element = $( '.distinct', options_element );
+
+                        distinct_element
+                            .show()
+                            .after( '<dd>' + schema_browser_data.fields[field].distinct + '</dd>' );
+                    }
+
+                    // -- position-increment-gap 
+                    if( schema_browser_data.fields[field].positionIncrementGap )
+                    {
+                        var pig_element = $( '.position-increment-gap', options_element );
+
+                        pig_element
+                            .show()
+                            .after( '<dd>' + schema_browser_data.fields[field].positionIncrementGap + '</dd>' );
+                    }
+
+
+
                     var topterms_holder_element = $( '.topterms-holder', data_element );
                     if( !schema_browser_data.fields[field].topTerms_hash )
                     {
