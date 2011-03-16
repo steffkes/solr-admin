@@ -336,6 +336,21 @@ var sammy = $.sammy
 
                                             for( var field in app.schema_browser_data.fields )
                                             {
+                                                app.schema_browser_data.fields[field].copySourcesRaw = null;
+
+                                                if( app.schema_browser_data.fields[field].copySources &&
+                                                    0 !== app.schema_browser_data.fields[field].copySources.length )
+                                                {
+                                                    app.schema_browser_data.fields[field].copySourcesRaw =
+                                                        app.schema_browser_data.fields[field].copySources;
+                                                }
+                                                
+                                                app.schema_browser_data.fields[field].copyDests = [];
+                                                app.schema_browser_data.fields[field].copySources = [];
+                                            }
+
+                                            for( var field in app.schema_browser_data.fields )
+                                            {
                                                 if( app.schema_browser_data.fields[field].histogram )
                                                 {
                                                     var histogram = app.schema_browser_data.fields[field].histogram;
@@ -356,6 +371,18 @@ var sammy = $.sammy
 
                                                     app.schema_browser_data.fields[field].topTerms_hash = 
                                                         luke_array_to_hash( top_terms );
+                                                }
+
+                                                if( app.schema_browser_data.fields[field].copySourcesRaw )
+                                                {
+                                                    var copy_sources = app.schema_browser_data.fields[field].copySourcesRaw;
+                                                    for( var i in copy_sources )
+                                                    {
+                                                        var target = copy_sources[i].replace( /^.+:(.+)\{.+$/, '$1' );
+
+                                                        app.schema_browser_data.fields[field].copySources.push( target );
+                                                        app.schema_browser_data.fields[target].copyDests.push( field );
+                                                    }
                                                 }
 
                                                 app.schema_browser_data.relations.f_t[field] = app.schema_browser_data.fields[field].type;
