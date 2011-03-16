@@ -1297,6 +1297,11 @@ ul
     background-image: url( ../img/ico/tick.png );
 }
 
+#content #schema-browser #data #field .head
+{
+    margin-bottom: 5px;
+}
+
 #content #schema-browser #data #field .topterms-holder
 {
     float: left;
@@ -1395,11 +1400,12 @@ ul
 {
     display: none;
     float: left;
+    margin-left: 50px;
 }
 
 #content #schema-browser #data #field .histogram-holder .histogram
 {
-    height: 75px;
+    height: 150px;
 }
 
 #content #schema-browser #data #field .histogram-holder dt,
