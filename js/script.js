@@ -116,6 +116,53 @@ var sammy = $.sammy
             }
         );
 
+        // #/:core/java-properties
+        this.get
+        (
+            /^#\/([\w\d]+)\/(java-properties)$/,
+            function( context )
+            {
+                var content_element = $( '#content' );
+
+                content_element
+                    .html( '<div id="java-properties"></div>' );
+
+                $.ajax
+                (
+                    {
+                        url : app.config.java_properties_path,
+                        dataType : 'json',
+                        context : $( '#java-properties', content_element ),
+                        beforeSend : function( xhr, settings )
+                        {
+                            this
+                                .html( '<div class="loader">Loading ...</div>' );
+                        },
+                        success : function( response, text_status, xhr )
+                        {
+                            var properties_content = [];
+
+                            delete response['_dummy'];
+                            for( var key in response )
+                            {
+                                properties_content.push( '<dt>' + key + '</dt>' );
+                                properties_content.push( '<dd>' + response[key] + '</dd>' );
+                            }
+
+                            this
+                                .html( '<dl>' + properties_content.join( "\n" ) + '</dl>' );
+                        },
+                        error : function( xhr, text_status, error_thrown)
+                        {
+                        },
+                        complete : function( xhr, text_status )
+                        {
+                        }
+                    }
+                );
+            }
+        );
+
         this.bind
         (
             'schema_browser_navi',
@@ -758,7 +805,7 @@ var sammy = $.sammy
                     field_type_element
                         .show()
                         .after( '<dd>' + analyzer_data.className + '</dd>' );
-                        
+
 
                     for( var key in analyzer_data )
                     {
@@ -2325,7 +2372,7 @@ $( document ).ready
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
-                                     + '        <li class="java-properties"><a href="' + core_path + '/admin/get-properties.jsp"><span>Java-Properties</span></a></li>' + "\n"
+                                     + '        <li class="java-properties"><a rel="#/' + core_name + '/java-properties"><span>Java-Properties</span></a></li>' + "\n"
 
                                      + '    </ul>' + "\n"
                                      + '</li>';
