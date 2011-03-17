@@ -752,6 +752,14 @@ var sammy = $.sammy
                         return list_content;
                     }
 
+                    // -- field-type
+                    var field_type_element = $( '.field-type', options_element );
+
+                    field_type_element
+                        .show()
+                        .after( '<dd>' + analyzer_data.className + '</dd>' );
+                        
+
                     for( var key in analyzer_data )
                     {
                         var key_match = key.match( /^(.+)Analyzer$/ );
