@@ -703,6 +703,104 @@ var sammy = $.sammy
                             .after( '<dd>' + schema_browser_data.fields[field].positionIncrementGap + '</dd>' );
                     }
 
+                    var analyzer_data = schema_browser_data.types[schema_browser_data.relations.f_t[field]];
+                    var analyzer_element = $( '.analyzer', data_element );
+
+                    var transform_analyzer_data_into_list = function( analyzer_data )
+                    {
+                        var args = [];
+                        for( var key in analyzer_data.args )
+                        {
+                            var arg_class = '';
+                            var arg_content = '';
+
+                            if( 'true' === analyzer_data.args[key] || '1' === analyzer_data.args[key] )
+                            {
+                                arg_class = 'ico-1';
+                                arg_content = key;
+                            }
+                            else if( 'false' === analyzer_data.args[key] || '0' === analyzer_data.args[key] )
+                            {
+                                arg_class = 'ico-0';
+                                arg_content = key;
+                            }
+                            else
+                            {
+                                arg_content = key + ': ';
+
+                                if( 'synonyms' === key || 'words' === key )
+                                {
+                                    // @TODO: set link target for file
+                                    arg_content += '<a>' + analyzer_data.args[key] + '</a>';
+                                }
+                                else
+                                {
+                                    arg_content += analyzer_data.args[key];
+                                }
+                            }
+
+                            args.push( '<dd class="' + arg_class + '">' + arg_content + '</dd>' );
+                        }
+
+                        var list_content = '<dt>' + analyzer_data.className + '</dt>';
+                        if( 0 !== args.length )
+                        {
+                            args.sort();
+                            list_content += args.join( "\n" );
+                        }
+
+                        return list_content;
+                    }
+
+                    for( var key in analyzer_data )
+                    {
+                        var key_match = key.match( /^(.+)Analyzer$/ );
+                        if( !key_match )
+                        {
+                            continue;
+                        }
+
+                        var analyzer_key_element = $( '.' + key_match[1], analyzer_element );
+                        var analyzer_key_data = analyzer_data[key];
+
+                        analyzer_element.show();
+                        analyzer_key_element.show();
+
+                        if( analyzer_key_data.className )
+                        {
+                            $( 'dl:first dt', analyzer_key_element )
+                                .html( analyzer_key_data.className );
+                        }
+
+                        for( var type in analyzer_key_data )
+                        {
+                            if( 'object' !== typeof analyzer_key_data[type] )
+                            {
+                                continue;
+                            }
+
+                            var type_element = $( '.' + type, analyzer_key_element );
+                            var type_content = [];
+
+                            type_element.show();
+
+                            if( analyzer_key_data[type].className )
+                            {
+                                type_content.push( transform_analyzer_data_into_list( analyzer_key_data[type] ) );
+                            }
+                            else
+                            {
+                                for( var entry in analyzer_key_data[type] )
+                                {
+                                    type_content.push( transform_analyzer_data_into_list( analyzer_key_data[type][entry] ) );
+                                }
+                            }
+
+                            $( 'dl', type_element )
+                                .append( type_content.join( "\n" ) );
+                        }
+                    }
+
 
                     var topterms_holder_element = $( '.topterms-holder', data_element );
                     if( !schema_browser_data.fields[field].topTerms_hash )

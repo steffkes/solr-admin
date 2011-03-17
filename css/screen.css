@@ -1227,9 +1227,12 @@ ul
     margin-right: 5px;
 }
 
-#content #schema-browser #data #field .field-options .analyzer
+#content #schema-browser #data #field .field-options .analyzer,
+#content #schema-browser #data #field .field-options .analyzer li,
+#content #schema-browser #data #field .field-options .analyzer ul,
+#content #schema-browser #data #field .field-options .analyzer ul li
 {
-    
+    display: none;
 }
 
 #content #schema-browser #data #field .field-options .analyzer p,
@@ -1255,6 +1258,7 @@ ul
 #content #schema-browser #data #field .field-options .analyzer ul
 {
     clear: left;
+    display: block;
     margin-left: 30px;
     padding-top: 5px;
 }
