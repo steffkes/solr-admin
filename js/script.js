@@ -140,17 +140,54 @@ var sammy = $.sammy
                         },
                         success : function( response, text_status, xhr )
                         {
+                            var properties_data = {};
                             var properties_content = [];
+                            var properties_order = [];
 
                             delete response['_dummy'];
                             for( var key in response )
                             {
-                                properties_content.push( '<dt>' + key + '</dt>' );
-                                properties_content.push( '<dd>' + response[key] + '</dd>' );
+                                var displayed_key = key.split( '.' ).join( '.&#8203;' );
+                                var displayed_value = [ response[key] ];
+                                var item_class = 'clearfix';
+
+                                if( -1 !== key.indexOf( '.path' ) )
+                                {
+                                    displayed_value = response[key].split( ':' );
+                                    if( 1 < displayed_value.length )
+                                    {
+                                        item_class += ' multi';
+                                    }
+                                }
+
+                                var item_content = '<li><dl class="' + item_class + '">' + "\n" +
+                                                   '<dt>' + displayed_key + '</dt>' + "\n";
+
+                                for( var i in displayed_value )
+                                {
+                                    item_content += '<dd>' + displayed_value[i] + '</dd>' + "\n";
+                                }
+
+                                item_content += '</dl></li>';
+
+                                properties_data[key] = item_content;
+                                properties_order.push( key );
+                            }
+
+                            properties_order.sort();
+                            for( var i in properties_order )
+                            {
+                                properties_content.push( properties_data[properties_order[i]] );
                             }
 
                             this
-                                .html( '<dl>' + properties_content.join( "\n" ) + '</dl>' );
+                                .html( '<ul>' + properties_content.join( "\n" ) + '</ul>' );
+                            
+                            $( 'li:odd', this )
+                                .addClass( 'odd' );
+                            
+                            $( '.multi dd:odd', this )
+                                .addClass( 'odd' );
                         },
                         error : function( xhr, text_status, error_thrown)
                         {
