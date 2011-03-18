@@ -1687,8 +1687,7 @@ var sammy = $.sammy
                 var content_element = $( '#content' );
 
                 content_element
-                    //.addClass( 'single' )
-                    .html( '<iframe src="' + $( 'a', menu_item ).attr( 'href' ) + '"></iframe>' );
+                    .html( '<iframe src="' + $( '.active a', this.active_core ).attr( 'href' ) + '"></iframe>' );
                 
                 $( 'iframe', content_element )
                     .css( 'height', $( '#main' ).height() );
