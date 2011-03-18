@@ -147,7 +147,7 @@ var sammy = $.sammy
                             delete response['_dummy'];
                             for( var key in response )
                             {
-                                var displayed_key = key.split( '.' ).join( '.&#8203;' );
+                                var displayed_key = key.replace( /\./g, '.&#8203;' );
                                 var displayed_value = [ response[key] ];
                                 var item_class = 'clearfix';
 
