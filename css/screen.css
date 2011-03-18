@@ -1203,6 +1203,14 @@ ul
     color: #666;
 }
 
+#content #schema-browser #data #index dt
+{
+    display: none;
+    float: left;
+    margin-right: 5px;
+    width: 150px;
+}
+
 #content #schema-browser #data #field .field-options
 {
     margin-bottom: 20px;

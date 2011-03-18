@@ -168,6 +168,8 @@ var sammy = $.sammy
             'schema_browser_navi',
             function( event, params )
             {
+                var type = 'index';
+
                 if( params.route_params )
                 {
                     var related_navigation_element = $( '#related dl', params.schema_browser_element );
@@ -300,7 +302,7 @@ var sammy = $.sammy
 
                 $.get
                 (
-                    'tpl/schema-browser_'+ type + '.html',
+                        'tpl/schema-browser_'+ type + '.html',
                     function( template )
                     {
                         var data_element = $( '#data', params.schema_browser_element );
@@ -618,10 +620,23 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema-browser)$/,
             function( context )
             {
-                var callback = function( schema_browser_data, schema_browser_element )
+                var callback = function( schema_browser_data, data_element )
                 {
-                    $( '#data', schema_browser_element )
-                        .html( 'schema-browser/index' );
+                    var sammy_basepath = '#/' + $( 'p a', context.active_core ).html() + '/schema-browser'
+
+                    if( schema_browser_data.unique_key_field )
+                    {
+                        $( '.unique-key-field', data_element )
+                            .show()
+                            .after( '<dd><a href="' + sammy_basepath + '/field/' + schema_browser_data.unique_key_field + '">' + schema_browser_data.unique_key_field + '</a></dd>' );
+                    }
+
+                    if( schema_browser_data.default_search_field )
+                    {
+                        $( '.default-search-field', data_element )
+                            .show()
+                            .after( '<dd><a href="' + sammy_basepath + '/field/' + schema_browser_data.default_search_field + '">' + schema_browser_data.default_search_field + '</a></dd>' );
+                    }
                 }
 
                 sammy.trigger
