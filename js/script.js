@@ -45,13 +45,10 @@ var sammy = $.sammy
                         dataType : 'json',
                         beforeSend : function( arr, form, options )
                         {
-                            console.debug( 'before_send', arguments );
                             loader.show( element );
                         },
                         success : function( response )
                         {
-                            console.debug( 'success', arguments );
-                            
                             var qtime_element = $( '.qtime', element );
                             
                             if( 0 === qtime_element.size() )
@@ -70,7 +67,6 @@ var sammy = $.sammy
                         },
                         error : function()
                         {
-                            console.debug( 'error', arguments );
                         },
                         complete : function()
                         {
