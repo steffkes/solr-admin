@@ -1216,35 +1216,56 @@ var sammy = $.sammy
                                     
                                     for( var i = 0; i < sort_key_length; i++ )
                                     {
-                                        content += '<li><a>' + sort_table[key][sort_key][i] + '</a>' + "\n";
-                                        content += '<dl class="clearfix">' + "\n";
+                                        content += '<li class="entry"><a>' + sort_table[key][sort_key][i] + '</a>' + "\n";
+                                        content += '<ul class="detail">' + "\n";
                                         
                                         var details = response.plugins[key][ sort_table[key][sort_key][i] ];
                                         for( var detail_key in details )
                                         {
                                             if( 'stats' !== detail_key )
                                             {
+                                                var detail_value = details[detail_key];
+
+                                                if( 'description' === detail_key )
+                                                {
+                                                    detail_value = detail_value.replace( /,/g, ',&#8203;' );
+                                                }
+                                                else if( 'src' === detail_key )
+                                                {
+                                                    detail_value = detail_value.replace( /\//g, '/&#8203;' );
+                                                }
+
+                                                content += '<li><dl class="clearfix">' + "\n";
                                                 content += '<dt>' + detail_key + ':</dt>' + "\n";
-                                                content += '<dd>' + details[detail_key] + '</dd>' + "\n";
+                                                content += '<dd>' + detail_value + '</dd>' + "\n";
+                                                content += '</dl></li>' + "\n";
                                             }
                                             else if( 'stats' === detail_key && details[detail_key] && show_stats )
                                             {
-                                                content += '<dt>' + detail_key + ':</dt>' + "\n";
-                                                content += '<dd>' + "\n";
+                                                content += '<li class="stats clearfix">' + "\n";
+                                                content += '<span>' + detail_key + ':</span>' + "\n";
+                                                content += '<ul>' + "\n";
 
-                                                content += '<dl class="clearfix">' + "\n";
-                                                    for( var stats_key in details[detail_key] )
+                                                for( var stats_key in details[detail_key] )
+                                                {
+                                                    var stats_value = details[detail_key][stats_key];
+
+                                                    if( 'readerDir' === stats_key )
                                                     {
-                                                        content += '<dt>' + stats_key + ':</dt>' + "\n";
-                                                        content += '<dd>' + details[detail_key][stats_key] + '</dd>' + "\n";
+                                                        stats_value = stats_value.replace( /@/g, '@&#8203;' );
                                                     }
-                                                content += '</dl>' + "\n";
 
-                                                content += '</dd>' + "\n";
+                                                    content += '<li><dl class="clearfix">' + "\n";
+                                                    content += '<dt>' + stats_key + ':</dt>' + "\n";
+                                                    content += '<dd>' + stats_value + '</dd>' + "\n";
+                                                    content += '</dl></li>' + "\n";
+                                                }
+
+                                                content += '</ul></li>' + "\n";
                                             }
                                         }
                                         
-                                        content += '</dl>' + "\n";
+                                        content += '</ul>' + "\n";
                                     }
                                 }
                                 
@@ -1265,6 +1286,19 @@ var sammy = $.sammy
                                     {
                                         $( this ).parent()
                                             .toggleClass( 'expanded' );
+                                    }
+                                );
+                            
+                            $( '.entry', this )
+                                .each
+                                (
+                                    function( i, entry )
+                                    {
+                                        $( '.detail > li', entry ).not( '.stats' ).filter( ':even' )
+                                            .addClass( 'odd' );
+
+                                        $( '.stats li:odd', entry )
+                                            .addClass( 'odd' );
                                     }
                                 );
                         },

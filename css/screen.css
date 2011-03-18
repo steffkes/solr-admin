@@ -680,13 +680,12 @@ ul
 #content #plugins #cache h2 { background-image: url( ../img/ico/disk-black.png ); }
 #content #plugins #highlighting h2 { background-image: url( ../img/ico/highlighter-text.png ); }
 
-#content #plugins .block li
+#content #plugins .block .entry
 {
-    clear: left;
     padding-top: 10px;
 }
 
-#content #plugins .block li a
+#content #plugins .block .entry a
 {
     background-image: url( ../img/ico/chevron-small-expand.png );
     background-position: 0 50%;
@@ -695,56 +694,69 @@ ul
     padding-left: 21px;
 }
 
-#content #plugins .block dl
+#content #plugins .block .entry.expanded a
+{
+    background-image: url( ../img/ico/chevron-small.png );
+}
+
+#content #plugins .block .entry.expanded ul
+{
+    display: block;
+}
+
+#content #plugins .block .entry ul
 {
     display: none;
     padding-top: 5px;
     margin-left: 21px;
 }
 
-#content #plugins .block dt,
-#content #plugins .block dd
+#content #plugins .block .entry li
 {
-    float: left;
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
-#content #plugins .block dt
+#content #plugins .block .entry li.stats
 {
-    clear: left;
-    margin-right: 1%;
+    border-top: 1px solid #c0c0c0;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+#content #plugins .block .entry li.odd
+{
+    background-color: #f8f8f8;
+}
+
+#content #plugins .block .entry dt,
+#content #plugins .block .entry .stats span
+{
+    float: left;
     width: 11%;
 }
 
-#content #plugins .block dd
+#content #plugins .block .entry dd,
+#content #plugins .block .entry .stats ul
 {
-    width: 85%;
+    float: right;
+    width: 88%;
 }
 
-#content #plugins .block li.expanded a
+#content #plugins .block .entry .stats ul
 {
-    background-image: url( ../img/ico/chevron-small.png );
+    margin: 0;
+    padding: 0;
 }
 
-#content #plugins .block li.expanded dl
+#content #plugins .block .entry .stats dt
 {
-    display: block;
+    width: 27%;
 }
 
-#content #plugins .block dl dl
+#content #plugins .block .entry .stats dd
 {
-    display: block;
-    padding-top: 0;
-    margin-left: 0;
-}
-
-#content #plugins .block dl dl dt
-{
-    width: 28%;
-}
-
-#content #plugins .block dl dl dd
-{
-    width: 70%;
+    width: 72%;
 }
 
 /* query */
