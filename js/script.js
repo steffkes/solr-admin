@@ -168,11 +168,20 @@ var sammy = $.sammy
             'schema_browser_navi',
             function( event, params )
             {
+                var related_navigation_element = $( '#related dl', params.schema_browser_element );
+                var related_select_element = $( '#related select', params.schema_browser_element )
                 var type = 'index';
 
-                if( params.route_params )
+                if( !params.route_params )
                 {
-                    var related_navigation_element = $( '#related dl', params.schema_browser_element );
+                    related_navigation_element
+                        .hide();
+                    
+                    $( 'option:selected', related_select_element )
+                        .removeAttr( 'selected' );
+                }
+                else
+                {
                     var type = params.route_params.splat[3];
                     var value = params.route_params.splat[4];
 
@@ -184,7 +193,7 @@ var sammy = $.sammy
                         'types' : []
                     }
 
-                    $( '#related select option[value=' + params.route_params.splat[2] + ']', params.schema_browser_element )
+                    $( 'option[value=' + params.route_params.splat[2] + ']', related_select_element )
                         .attr( 'selected', 'selected' );
 
                     if( 'field' === type )
@@ -296,6 +305,7 @@ var sammy = $.sammy
                     }
 
                     related_navigation_element
+                        .show()
                         .attr( 'class', type )
                         .html( navigation_content );
                 }
