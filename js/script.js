@@ -1257,6 +1257,7 @@ var sammy = $.sammy
                                 .html( content );
                             
                             $( '.block a', this )
+                                .die( 'click' )
                                 .live
                                 (
                                     'click',
