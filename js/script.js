@@ -2196,6 +2196,18 @@ var sammy = $.sammy
                             this
                                 .html( template );
             
+                            var memory_data = {
+                                'memory-bar-max' : parseInt( app.dashboard_values['jvm']['memory']['raw']['max'] ),
+                                'memory-bar-total' : parseInt( app.dashboard_values['jvm']['memory']['raw']['total'] ),
+                                'memory-bar-used' : parseInt( app.dashboard_values['jvm']['memory']['raw']['used'] )
+                            };
+            
+                            for( var key in memory_data )
+                            {                                                        
+                                $( '.value.' + key, this )
+                                    .html( memory_data[key] );
+                            }
+            
                             var data = {
                                 'start_time' : app.dashboard_values['jvm']['jmx']['startTime'],
                                 'host' : app.dashboard_values['core']['host'],
@@ -2204,10 +2216,7 @@ var sammy = $.sammy
                                 'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
                                 'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
                                 'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
-                                'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version'],
-                                'memory-bar-max' : parseInt( app.dashboard_values['jvm']['memory']['raw']['max'] ),
-                                'memory-bar-total' : parseInt( app.dashboard_values['jvm']['memory']['raw']['total'] ),
-                                'memory-bar-used' : parseInt( app.dashboard_values['jvm']['memory']['raw']['used'] )
+                                'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version']
                             };
             
                             for( var key in data )
@@ -2243,8 +2252,8 @@ var sammy = $.sammy
                             // -- memory bar
 
                             var max_height = Math.round( $( '#memory-bar-max', this ).height() );
-                            var total_height = Math.round( ( data['memory-bar-total'] * max_height ) / data['memory-bar-max'] );
-                            var used_height = Math.round( ( data['memory-bar-used'] * max_height ) / data['memory-bar-max'] );
+                            var total_height = Math.round( ( memory_data['memory-bar-total'] * max_height ) / memory_data['memory-bar-max'] );
+                            var used_height = Math.round( ( memory_data['memory-bar-used'] * max_height ) / memory_data['memory-bar-max'] );
 
                             var memory_bar_total_value = $( '#memory-bar-total span', this ).first();
 
@@ -2261,7 +2270,7 @@ var sammy = $.sammy
                                     .css( 'margin-top', memory_bar_total_value.height() * -1 );
                             }
 
-                            var memory_percentage = ( ( data['memory-bar-used'] / data['memory-bar-max'] ) * 100 ).toFixed(1);
+                            var memory_percentage = ( ( memory_data['memory-bar-used'] / memory_data['memory-bar-max'] ) * 100 ).toFixed(1);
                             var headline = $( '#memory h2 span', this );
                                 
                             headline
