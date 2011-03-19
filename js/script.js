@@ -2212,12 +2212,12 @@ var sammy = $.sammy
             
                             for( var key in data )
                             {                                                        
-                                $( '.value.' + key, this )
+                                $( '.' + key + ' dd', this )
                                     .html( data[key] );
                             }
 
-                            var cmd_arg_key_element = $( 'dt.command_line_args', this );
-                            var cmd_arg_element = $( '.value.command_line_args', this );
+                            var cmd_arg_key_element = $( '.command_line_args dt', this );
+                            var cmd_arg_element = $( '.command_line_args dd', this );
 
                             for( var key in app.dashboard_values['jvm']['jmx']['commandLineArgs'] )
                             {
@@ -2228,13 +2228,16 @@ var sammy = $.sammy
                                     .after( cmd_arg_element );
                             }
 
-                            $( '.value.command_line_args:last', this )
+                            $( '.command_line_args dd:last', this )
                                 .remove();
 
                             $( '.timeago', this )
                                 .timeago();
 
-                            $( 'dt:odd', this )
+                            $( 'li:odd', this )
+                                .addClass( 'odd' );
+
+                            $( '.command_line_args dd:odd', this )
                                 .addClass( 'odd' );
                             
                             // -- memory bar
