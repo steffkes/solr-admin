@@ -112,6 +112,26 @@ var sammy = $.sammy
             }
         );
 
+        // #/:core/logging
+        this.get
+        (
+            /^#\/([\w\d]+)\/(logging)$/,
+            function( context )
+            {
+                var content_element = $( '#content' );
+                
+                $.get
+                (
+                    'tpl/logging.html',
+                    function( template )
+                    {
+                        content_element
+                            .html( template );
+                    }
+                );
+            }
+        );
+
         // #/:core/java-properties
         this.get
         (
@@ -2474,7 +2494,7 @@ $( document ).ready
                                      + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp" rel="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
-                                     + '        <li class="logging"><a href="' + core_path + '/admin/logging"><span>Logging</span></a></li>' + "\n"
+                                     + '        <li class="logging"><a href="' + core_path + '/admin/logging" rel="#/' + core_name + '/logging"><span>Logging</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
                                      + '        <li class="java-properties"><a rel="#/' + core_name + '/java-properties"><span>Java-Properties</span></a></li>' + "\n"
 

@@ -918,6 +918,7 @@ ul
 {
     background-position: -54px 0;
     background-repeat: repeat-y;
+    line-height: 22px;
 }
 
 #content .tree li.jstree-last
@@ -1499,4 +1500,115 @@ ul
 #content #java-properties li dd.odd
 {
     color: #999;
+}
+
+/* logging */
+
+#content #logging .jstree
+{
+    position: relative;
+}
+
+#content #logging .jstree a
+{
+    cursor: auto;
+}
+
+#content #logging .jstree > li
+{
+    margin-left: 0;
+}
+
+#content #logging .jstree li
+{
+    position: relative;
+}
+
+#content #logging .jstree .odd
+{
+    background-color: #f8f8f8;
+}
+
+#content #logging .jstree .loglevel
+{
+    position: absolute;
+    margin-top: 3px;
+    top: 0;
+    z-index: 50;
+}
+
+#content #logging .jstree .loglevel { left: 250px; }
+
+#content #logging .jstree .loglevel a
+{
+    display: block;
+}
+
+#content #logging .jstree .loglevel .effective span
+{
+    background-image: url( ../img/ico/pencil-small.png );
+    background-position: 100%;
+    padding-right: 21px;
+}
+
+#content #logging .jstree .loglevel.open .effective span
+{
+    background-image: url( ../img/ico/chevron-small-expand.png );
+}
+
+#content #logging .jstree .loglevel ul
+{
+    background-color: #fff;
+    border: 1px solid #f0f0f0;
+    padding-top: 5px;
+}
+
+#content #logging .jstree .loglevel ul li
+{
+    background-image: none;
+    line-height: auto;
+    margin-left: 0;
+}
+
+#content #logging .jstree .loglevel ul li a
+{
+    background-image: url( ../img/ico/ui-radio-button-uncheck.png );
+    background-position: 2px 50%;
+    cursor: pointer;
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    padding-left: 21px;
+    padding-right: 5px;
+}
+
+#content #logging .jstree .loglevel ul li.selected a
+{
+    background-image: url( ../img/ico/ui-radio-button.png );
+}
+
+#content #logging .jstree .loglevel ul li a:hover
+{
+    background-color: #f8f8f8;
+    color: #008;
+}
+
+#content #logging .jstree .loglevel ul li.unset
+{
+    border-top: 1px solid #f0f0f0;
+    margin-top: 5px;
+}
+
+#content #logging .jstree .loglevel ul li.unset a
+{
+    background-image: url( ../img/ico/cross-0.png );
+    background-position: 4px 50%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#content #logging .jstree .loglevel ul li.unset a:hover
+{
+    background-image: url( ../img/ico/cross-1.png );
+    color: #800;
 }
