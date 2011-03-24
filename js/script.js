@@ -2362,11 +2362,21 @@ var sammy = $.sammy
                             this
                                 .html( template );
             
-                            var memory_data = {
-                                'memory-bar-max' : parseInt( app.dashboard_values['jvm']['memory']['raw']['max'] ),
-                                'memory-bar-total' : parseInt( app.dashboard_values['jvm']['memory']['raw']['total'] ),
-                                'memory-bar-used' : parseInt( app.dashboard_values['jvm']['memory']['raw']['used'] )
-                            };
+                            var memory_data = {};
+                            if( app.dashboard_values['jvm']['memory']['raw'] )
+                            {
+                                var jvm_memory = app.dashboard_values['jvm']['memory']['raw'];
+                                memory_data['memory-bar-max'] = parseInt( jvm_memory['max'] );
+                                memory_data['memory-bar-total'] = parseInt( jvm_memory['total'] );
+                                memory_data['memory-bar-used'] = parseInt( jvm_memory['used'] );
+                            }
+                            else
+                            {
+                                var jvm_memory = app.dashboard_values['jvm']['memory'];
+                                memory_data['memory-bar-max'] = parseFloat( jvm_memory['max'] ) * 1024 * 1024;
+                                memory_data['memory-bar-total'] = parseFloat( jvm_memory['total'] ) * 1024 * 1024;
+                                memory_data['memory-bar-used'] = parseFloat( jvm_memory['used'] ) * 1024 * 1024;
+                            }
             
                             for( var key in memory_data )
                             {                                                        
@@ -2377,18 +2387,27 @@ var sammy = $.sammy
                             var data = {
                                 'start_time' : app.dashboard_values['jvm']['jmx']['startTime'],
                                 'host' : app.dashboard_values['core']['host'],
-                                'cwd' : app.dashboard_values['core']['directory']['cwd'],
                                 'jvm' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
                                 'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
                                 'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
                                 'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
                                 'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version']
                             };
+
+                            if( app.dashboard_values['core']['directory']['cwd'] )
+                            {
+                                data['cwd'] = app.dashboard_values['core']['directory']['cwd'];
+                            }
             
                             for( var key in data )
                             {                                                        
-                                $( '.' + key + ' dd', this )
+                                var value_element = $( '.' + key + ' dd', this );
+
+                                value_element
                                     .html( data[key] );
+                                
+                                value_element.closest( 'li' )
+                                    .show();
                             }
 
                             var cmd_arg_key_element = $( '.command_line_args dt', this );
@@ -2403,13 +2422,16 @@ var sammy = $.sammy
                                     .after( cmd_arg_element );
                             }
 
+                            cmd_arg_key_element.closest( 'li' )
+                                .show();
+
                             $( '.command_line_args dd:last', this )
                                 .remove();
 
                             $( '.timeago', this )
                                 .timeago();
 
-                            $( 'li:odd', this )
+                            $( 'li:visible:odd', this )
                                 .addClass( 'odd' );
 
                             $( '.command_line_args dd:odd', this )
