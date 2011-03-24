@@ -104,21 +104,19 @@ var sammy = $.sammy
                             .addClass( 'active' );
                     }
                 }
-                else
-                {
-                    $( '#index', app.menu_element )
-                        .addClass( 'active' );
-                }
             }
         );
 
-        // #/:core/logging
+        // #/logging
         this.get
         (
-            /^#\/([\w\d]+)\/(logging)$/,
+            /^#\/logging$/,
             function( context )
             {
                 var content_element = $( '#content' );
+
+                $( '#logging', app.menu_element )
+                    .addClass( 'active' );
                 
                 content_element
                     .html( '<div id="logging"></div>' );
@@ -2345,6 +2343,9 @@ var sammy = $.sammy
             {
                 var content_element = $( '#content' );
 
+                $( '#index', app.menu_element )
+                    .addClass( 'active' );
+
                 content_element
                     .html( '<div id="index"></div>' );
 
@@ -2639,7 +2640,6 @@ $( document ).ready
                                      + '        <li class="schema-browser"><a href="' + core_path + '/admin/schema.jsp" rel="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
-                                     + '        <li class="logging"><a href="' + core_path + '/admin/logging" rel="#/' + core_name + '/logging"><span>Logging</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
                                      + '        <li class="java-properties"><a rel="#/' + core_name + '/java-properties"><span>Java-Properties</span></a></li>' + "\n"
 

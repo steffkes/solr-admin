@@ -330,11 +330,20 @@ ul
     background-color: transparent;
 }
 
+#menu .global p a
+{
+    background-position: 5px 50%;
+    padding-left: 26px;
+}
+
 #menu #index p a
 {
     background-image: url( ../img/ico/dashboard.png );
-    background-position: 5px 50%;
-    padding-left: 26px;
+}
+
+#menu #logging p a
+{
+    background-image: url( ../img/ico/inbox-document-text.png );
 }
 
 #menu .query a { background-image: url( ../img/ico/magnifier.png ); }

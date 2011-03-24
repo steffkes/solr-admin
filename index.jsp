@@ -53,8 +53,12 @@
                 
                 <ul>
 
-                    <li id="index">
+                    <li id="index" class="global">
                         <p><a href="#/">Dashboard</a></p>
+                    </li>
+
+                    <li id="logging" class="global">
+                        <p><a href="#/logging">Logging</a></p>
                     </li>
                     
                 </ul>
