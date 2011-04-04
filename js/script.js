@@ -63,7 +63,7 @@ var sammy = $.sammy
                             }
                             
                             $( 'span', qtime_element )
-                                .html( response.responseHeader.QTime );
+                                .html( response.responseHeader.QTime + 'ms' );
                         },
                         error : function()
                         {
