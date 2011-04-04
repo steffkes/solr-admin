@@ -275,13 +275,16 @@ var sammy = $.sammy
             }
         );
 
-        // #/:core/java-properties
+        // #/java-properties
         this.get
         (
-            /^#\/([\w\d]+)\/(java-properties)$/,
+            /^#\/(java-properties)$/,
             function( context )
             {
                 var content_element = $( '#content' );
+
+                $( '#java-properties', app.menu_element )
+                    .addClass( 'active' );
 
                 content_element
                     .html( '<div id="java-properties"></div>' );
@@ -2663,7 +2666,6 @@ $( document ).ready
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
-                                     + '        <li class="java-properties"><a rel="#/' + core_name + '/java-properties"><span>Java-Properties</span></a></li>' + "\n"
 
                                      + '    </ul>' + "\n"
                                      + '</li>';

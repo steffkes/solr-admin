@@ -346,6 +346,11 @@ ul
     background-image: url( ../img/ico/inbox-document-text.png );
 }
 
+#menu #java-properties p a
+{
+    background-image: url( ../img/ico/jar.png );
+}
+
 #menu .query a { background-image: url( ../img/ico/magnifier.png ); }
 #menu .schema a { background-image: url( ../img/ico/table.png ); }
 #menu .config a { background-image: url( ../img/ico/gear.png ); }
@@ -357,7 +362,6 @@ ul
 #menu .ping a { background-image: url( ../img/ico/system-monitor.png ); }
 #menu .logging a { background-image: url( ../img/ico/inbox-document-text.png ); }
 #menu .plugins a { background-image: url( ../img/ico/block.png ); }
-#menu .java-properties a { background-image: url( ../img/ico/jar.png ); }
 
 #content-wrapper
 {

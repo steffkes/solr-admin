@@ -60,6 +60,9 @@
                     <li id="logging" class="global">
                         <p><a href="#/logging">Logging</a></p>
                     </li>
+                    <li id="java-properties" class="global">
+                        <p><a href="#/java-properties">Java Properties</a>
+                    </li>
                     
                 </ul>
                 
