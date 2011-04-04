@@ -351,6 +351,11 @@ ul
     background-image: url( ../img/ico/jar.png );
 }
 
+#menu #threads p a
+{
+    background-image: url( ../img/ico/ui-accordion.png );
+}
+
 #menu .query a { background-image: url( ../img/ico/magnifier.png ); }
 #menu .schema a { background-image: url( ../img/ico/table.png ); }
 #menu .config a { background-image: url( ../img/ico/gear.png ); }
@@ -1667,4 +1672,163 @@ ul
 {
     background-image: url( ../img/ico/cross-1.png );
     color: #800;
+}
+
+/* threads */
+
+#content #threads .loader
+{
+    background-position: 0 50%;
+    padding-left: 21px;
+}
+
+#content #threads #thread-dump table
+{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#content #threads #thread-dump table .spacer,
+#content #threads #thread-dump tbody .state
+{
+    background-color: #fff;
+    border: 0;
+}
+
+#content #threads #thread-dump table th,
+#content #threads #thread-dump table td
+{
+    border: 1px solid #c0c0c0;
+    padding: 3px;
+    vertical-align: top;
+}
+
+#content #threads #thread-dump thead th
+{
+    background-color: #c8c8c8;
+    font-weight: bold;
+    text-align: left;
+}
+
+#content #threads #thread-dump tbody .odd
+{
+    background-color: #f0f0f0;
+}
+
+#content #threads #thread-dump tbody .state
+{
+    width: 20px;
+}
+
+#content #threads #thread-dump tbody .state a
+{
+    background-position: 50% 50%;
+    display: block;
+    height: 20px;
+}
+
+#content #threads #thread-dump tbody .open .state a
+{
+    background-image: url( ../img/ico/chevron-small.png );
+}
+
+#content #threads #thread-dump tbody .state a span
+{
+    display: none;
+}
+
+#content #threads #thread-dump tbody .id
+{
+    text-align: right;
+}
+
+#content #threads #thread-dump tbody .ico
+{
+    background-position: 50% 3px;
+    cursor: help;
+    width: 20px;
+}
+
+#content #threads #thread-dump tbody .RUNNABLE .ico
+{
+    background-image: url( ../img/ico/tick-circle.png );
+}
+
+#content #threads #thread-dump tbody .WAITING .ico,
+#content #threads #thread-dump tbody .TIMED_WAITING .ico
+{
+    background-image: url( ../img/ico/hourglass.png );
+}
+
+#content #threads #thread-dump tbody .WAITING.lock .ico,
+#content #threads #thread-dump tbody .TIMED_WAITING.lock .ico
+{
+    background-image: url( ../img/ico/hourglass--exclamation.png );
+}
+
+#content #threads #thread-dump tbody .ico span
+{
+    display: none;
+}
+
+#content #threads #thread-dump tbody .name a
+{
+    cursor: auto;
+    display: block;
+}
+
+#content #threads #thread-dump tbody .stacktrace .name a
+{
+    cursor: pointer;
+}
+
+#content #threads #thread-dump tbody .stacktrace .name a span
+{    
+    background-image: url( ../img/ico/chevron-small.png );
+    background-position: 100% 50%;
+    padding-right: 21px;
+}
+
+#content #threads #thread-dump tbody .stacktrace.open .name a span
+{   
+    background-image: url( ../img/ico/chevron-small-expand.png );
+}
+
+#content #threads #thread-dump tbody .name p
+{
+    background-image: url( ../img/ico/arrow-000-small.png );
+    background-position: 0 50%;
+    color: #c0c0c0;
+    font-size: 11px;
+    padding-left: 21px;
+}
+
+#content #threads #thread-dump tbody .name div
+{
+    border-top: 1px solid #c0c0c0;
+    display: none;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+#content #threads #thread-dump tbody .open .name div
+{
+    display: block;
+}
+
+#content #threads #thread-dump tbody .name ul
+{
+    list-style-type: disc;
+    margin-left: 0.7em;
+    padding-left: 0.7em;
+}
+
+#content #threads #thread-dump tbody .time
+{
+    text-align: right;
+}
+
+#content #threads #thread-dump tbody .details
+{
+    display: none;
 }

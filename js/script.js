@@ -362,6 +362,118 @@ var sammy = $.sammy
             }
         );
 
+        // #/threads
+        this.get
+        (
+            /^#\/(threads)$/,
+            function( context )
+            {
+                var core_basepath = $( 'li[data-basepath]', app.menu_element ).attr( 'data-basepath' );
+                var content_element = $( '#content' );
+
+                $( '#threads', app.menu_element )
+                    .addClass( 'active' );
+
+                $.get
+                (
+                    'tpl/threads.html',
+                    function( template )
+                    {
+                        content_element
+                            .html( template );
+
+                        $.ajax
+                        (
+                            {
+                                url : core_basepath + '/admin/threads?wt=json',
+                                dataType : 'json',
+                                context : $( '#threads', content_element ),
+                                beforeSend : function( xhr, settings )
+                                {
+                                },
+                                success : function( response, text_status, xhr )
+                                {
+                                    var threadDumpData = response.system.threadDump;
+                                    var threadDumpContent = [];
+                                    var c = 0;
+                                    for( var i = 1; i < threadDumpData.length; i += 2 )
+                                    {
+                                        var state = threadDumpData[i].state;
+                                        var name = '<a><span>' + threadDumpData[i].name + '</span></a>';
+
+                                        var class = [state];
+                                        var details = '';
+
+                                        if( 0 !== c % 2 )
+                                        {
+                                            class.push( 'odd' );
+                                        }
+
+                                        if( threadDumpData[i].lock )
+                                        {
+                                            class.push( 'lock' );
+                                            name += "\n" + '<p title="Waiting on">' + threadDumpData[i].lock + '</p>';
+                                        }
+
+                                        if( threadDumpData[i].stackTrace && 0 !== threadDumpData[i].stackTrace.length )
+                                        {
+                                            class.push( 'stacktrace' );
+
+                                            var stack_trace = threadDumpData[i].stackTrace
+                                                                .join( '</li><li>' )
+                                                                .replace( /\(/g, '&#8203;(' );
+
+                                            name += '<div>' + "\n"
+                                                    + '<ul>' + "\n"
+                                                    + '<li>' + stack_trace + '</li>'
+                                                    + '</ul>' + "\n"
+                                                    + '</div>';
+                                        }
+
+                                        var item = '<tr class="' + class.join( ' ' ) +'">' + "\n"
+
+                                                 + '<td class="ico" title="' + state +'"><span>' + state +'</span></td>' + "\n"
+                                                 + '<td class="id">' + threadDumpData[i].id + '</td>' + "\n"
+                                                 + '<td class="name">' + name + '</td>' + "\n"
+                                                 + '<td class="time">' + threadDumpData[i].cpuTime + '</td>' + "\n"
+                                                 + '<td class="time">' + threadDumpData[i].userTime + '</td>' + "\n"
+
+                                                 + '</tr>';
+                                        
+                                        threadDumpContent.push( item );
+                                        c++;
+                                    }
+
+                                    var threadDumpBody = $( '#thread-dump tbody', this );
+
+                                    threadDumpBody
+                                        .html( threadDumpContent.join( "\n" ) );
+                                    
+                                    $( '.name a', threadDumpBody )
+                                        .die( 'click' )
+                                        .live
+                                        (
+                                            'click',
+                                            function( event )
+                                            {
+                                                $( this ).closest( 'tr' )
+                                                    .toggleClass( 'open' );
+                                            }
+                                        )
+                                },
+                                error : function( xhr, text_status, error_thrown)
+                                {
+                                },
+                                complete : function( xhr, text_status )
+                                {
+                                }
+                            }
+                        );
+                    }
+                );
+            }
+        );
+
         this.bind
         (
             'schema_browser_navi',
