@@ -683,6 +683,9 @@ ul
     background-color: #f00;
 }
 
+#content #analysis #field-analysis h2 { background-image: url( ../img/ico/receipt.png ); }
+#content #analysis .analysis-result h2 { background-image: url( ../img/ico/receipt-invoice.png ); }
+
 /* plugins */
 
 #content #plugins .loader
