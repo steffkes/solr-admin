@@ -664,15 +664,17 @@ ul
 #content #analysis .index
 {
     float: left;
+    margin-right: 0.5%;
     min-width: 49%;
-    max-width: 100%;
+    max-width: 99%;
 }
 
 #content #analysis .query
 {
     float: right;
+    margin-left: 0.5%;
     min-width: 49%;
-    max-width: 100%;
+    max-width: 99%;
 }
 
 #content #analysis .analysis-result .index,
@@ -681,14 +683,41 @@ ul
     margin-bottom: 10px;
 }
 
-#content #analysis .analysis-result .index
+#content #analysis .analysis-result .row
 {
-    background-color: #ff0;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 10px;
+    padding-top: 10px;
 }
 
-#content #analysis .analysis-result .query
+#content #analysis .analysis-result .row:first-child
 {
-    background-color: #f00;
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#content #analysis .analysis-result .row .analyzer
+{
+    color: #c0c0c0;
+}
+
+#content #analysis .analysis-result .row table th,
+#content #analysis .analysis-result .row table td
+{
+    border-top: 1px solid #f0f0f0;
+    padding: 1px 2px;
+    vertical-align: top;
+}
+
+#content #analysis .analysis-result .row table td
+{
+    border-left: 1px solid #c0c0c0;
+}
+
+#content #analysis .analysis-result .row table td div
+{
+    border-top: 1px solid #ff0;
 }
 
 #content #analysis #field-analysis h2 { background-image: url( ../img/ico/receipt.png ); }

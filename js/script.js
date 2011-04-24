@@ -1862,29 +1862,16 @@ var sammy = $.sammy
                                     if( 0 !== type_length )
                                     {
                                         var type_content = '<div class="' + type + '">' + "\n";
-                                        type_content += '<table border="1">' + "\n";
                                         for( var i = 0; i < type_length; i += 2 )
                                         {
-                                            type_content += '<tr>' + "\n";
-                                            
+                                            type_content += '<div class="row">' + "\n";
+                                        
                                             var analyzer_parts = analysis_data[type][i].split( '.' );
                                             var analyzer_parts_name = analyzer_parts.pop();
                                             var analyzer_parts_namespace = analyzer_parts.join( '.' ) + '.';
-                                            
-                                            var analyzer_parts_formatted_name = '';
-                                            
-                                            if( verbose )
-                                            {
-                                                analyzer_parts_formatted_name += '<span>' + analyzer_parts_namespace + '</span>';
-                                            }
-                                            analyzer_parts_formatted_name += analyzer_parts_name;
-                                            
-                                            type_content += '<th colspan="' + analysis_data[type][i+1].length + '" ' +
-                                                            '    title="' + analysis_data[type][i] +'">' + 
-                                                            analyzer_parts_formatted_name + '</th>' + "\n";
-                                            
-                                            type_content += '</tr>' + "\n";
-                                            type_content += '<tr>' + "\n";
+                                                                                        
+                                            type_content += '<div class="analyzer" title="' + analysis_data[type][i] +'">' + 
+                                                            analyzer_parts_name + '</div>' + "\n";
                                             
                                             var parts = {
                                                 'position' : [],
@@ -1901,7 +1888,9 @@ var sammy = $.sammy
                                                 parts['type'].push( '<td>' + analysis_data[type][i+1][k]['type'] + '</td>' );
                                                 parts['start-end'].push( '<td>' + analysis_data[type][i+1][k]['start'] + '–' + analysis_data[type][i+1][k]['end'] + '</td>' );
                                             }
-                                            type_content += '<td><table border="1">' + "\n";
+
+                                            type_content += '<div class="result">' + "\n";
+                                            type_content += '<table border="0" cellspacing="0" cellpadding="0">' + "\n";
                                             
                                             if( verbose )
                                             {
@@ -1931,18 +1920,18 @@ var sammy = $.sammy
                                                 type_content += '</tr>' + "\n";
                                             }
                                             
-                                            type_content += '</table></td>' + "\n";
+                                            type_content += '</table>' + "\n";
+                                            type_content += '</div>' + "\n";
                                             
-                                            type_content += '</tr>' + "\n";
+                                            type_content += '</div>' + "\n";
                                         }
-                                        type_content += '</table>' + "\n";
                                         type_content += '</div>';
                                         content.push( $.trim( type_content ) );
                                     }
                                 }
                                 
                                 $( 'h2 span', analysis_result_data )
-                                    .html( field_or_name + ' : ' + name );
+                                    .html( field_or_name + ': ' + name );
                                 
                                 $( '.analysis-result-content', analysis_result_data )
                                     .html( content.join( "\n" ) );
