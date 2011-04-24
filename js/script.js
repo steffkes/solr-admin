@@ -1771,21 +1771,6 @@ var sammy = $.sammy
                                         content += '</optgroup>' + "\n";
                                     }
                                     
-                                    var dynamic_fields = [];
-                                    for( var type_name in response.schema.dynamicFields )
-                                    {
-                                        dynamic_fields.push
-                                        (
-                                            '<option value="fieldtype=' + type_name + '">' + type_name + '</option>'
-                                        );
-                                    }
-                                    if( 0 !== dynamic_fields.length )
-                                    {
-                                        content += '<optgroup label="DynamicFields">' + "\n";
-                                        content += dynamic_fields.join( "\n" ) + "\n";
-                                        content += '</optgroup>' + "\n";
-                                    }
-                                    
                                     this
                                         .html( content );
                                     
