@@ -1792,8 +1792,6 @@ var sammy = $.sammy
                         analysis_result_tpl = analysis_result.clone();
                         analysis_result.remove();
                         
-                        var verbose_output = false;
-                        
                         analysis_form
                             .ajaxForm
                             (
@@ -1807,8 +1805,6 @@ var sammy = $.sammy
                                         $( '.analysis-result', analysis_element )
                                             .remove();
                                         
-                                        verbose_output = $( '#verbose_output', form ).is( ':checked' );
-                                        
                                         array.push( { name: 'analysis.showmatch', value: 'true' } );
                                         
                                         var type_or_name = $( '#type_or_name', form ).val().split( '=' );
@@ -1819,12 +1815,12 @@ var sammy = $.sammy
                                     {
                                         for( var name in response.analysis.field_names )
                                         {
-                                            build_analysis_table( 'name', name, response.analysis.field_names[name], verbose_output );
+                                            build_analysis_table( 'name', name, response.analysis.field_names[name] );
                                         }
                                         
                                         for( var name in response.analysis.field_types )
                                         {
-                                            build_analysis_table( 'type', name, response.analysis.field_types[name], verbose_output );
+                                            build_analysis_table( 'type', name, response.analysis.field_types[name] );
                                         }
                                     },
                                     complete : function()
@@ -1834,10 +1830,8 @@ var sammy = $.sammy
                                 }
                             );
                             
-                            var build_analysis_table = function( field_or_name, name, analysis_data, verbose )
-                            {
-                                verbose = !!verbose;
-                                
+                            var build_analysis_table = function( field_or_name, name, analysis_data )
+                            {                                
                                 var analysis_result_data = analysis_result_tpl.clone();
                                 var content = [];
                                 
@@ -1857,53 +1851,72 @@ var sammy = $.sammy
                                                                                         
                                             type_content += '<div class="analyzer" title="' + analysis_data[type][i] +'">' + 
                                                             analyzer_parts_name + '</div>' + "\n";
+
+                                            var raw_parts = {
+                                                'position' : [],
+                                                'text' : [],
+                                                'type' : [],
+                                                'start-end' : []
+                                            };
                                             
+                                            for( var k in analysis_data[type][i+1] )
+                                            {
+                                                var pos = analysis_data[type][i+1][k]['position'] - 1;
+                                                var is_match = !!analysis_data[type][i+1][k]['match'];
+                                            
+                                                if( 'undefined' === typeof raw_parts['text'][pos] )
+                                                {
+                                                    raw_parts['position'][pos] = [];
+                                                    raw_parts['text'][pos] = [];
+                                                    raw_parts['type'][pos] = [];
+                                                    raw_parts['start-end'][pos] = [];
+
+                                                    raw_parts['position'][pos].push( '<div>' + analysis_data[type][i+1][k]['position'] + '</div>' );
+                                                }
+
+                                                raw_parts['text'][pos].push( '<div>' + analysis_data[type][i+1][k]['text'] + '</div>' );
+                                                raw_parts['type'][pos].push( '<div>' + analysis_data[type][i+1][k]['type'] + '</div>' );
+                                                raw_parts['start-end'][pos].push( '<div>' + analysis_data[type][i+1][k]['start'] + '–' + analysis_data[type][i+1][k]['end'] + '</div>' );
+                                            }
+
                                             var parts = {
                                                 'position' : [],
                                                 'text' : [],
                                                 'type' : [],
                                                 'start-end' : []
                                             };
-                                            for( var k in analysis_data[type][i+1] )
+
+                                            for( var key in raw_parts )
                                             {
-                                                var is_match = !!analysis_data[type][i+1][k]['match'];
-                                            
-                                                parts['position'].push( '<td>' + analysis_data[type][i+1][k]['position'] + '</td>' );
-                                                parts['text'].push( '<td>' + analysis_data[type][i+1][k]['text'] + '</td>' );
-                                                parts['type'].push( '<td>' + analysis_data[type][i+1][k]['type'] + '</td>' );
-                                                parts['start-end'].push( '<td>' + analysis_data[type][i+1][k]['start'] + '–' + analysis_data[type][i+1][k]['end'] + '</td>' );
+                                                var length = raw_parts[key].length;
+                                                for( var j = 0; j < length; j++ )
+                                                {
+                                                    parts[key].push( '<td>' + raw_parts[key][j].join( "\n" ) + '</td>' );
+                                                }
                                             }
 
                                             type_content += '<div class="result">' + "\n";
                                             type_content += '<table border="0" cellspacing="0" cellpadding="0">' + "\n";
                                             
-                                            if( verbose )
-                                            {
-                                                type_content += '<tr>' + "\n";
-                                                type_content += '<th><abbr title="Position">P</abbr></th>' + "\n";
-                                                type_content += parts['position'].join( "\n" ) + "\n";
-                                                type_content += '</tr>' + "\n";
-                                            }
-                                            
-                                            if( 0 !== parts['text'].length )
-                                            {
-                                                type_content += '<tr>' + "\n";
-                                                type_content += '<th><abbr title="Text">T</abbr></th>' + "\n";
-                                                type_content += parts['text'].join( "\n" ) + "\n";
-                                                type_content += '</tr>' + "\n";
-                                            }
-                                            
-                                            if( verbose )
-                                            {
-                                                type_content += '<tr>' + "\n";
-                                                type_content += '<th><abbr title="Type">T</abbr></th>' + "\n";
-                                                type_content += parts['type'].join( "\n" ) + "\n";
-                                                type_content += '</tr>' + "\n";
-                                                type_content += '<tr>' + "\n";
-                                                type_content += '<th><abbr title="Range (Start, End)">R</abbr></th>' + "\n";
-                                                type_content += parts['start-end'].join( "\n" ) + "\n";
-                                                type_content += '</tr>' + "\n";
-                                            }
+                                            type_content += '<tr class="verbose_output">' + "\n";
+                                            type_content += '<th><abbr title="Position">P</abbr></th>' + "\n";
+                                            type_content += parts['position'].join( "\n" ) + "\n";
+                                            type_content += '</tr>' + "\n";
+                                                                                        
+                                            type_content += '<tr>' + "\n";
+                                            type_content += '<th><abbr title="Text">T</abbr></th>' + "\n";
+                                            type_content += parts['text'].join( "\n" ) + "\n";
+                                            type_content += '</tr>' + "\n";
+
+                                            type_content += '<tr class="verbose_output">' + "\n";
+                                            type_content += '<th><abbr title="Type">T</abbr></th>' + "\n";
+                                            type_content += parts['type'].join( "\n" ) + "\n";
+                                            type_content += '</tr>' + "\n";
+
+                                            type_content += '<tr class="verbose_output">' + "\n";
+                                            type_content += '<th><abbr title="Range (Start, End)">R</abbr></th>' + "\n";
+                                            type_content += parts['start-end'].join( "\n" ) + "\n";
+                                            type_content += '</tr>' + "\n";
                                             
                                             type_content += '</table>' + "\n";
                                             type_content += '</div>' + "\n";
@@ -1917,6 +1930,18 @@ var sammy = $.sammy
                                 
                                 $( 'h2 span', analysis_result_data )
                                     .html( field_or_name + ': ' + name );
+                                
+                                $( 'h2 .verbose_output a', analysis_result_data )
+                                    .die( 'click' )
+                                    .live
+                                    (
+                                        'click',
+                                        function( event )
+                                        {
+                                            $( this ).parents( '.block' )
+                                                .toggleClass( 'verbose_output' );
+                                        }
+                                    );
                                 
                                 $( '.analysis-result-content', analysis_result_data )
                                     .html( content.join( "\n" ) );

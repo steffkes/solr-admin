@@ -34,9 +34,6 @@
 
                     <div>
 
-                        <input type="checkbox" id="verbose_output">
-                        <label for="verbose_output">Verbose Output</label>
-
                         <button type="submit">Analyse Values</button>
 
                     </div>
@@ -52,7 +49,12 @@
     
     <div class="block analysis-result">
         
-        <h2><span>{headline}</span></h2>
+        <h2>
+            <span>{headline}</span>
+            <div class="verbose_output">
+                <a>Verbose Output</label>
+            </div>
+        </h2>
         <div class="content">
         
         <div class="message-container">

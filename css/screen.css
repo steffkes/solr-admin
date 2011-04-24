@@ -677,6 +677,33 @@ ul
     max-width: 99%;
 }
 
+#content #analysis .analysis-result h2
+{
+    position: relative;
+}
+
+#content #analysis .analysis-result h2 .verbose_output
+{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+#content #analysis .analysis-result h2 .verbose_output a
+{
+    background-image: url( ../img/ico/ui-check-box-uncheck.png );
+    background-position: 0 50%;
+    color: #999;
+    display: block;
+    padding-left: 21px;
+}
+
+#content #analysis .analysis-result.verbose_output h2 .verbose_output a
+{
+    background-image: url( ../img/ico/ui-check-box.png );
+    color: #080;
+}
+
 #content #analysis .analysis-result .index,
 #content #analysis .analysis-result .query
 {
@@ -707,11 +734,20 @@ ul
     color: #333;
 }
 
+#content #analysis .analysis-result .row table tr.verbose_output
+{
+    display: none;
+}
+
+#content #analysis .analysis-result.verbose_output .row table tr.verbose_output
+{
+    display: table-row;
+}
+
 #content #analysis .analysis-result .row table th,
 #content #analysis .analysis-result .row table td
 {
     border-top: 1px solid #f0f0f0;
-    padding: 1px 2px;
     vertical-align: top;
 }
 
@@ -719,8 +755,7 @@ ul
 {
     background-color: #f8f8f8;
     color: #999;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding: 2px;
 }
 
 #content #analysis .analysis-result .row table th abbr
@@ -731,12 +766,18 @@ ul
 
 #content #analysis .analysis-result .row table td
 {
-    border-left: 1px solid #c0c0c0;
+    border-left: 1px solid #dcdcdc;
 }
 
 #content #analysis .analysis-result .row table td div
 {
-    border-top: 1px solid #ff0;
+    border-top: 1px solid #f0f0f0;
+    padding: 1px 2px;
+}
+
+#content #analysis .analysis-result .row table td div:first-child
+{
+    border-top: 0;
 }
 
 #content #analysis #field-analysis h2 { background-image: url( ../img/ico/receipt.png ); }
