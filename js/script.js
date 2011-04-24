@@ -1874,7 +1874,7 @@ var sammy = $.sammy
                                                     raw_parts['position'][pos].push( '<div>' + analysis_data[type][i+1][k]['position'] + '</div>' );
                                                 }
 
-                                                raw_parts['text'][pos].push( '<div>' + analysis_data[type][i+1][k]['text'] + '</div>' );
+                                                raw_parts['text'][pos].push( '<div class="' + ( is_match ? 'match' : '' ) + '">' + analysis_data[type][i+1][k]['text'] + '</div>' );
                                                 raw_parts['type'][pos].push( '<div>' + analysis_data[type][i+1][k]['type'] + '</div>' );
                                                 raw_parts['start-end'][pos].push( '<div>' + analysis_data[type][i+1][k]['start'] + '–' + analysis_data[type][i+1][k]['end'] + '</div>' );
                                             }

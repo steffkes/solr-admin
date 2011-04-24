@@ -756,6 +756,7 @@ ul
     background-color: #f8f8f8;
     color: #999;
     padding: 2px;
+    padding-bottom: 0;
 }
 
 #content #analysis .analysis-result .row table th abbr
@@ -772,7 +773,13 @@ ul
 #content #analysis .analysis-result .row table td div
 {
     border-top: 1px solid #f0f0f0;
+    display: block;
     padding: 1px 2px;
+}
+
+#content #analysis .analysis-result .row table td div.match
+{
+    background-color: #e9eff7;
 }
 
 #content #analysis .analysis-result .row table td div:first-child
