@@ -1880,7 +1880,7 @@ var sammy = $.sammy
                                             if( verbose )
                                             {
                                                 type_content += '<tr>' + "\n";
-                                                type_content += '<th>Position</th>' + "\n";
+                                                type_content += '<th><abbr title="Position">P</abbr></th>' + "\n";
                                                 type_content += parts['position'].join( "\n" ) + "\n";
                                                 type_content += '</tr>' + "\n";
                                             }
@@ -1888,7 +1888,7 @@ var sammy = $.sammy
                                             if( 0 !== parts['text'].length )
                                             {
                                                 type_content += '<tr>' + "\n";
-                                                type_content += '<th>Text</th>' + "\n";
+                                                type_content += '<th><abbr title="Text">T</abbr></th>' + "\n";
                                                 type_content += parts['text'].join( "\n" ) + "\n";
                                                 type_content += '</tr>' + "\n";
                                             }
@@ -1896,11 +1896,11 @@ var sammy = $.sammy
                                             if( verbose )
                                             {
                                                 type_content += '<tr>' + "\n";
-                                                type_content += '<th>Type</th>' + "\n";
+                                                type_content += '<th><abbr title="Type">T</abbr></th>' + "\n";
                                                 type_content += parts['type'].join( "\n" ) + "\n";
                                                 type_content += '</tr>' + "\n";
                                                 type_content += '<tr>' + "\n";
-                                                type_content += '<th>Start, End</th>' + "\n";
+                                                type_content += '<th><abbr title="Range (Start, End)">R</abbr></th>' + "\n";
                                                 type_content += parts['start-end'].join( "\n" ) + "\n";
                                                 type_content += '</tr>' + "\n";
                                             }

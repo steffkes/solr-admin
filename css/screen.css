@@ -702,12 +702,31 @@ ul
     color: #c0c0c0;
 }
 
+#content #analysis .analysis-result .row:hover .analyzer
+{
+    color: #333;
+}
+
 #content #analysis .analysis-result .row table th,
 #content #analysis .analysis-result .row table td
 {
     border-top: 1px solid #f0f0f0;
     padding: 1px 2px;
     vertical-align: top;
+}
+
+#content #analysis .analysis-result .row table th
+{
+    background-color: #f8f8f8;
+    color: #999;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+#content #analysis .analysis-result .row table th abbr
+{
+    border: 0;
+    cursor: help;
 }
 
 #content #analysis .analysis-result .row table td
