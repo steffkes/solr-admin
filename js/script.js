@@ -1400,6 +1400,146 @@ var sammy = $.sammy
             }
         );
 
+        this.bind
+        (
+            'dataimport_queryhandler_load',
+            function( event, params )
+            {
+                var core_basepath = params.active_core.attr( 'data-basepath' );
+
+                $.ajax
+                (
+                    {
+                        url : core_basepath + '/admin/mbeans?cat=QUERYHANDLER&wt=json',
+                        dataType : 'json',
+                        beforeSend : function( xhr, settings )
+                        {
+                        },
+                        success : function( response, text_status, xhr )
+                        {
+                            var handlers = response['solr-mbeans'][1];
+                            var dataimport_handlers = [];
+                            for( var key in handlers )
+                            {
+                                if( handlers[key].class !== key &&
+                                    handlers[key].class === 'org.apache.solr.handler.dataimport.DataImportHandler' )
+                                {
+                                    dataimport_handlers.push( key );
+                                }
+                            }
+                            params.callback( dataimport_handlers );
+                        },
+                        error : function( xhr, text_status, error_thrown)
+                        {
+                        },
+                        complete : function( xhr, text_status )
+                        {
+                        }
+                    }
+                );
+            }
+        );
+
+        // #/:core/dataimport
+        this.get
+        (
+            /^#\/([\w\d]+)\/dataimport$/,
+            function( context )
+            {
+                sammy.trigger
+                (
+                    'dataimport_queryhandler_load',
+                    {
+                        active_core : this.active_core,
+                        callback :  function( dataimport_handlers )
+                        {
+                            context.redirect( context.path + '/' + dataimport_handlers[0] );
+                        }
+                    }
+                );
+            }
+        );
+
+        // #/:core/dataimport
+        this.get
+        (
+            /^#\/([\w\d]+)\/dataimport\//,
+            function( context )
+            {
+                var core_basepath = this.active_core.attr( 'data-basepath' );
+                var content_element = $( '#content' );
+                var current_handler = this.path.match( /\/dataimport\/(.*)$/ )[1];
+
+                $.get
+                (
+                    'tpl/dataimport.html',
+                    function( template )
+                    {
+                        content_element
+                            .html( template );
+
+                        // handler
+
+                        sammy.trigger
+                        (
+                            'dataimport_queryhandler_load',
+                            {
+                                active_core : context.active_core,
+                                callback :  function( dataimport_handlers )
+                                {
+                                    console.debug( dataimport_handlers );
+                                }
+                            }
+                        );
+
+                        // config
+
+                        $.ajax
+                        (
+                            {
+                                url : core_basepath + '/select?qt=' + current_handler  + '&command=show-config',
+                                dataType : 'xml',
+                                context : $( '#dataimport_config', content_element ),
+                                beforeSend : function( xhr, settings )
+                                {
+                                    this
+                                        .html( '<div class="loader">Loading ...</div>' );
+                                },
+                                success : function( config, text_status, xhr )
+                                {
+                                    var root_entities = $( 'document > entity', config );
+                                    console.debug( root_entities );
+                                },
+                                error : function( xhr, text_status, error_thrown )
+                                {
+                                    if( 'parsererror' === error_thrown )
+                                    {
+                                        console.error( 'xml not valid!' );
+                                        console.debug( arguments );
+                                    }
+                                    else
+                                    {
+                                        console.debug( arguments );
+                                    }
+                                },
+                                complete : function( xhr, text_status )
+                                {
+                                    var code = $(
+                                        '<pre class="syntax language-xml"><code>' +
+                                        xhr.responseText.replace( /\</g, '&lt;' ).replace( /\>/g, '&gt;' ) +
+                                        '</code></pre>'
+                                    );
+
+                                    this.html( code );
+                                    hljs.highlightBlock( code.get(0) );
+                                }
+                            }
+                        );
+                    }
+                );
+            }
+        );
+
         // #/:core/info(/stats)
         this.get
         (

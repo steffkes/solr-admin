@@ -99,6 +99,7 @@
     <script type="text/javascript" src="js/jquery.sammy.js"></script>
     <script type="text/javascript" src="js/jquery.sparkline.js"></script>
     <script type="text/javascript" src="js/jquery.jstree.js"></script>
+    <script type="text/javascript" src="js/highlight.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
     
 </body>
