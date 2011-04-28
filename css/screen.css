@@ -2037,3 +2037,9 @@ ul
 {
     color: #333;
 }
+
+#content #dataimport #dataimport_config .loader
+{
+    background-position: 0 50%;
+    padding-left: 21px;
+}

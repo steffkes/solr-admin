@@ -1526,8 +1526,6 @@ var sammy = $.sammy
                                 context : $( '#dataimport_config', content_element ),
                                 beforeSend : function( xhr, settings )
                                 {
-                                    this
-                                        .html( '<div class="loader">Loading ...</div>' );
                                 },
                                 success : function( config, text_status, xhr )
                                 {
