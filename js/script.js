@@ -1468,7 +1468,9 @@ var sammy = $.sammy
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
                 var content_element = $( '#content' );
-                var current_handler = this.path.match( /\/dataimport\/(.*)$/ )[1];
+
+                var path_parts = this.path.match( /^(.+\/dataimport\/)(.*)$/ );
+                var current_handler = path_parts[2];
 
                 $.get
                 (
@@ -1477,6 +1479,8 @@ var sammy = $.sammy
                     {
                         content_element
                             .html( template );
+
+                        var form_element = $( '#form', content_element );
 
                         // handler
 
@@ -1487,7 +1491,27 @@ var sammy = $.sammy
                                 active_core : context.active_core,
                                 callback :  function( dataimport_handlers )
                                 {
-                                    console.debug( dataimport_handlers );
+                                    var handlers_element = $( '.handler', form_element );
+                                    var handlers = [];
+
+                                    for( var i = 0; i < dataimport_handlers.length; i++ )
+                                    {
+                                        handlers.push
+                                        (
+                                                '<li><a href="' + path_parts[1] + dataimport_handlers[i] + '">' +
+                                                dataimport_handlers[i] +
+                                                '</a></li>'
+                                        );
+                                    }
+
+                                    $( 'ul', handlers_element )
+                                        .html( handlers.join( "\n") ) ;
+                                    
+                                    $( 'a[href=' + context.path + ']', handlers_element ).parent()
+                                        .addClass( 'active' );
+                                    
+                                    handlers_element
+                                        .show();
                                 }
                             }
                         );
@@ -1507,8 +1531,19 @@ var sammy = $.sammy
                                 },
                                 success : function( config, text_status, xhr )
                                 {
-                                    var root_entities = $( 'document > entity', config );
-                                    console.debug( root_entities );
+                                    var entities = [];
+
+                                    $( 'document > entity', config )
+                                        .each
+                                        (
+                                            function( i, element )
+                                            {
+                                                entities.push( '<option>' + $( element ).attr( 'name' ) + '</option>' );
+                                            }
+                                        );
+                                    
+                                    $( '#entity', form_element )
+                                        .append( entities.join( "\n" ) );
                                 },
                                 error : function( xhr, text_status, error_thrown )
                                 {
@@ -1535,6 +1570,20 @@ var sammy = $.sammy
                                 }
                             }
                         );
+
+                        // form
+
+                        $( 'form', form_element )
+                            .die( 'submit' )
+                            .live
+                            (
+                                'submit',
+                                function( event )
+                                {
+                                    console.warn( this );
+                                    return false;
+                                }
+                            );
                     }
                 );
             }

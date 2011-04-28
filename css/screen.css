@@ -1939,3 +1939,101 @@ ul
 {
     display: none;
 }
+
+/* dataimport */
+
+#content #dataimport
+{
+    background-image: url( ../img/div.gif );
+    background-position: 21% 0;
+    background-repeat: repeat-y;
+}
+
+#content #dataimport #frame
+{
+    float: right;
+    width: 78%;
+}
+
+#content #dataimport #form
+{
+    float: left;
+    width: 20%;
+}
+
+#content #dataimport #form label
+{
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+}
+
+#content #dataimport #form input,
+#content #dataimport #form select,
+#content #dataimport #form textarea
+{
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+#content #dataimport #form #start
+{
+    float: left;
+    margin-right: 2%;
+    width: 49%;
+}
+
+#content #dataimport #form #rows
+{
+    width: 49%;
+}
+
+#content #dataimport #form .checkbox input
+{
+    margin-bottom: 0;
+    width: auto;
+}
+
+#content #dataimport #form fieldset,
+#content #dataimport #form .optional.expanded
+{
+    border: 1px solid #fff;
+    border-top: 1px solid #c0c0c0;
+    margin-bottom: 10px;
+}
+
+#content #dataimport #form fieldset legend,
+#content #dataimport #form .optional.expanded legend
+{
+    display: block;
+    margin-left: 10px;
+    padding: 0px 5px;
+}
+
+#content #dataimport #form fieldset legend label
+{
+    margin-top: 0;
+}
+
+#content #dataimport #form .handler
+{
+    display: none;
+}
+
+#content #dataimport #form .handler ul
+{
+    list-style: disc;
+    margin-left: 0.7em;
+    padding-left: 0.7em;
+}
+
+#content #dataimport #form .handler ul li a
+{
+    color: #c0c0c0;
+    display: block;
+}
+
+#content #dataimport #form .handler ul li.active a
+{
+    color: #333;
+}
