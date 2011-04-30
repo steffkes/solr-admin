@@ -7,14 +7,12 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 pre.syntax
 {
-    background: #f8f8ff;
     overflow: auto;
 }
 
 pre.syntax code
 {
     display: block;
-    padding: 0.5em;
     color: #000;
 }
 

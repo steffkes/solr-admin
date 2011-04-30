@@ -367,6 +367,7 @@ ul
 #menu .ping a { background-image: url( ../img/ico/system-monitor.png ); }
 #menu .logging a { background-image: url( ../img/ico/inbox-document-text.png ); }
 #menu .plugins a { background-image: url( ../img/ico/block.png ); }
+#menu .dataimport a { background-image: url( ../img/ico/document-import.png ); }
 
 #content-wrapper
 {
@@ -2036,6 +2037,114 @@ ul
 #content #dataimport #form .handler ul li.active a
 {
     color: #333;
+}
+
+#content #dataimport #current_state
+{
+    display: none;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+#content #dataimport #current_state .time,
+#content #dataimport #current_state .info
+{
+    display: block;
+    padding-left: 21px;
+}
+
+#content #dataimport #current_state .time
+{
+    color: #c0c0c0;
+    font-size: 11px;
+}
+
+#content #dataimport #current_state .info
+{
+    background-position: 0 1px;
+}
+
+#content #dataimport #current_state.indexing
+{
+    background-color: #f9f9f9;
+}
+
+#content #dataimport #current_state.success
+{
+    background-color: #e6f3e6;
+}
+
+#content #dataimport #current_state.success .info
+{
+    background-image: url( ../img/ico/tick-circle.png );
+}
+
+#content #dataimport #current_state.success .info strong
+{
+    color: #080;
+}
+
+#content #dataimport #current_state.failure
+{
+    background-color: #f3e6e6;
+}
+
+#content #dataimport #current_state.failure .info
+{
+    background-image: url( ../img/ico/slash.png );
+}
+
+#content #dataimport #current_state.failure .info strong
+{
+    color: #800;
+}
+
+#content #dataimport #config h2
+{
+    border-color: #c0c0c0;
+    padding-left: 5px;
+    position: relative;
+}
+
+#content #dataimport #config.hidden h2
+{
+    border-color: #fafafa;
+}
+
+#content #dataimport #config h2 a.toggle
+{
+    background-image: url( ../img/ico/toggle-small.png );
+    background-position: 0 50%;
+    padding-left: 21px;
+}
+
+#content #dataimport #config.hidden h2 a.toggle
+{
+    background-image: url( ../img/ico/toggle-small-expand.png );
+}
+
+#content #dataimport #config h2 a.reload_config
+{
+    background-image: url( ../img/ico/arrow-circle.png );
+    padding-left: 21px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+#content #dataimport #config h2 a.reload_config.success
+{
+    background-image: url( ../img/ico/tick.png );
+}
+
+#content #dataimport #config h2 a.reload_config.error
+{
+    background-image: url( ../img/ico/slash.png );
+}
+
+#content #dataimport #config.hidden .content
+{
+    display: none;
 }
 
 #content #dataimport #dataimport_config .loader

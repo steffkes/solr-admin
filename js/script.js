@@ -1471,6 +1471,9 @@ var sammy = $.sammy
 
                 var path_parts = this.path.match( /^(.+\/dataimport\/)(.*)$/ );
                 var current_handler = path_parts[2];
+                
+                $( 'li.dataimport', this.active_core )
+                    .addClass( 'active' );
 
                 $.get
                 (
@@ -1569,6 +1572,227 @@ var sammy = $.sammy
                             }
                         );
 
+                        $( '#config .toggle', content_element )
+                            .die( 'click' )
+                            .live
+                            (
+                                'click',
+                                function( event )
+                                {
+                                    $( this ).parents( '.block' )
+                                        .toggleClass( 'hidden' );
+                                    
+                                    return false;
+                                }
+                            )
+
+                        var reload_config_element = $( '#config .reload_config', content_element );
+                        reload_config_element
+                            .die( 'click' )
+                            .live
+                            (
+                                'click',
+                                function( event )
+                                {
+                                    $.ajax
+                                    (
+                                        {
+                                            url : core_basepath + '/select?qt=' + current_handler  + '&command=reload-config',
+                                            dataType : 'xml',
+                                            context: $( this ),
+                                            beforeSend : function( xhr, settings )
+                                            {
+                                                this
+                                                    .addClass( 'loader' );
+                                            },
+                                            success : function( response, text_status, xhr )
+                                            {
+                                                this
+                                                    .addClass( 'success' );
+
+                                                window.setTimeout
+                                                (
+                                                    function()
+                                                    {
+                                                        reload_config_element
+                                                            .removeClass( 'success' );
+                                                    },
+                                                    5000
+                                                );
+                                            },
+                                            error : function( xhr, text_status, error_thrown )
+                                            {
+                                                this
+                                                    .addClass( 'error' );
+                                            },
+                                            complete : function( xhr, text_status )
+                                            {
+                                                this
+                                                    .removeClass( 'loader' );
+                                            }
+                                        }
+                                    );
+                                    return false;
+                                }
+                            )
+
+                        // state
+                        
+                        function dataimport_fetch_status()
+                        {
+                            $.ajax
+                            (
+                                {
+                                    url : core_basepath + '/select?qt=' + current_handler  + '&command=status',
+                                    dataType : 'xml',
+                                    beforeSend : function( xhr, settings )
+                                    {
+                                    },
+                                    success : function( response, text_status, xhr )
+                                    {
+                                        var state_element = $( '#current_state', content_element );
+
+                                        var status = $( 'str[name="status"]', response ).text();
+                                        var rollback_element = $( 'str[name="Rolledback"]', response );
+                                        var messages_count = $( 'lst[name="statusMessages"] str', response ).size();
+
+                                        var started_at = $( 'str[name="Full Dump Started"]', response ).text();
+                                        if( !started_at )
+                                        {
+                                            started_at = (new Date()).toGMTString();
+                                        }
+                                        console.debug( 'started_at @ ', started_at );
+
+                                        function dataimport_compute_details( response, details_element )
+                                        {
+                                            var details = [];
+
+                                            
+                                            console.debug( 'elapsed @ ', $( 'str[name="Time Elapsed"]', response ).text() );
+                                            console.debug( 'taken @ ', $( 'str[name="Time taken "]', response ).text() );
+                                            console.debug( 'requests @ ', $( 'str[name="Total Requests made to DataSource"]', response ).text() );
+                                            console.debug( 'fetched @ ', $( 'str[name="Total Rows Fetched"]', response ).text() );
+                                            console.debug( 'skipped @ ', $( 'str[name="Total Documents Skipped"]', response ).text() );
+                                            console.debug( 'processed @ ', $( 'str[name="Total Documents Processed"]', response ).text() );
+
+                                            var requests = parseInt( $( 'str[name="Total Requests made to DataSource"]', response ).text() );
+                                            if( NaN !== requests )
+                                            {
+                                                details.push
+                                                (
+                                                    '<abbr title="Total Requests made to DataSource">Requests</abbr>: ' +
+                                                    requests
+                                                );
+                                            }
+
+                                            var fetched = parseInt( $( 'str[name="Total Rows Fetched"]', response ).text() );
+                                            if( NaN !== fetched )
+                                            {
+                                                details.push
+                                                (
+                                                    '<abbr title="Total Rows Fetched">Fetched</abbr>: ' +
+                                                    fetched
+                                                );
+                                            }
+
+                                            var skipped = parseInt( $( 'str[name="Total Documents Skipped"]', response ).text() );
+                                            if( NaN !== requests )
+                                            {
+                                                details.push
+                                                (
+                                                    '<abbr title="Total Documents Skipped">Skipped</abbr>: ' +
+                                                    skipped
+                                                );
+                                            }
+
+                                            var processed = parseInt( $( 'str[name="Total Documents Processed"]', response ).text() );
+                                            if( NaN !== processed )
+                                            {
+                                                details.push
+                                                (
+                                                    '<abbr title="Total Documents Processed">Processed</abbr>: ' +
+                                                    processed
+                                                );
+                                            }
+
+                                            details_element
+                                                .html( details.join( ', ' ) );
+                                        }
+
+                                        state_element
+                                            .removeClass( 'indexing' )
+                                            .removeClass( 'success' )
+                                            .removeClass( 'failure' );
+                                        
+                                        $( '.info', state_element )
+                                            .removeClass( 'loader' );
+
+                                        if( 0 !== rollback_element.size() )
+                                        {
+                                            state_element
+                                                .addClass( 'failure' )
+                                                .show();
+
+                                            $( '.info strong', state_element )
+                                                .text( $( 'str[name=""]', response ).text() );
+                                            
+                                            console.debug( 'failure' );
+                                            console.debug( 'rollback @ ', rollback_element.text() );
+                                        }
+                                        else if( 'idle' === status && 0 !== messages_count )
+                                        {
+                                            state_element
+                                                .addClass( 'success' )
+                                                .show();
+
+                                            $( '.time', state_element )
+                                                .text( started_at )
+                                                .timeago();
+
+                                            $( '.info strong', state_element )
+                                                .text( $( 'str[name=""]', response ).text() );
+
+                                            console.debug( 'success' );
+                                            dataimport_compute_details( response, $( '.info .details', state_element ) );
+                                        }
+                                        else if( 'busy' === status )
+                                        {
+                                            state_element
+                                                .addClass( 'indexing' )
+                                                .show();
+
+                                            $( '.time', state_element )
+                                                .text( started_at )
+                                                .timeago();
+
+                                            $( '.info', state_element )
+                                                .addClass( 'loader' );
+
+                                            $( '.info strong', state_element )
+                                                .text( 'Indexing ...' );
+                                            
+                                            console.debug( 'indexing' );
+                                            dataimport_compute_details( response, $( '.info .details', state_element ) );
+
+                                            window.setTimeout( dataimport_fetch_status, 2000 );
+                                        }
+                                        else
+                                        {
+                                            state_element.hide();
+                                        }
+                                    },
+                                    error : function( xhr, text_status, error_thrown )
+                                    {
+                                        console.debug( arguments );
+                                    },
+                                    complete : function( xhr, text_status )
+                                    {
+                                    }
+                                }
+                            );
+                        }
+                        dataimport_fetch_status();
+
                         // form
 
                         $( 'form', form_element )
@@ -1578,7 +1802,28 @@ var sammy = $.sammy
                                 'submit',
                                 function( event )
                                 {
-                                    console.warn( this );
+                                    $.ajax
+                                    (
+                                        {
+                                            url : core_basepath + '/select?qt=' + current_handler  + '&command=full-import',
+                                            dataType : 'xml',
+                                            beforeSend : function( xhr, settings )
+                                            {
+                                            },
+                                            success : function( response, text_status, xhr )
+                                            {
+                                                console.debug( response );
+                                                dataimport_fetch_status();
+                                            },
+                                            error : function( xhr, text_status, error_thrown )
+                                            {
+                                                console.debug( arguments );
+                                            },
+                                            complete : function( xhr, text_status )
+                                            {
+                                            }
+                                        }
+                                    );
                                     return false;
                                 }
                             );
@@ -2964,6 +3209,7 @@ $( document ).ready
                                      + '        <li class="stats"><a href="' +core_path + '/admin/stats.jsp" rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
                                      + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="plugins"><a href="' + core_path + '/admin/plugins" rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
+                                     + '        <li class="dataimport"><a rel="#/' + core_name + '/dataimport"><span>Dataimport</span></a></li>' + "\n"
 
                                      + '    </ul>' + "\n"
                                      + '</li>';
