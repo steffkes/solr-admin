@@ -1524,71 +1524,75 @@ var sammy = $.sammy
 
                         // config
 
-                        $.ajax
-                        (
-                            {
-                                url : core_basepath + '/select?qt=' + current_handler  + '&command=show-config',
-                                dataType : 'xml',
-                                context : $( '#dataimport_config', config_element ),
-                                beforeSend : function( xhr, settings )
+                        function dataimport_fetch_config()
+                        {
+                            $.ajax
+                            (
                                 {
-                                },
-                                success : function( config, text_status, xhr )
-                                {
-                                    dataimport_element
-                                        .removeClass( 'error' );
-                                        
-                                    config_error_element
-                                        .hide();
-
-                                    config_element
-                                        .addClass( 'hidden' );
-
-
-                                    var entities = [];
-
-                                    $( 'document > entity', config )
-                                        .each
-                                        (
-                                            function( i, element )
-                                            {
-                                                entities.push( '<option>' + $( element ).attr( 'name' ) + '</option>' );
-                                            }
-                                        );
-                                    
-                                    $( '#entity', form_element )
-                                        .append( entities.join( "\n" ) );
-                                },
-                                error : function( xhr, text_status, error_thrown )
-                                {
-                                    if( 'parsererror' === error_thrown )
+                                    url : core_basepath + '/select?qt=' + current_handler  + '&command=show-config',
+                                    dataType : 'xml',
+                                    context : $( '#dataimport_config', config_element ),
+                                    beforeSend : function( xhr, settings )
+                                    {
+                                    },
+                                    success : function( config, text_status, xhr )
                                     {
                                         dataimport_element
-                                            .addClass( 'error' );
-                                        
+                                            .removeClass( 'error' );
+                                            
                                         config_error_element
-                                            .show();
+                                            .hide();
 
                                         config_element
-                                            .removeClass( 'hidden' );
-                                    }
-                                },
-                                complete : function( xhr, text_status )
-                                {
-                                    var code = $(
-                                        '<pre class="syntax language-xml"><code>' +
-                                        xhr.responseText.replace( /\</g, '&lt;' ).replace( /\>/g, '&gt;' ) +
-                                        '</code></pre>'
-                                    );
-                                    this.html( code );
+                                            .addClass( 'hidden' );
 
-                                    if( 'success' === text_status )
+
+                                        var entities = [];
+
+                                        $( 'document > entity', config )
+                                            .each
+                                            (
+                                                function( i, element )
+                                                {
+                                                    entities.push( '<option>' + $( element ).attr( 'name' ) + '</option>' );
+                                                }
+                                            );
+                                        
+                                        $( '#entity', form_element )
+                                            .append( entities.join( "\n" ) );
+                                    },
+                                    error : function( xhr, text_status, error_thrown )
                                     {
-                                        hljs.highlightBlock( code.get(0) );
+                                        if( 'parsererror' === error_thrown )
+                                        {
+                                            dataimport_element
+                                                .addClass( 'error' );
+                                            
+                                            config_error_element
+                                                .show();
+
+                                            config_element
+                                                .removeClass( 'hidden' );
+                                        }
+                                    },
+                                    complete : function( xhr, text_status )
+                                    {
+                                        var code = $(
+                                            '<pre class="syntax language-xml"><code>' +
+                                            xhr.responseText.replace( /\</g, '&lt;' ).replace( /\>/g, '&gt;' ) +
+                                            '</code></pre>'
+                                        );
+                                        this.html( code );
+
+                                        if( 'success' === text_status )
+                                        {
+                                            hljs.highlightBlock( code.get(0) );
+                                        }
                                     }
                                 }
-                            }
-                        );
+                            );
+                        }
+                        dataimport_fetch_config();
 
                         $( '.toggle', config_element )
                             .die( 'click' )
@@ -1647,6 +1651,8 @@ var sammy = $.sammy
                                             {
                                                 this
                                                     .removeClass( 'loader' );
+                                                
+                                                dataimport_fetch_config();
                                             }
                                         }
                                     );
