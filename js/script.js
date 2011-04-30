@@ -1483,7 +1483,10 @@ var sammy = $.sammy
                         content_element
                             .html( template );
 
-                        var form_element = $( '#form', content_element );
+                        var dataimport_element = $( '#dataimport', content_element );
+                        var form_element = $( '#form', dataimport_element );
+                        var config_element = $( '#config', dataimport_element );
+                        var config_error_element = $( '#config-error', dataimport_element );
 
                         // handler
 
@@ -1526,12 +1529,22 @@ var sammy = $.sammy
                             {
                                 url : core_basepath + '/select?qt=' + current_handler  + '&command=show-config',
                                 dataType : 'xml',
-                                context : $( '#dataimport_config', content_element ),
+                                context : $( '#dataimport_config', config_element ),
                                 beforeSend : function( xhr, settings )
                                 {
                                 },
                                 success : function( config, text_status, xhr )
                                 {
+                                    dataimport_element
+                                        .removeClass( 'error' );
+                                        
+                                    config_error_element
+                                        .hide();
+
+                                    config_element
+                                        .addClass( 'hidden' );
+
+
                                     var entities = [];
 
                                     $( 'document > entity', config )
@@ -1550,12 +1563,14 @@ var sammy = $.sammy
                                 {
                                     if( 'parsererror' === error_thrown )
                                     {
-                                        console.error( 'xml not valid!' );
-                                        console.debug( arguments );
-                                    }
-                                    else
-                                    {
-                                        console.debug( arguments );
+                                        dataimport_element
+                                            .addClass( 'error' );
+                                        
+                                        config_error_element
+                                            .show();
+
+                                        config_element
+                                            .removeClass( 'hidden' );
                                     }
                                 },
                                 complete : function( xhr, text_status )
@@ -1566,7 +1581,7 @@ var sammy = $.sammy
                                         '</code></pre>'
                                     );
                                     this.html( code );
-                                    
+
                                     if( 'success' === text_status )
                                     {
                                         hljs.highlightBlock( code.get(0) );
@@ -1575,7 +1590,7 @@ var sammy = $.sammy
                             }
                         );
 
-                        $( '#config .toggle', content_element )
+                        $( '.toggle', config_element )
                             .die( 'click' )
                             .live
                             (
@@ -1589,7 +1604,7 @@ var sammy = $.sammy
                                 }
                             )
 
-                        var reload_config_element = $( '#config .reload_config', content_element );
+                        var reload_config_element = $( '.reload_config', config_element );
                         reload_config_element
                             .die( 'click' )
                             .live

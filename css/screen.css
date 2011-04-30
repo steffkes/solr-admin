@@ -1962,6 +1962,11 @@ ul
     width: 20%;
 }
 
+#content #dataimport.error #form form
+{
+    display: none !important;
+}
+
 #content #dataimport #form label
 {
     cursor: pointer;
@@ -2046,6 +2051,11 @@ ul
     margin-bottom: 20px;
 }
 
+#content #dataimport.error #current_state
+{
+    display: none !important;
+}
+
 #content #dataimport #current_state .time,
 #content #dataimport #current_state .info
 {
@@ -2097,6 +2107,19 @@ ul
 #content #dataimport #current_state.failure .info strong
 {
     color: #800;
+}
+
+#content #dataimport #config-error
+{
+    background-color: #f00;
+    background-image: url( ../img/ico/construction.png );
+    background-position: 10px 50%;
+    color: #fff;
+    display: none;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px;
+    padding-left: 35px;
 }
 
 #content #dataimport #config h2
