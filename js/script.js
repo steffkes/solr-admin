@@ -1565,9 +1565,12 @@ var sammy = $.sammy
                                         xhr.responseText.replace( /\</g, '&lt;' ).replace( /\>/g, '&gt;' ) +
                                         '</code></pre>'
                                     );
-
                                     this.html( code );
-                                    hljs.highlightBlock( code.get(0) );
+                                    
+                                    if( 'success' === text_status )
+                                    {
+                                        hljs.highlightBlock( code.get(0) );
+                                    }
                                 }
                             }
                         );
