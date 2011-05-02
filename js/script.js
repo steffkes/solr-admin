@@ -262,6 +262,7 @@ var sammy = $.sammy
                                         );
 
                                         var core_data = cores[current_core];
+                                        var core_basepath = $( '#' + current_core, app.menu_element ).attr( 'data-basepath' );
 
                                         // core-data
 
@@ -294,6 +295,9 @@ var sammy = $.sammy
                                         $( '.optimized dd', index_data_element )
                                             .addClass( core_data.index.optimized ? 'ico-1' : 'ico-0' );
 
+                                        $( '#actions .optimize', cores_element )
+                                            .show();
+
                                         $( '.optimized dd span', index_data_element )
                                             .html( core_data.index.optimized ? 'yes' : 'no' );
 
@@ -321,14 +325,13 @@ var sammy = $.sammy
 
                                         // layout
 
-                                        $( '.optimized dd.ico-0 a', index_data_element )
+                                        $( '#actions .optimize', cores_element )
                                             .die( 'click' )
                                             .live
                                             (
                                                 'click',
                                                 function( event )
                                                 {
-                                                    var core_basepath = $( '#' + current_core, app.menu_element ).attr( 'data-basepath' );
                                                     $.ajax
                                                     (
                                                         {
@@ -342,7 +345,7 @@ var sammy = $.sammy
                                                             },
                                                             success : function( response, text_status, xhr )
                                                             {
-                                                                this.parents( 'dd' )
+                                                                $( '.optimized dd.ico-0', index_data_element )
                                                                     .removeClass( 'ico-0' )
                                                                     .addClass( 'ico-1' );
                                                             },

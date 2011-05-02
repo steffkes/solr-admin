@@ -2193,7 +2193,7 @@ ul
 #content #cores #frame
 {
     float: right;
-    width: 620px;
+    width: 610px;
 }
 
 #content #cores #list
@@ -2224,9 +2224,52 @@ ul
     font-weight: bold;
 }
 
-#content #cores #list .current:first-child a
+#content #cores button
 {
-    border-top-color: #fff;
+    background-position: 2px 50%;
+    padding-left: 21px;
+}
+
+#content #cores #navigation .add
+{
+    background-image: url( ../img/ico/plus-button.png );
+    margin-bottom: 20px;
+}
+
+#content #cores #actions
+{
+    margin-bottom: 20px;
+}
+
+#content #cores #actions button
+{
+    margin-right: 10px;
+}
+
+#content #cores #actions .reload
+{
+    background-image: url( ../img/ico/arrow-circle.png );
+}
+
+#content #cores #actions .rename
+{
+    background-image: url( ../img/ico/ui-text-field-select.png );
+}
+
+#content #cores #actions .swap
+{
+    background-image: url( ../img/ico/arrow-switch.png );
+}
+
+#content #cores #actions .unload
+{
+    background-image: url( ../img/ico/cross.png );
+}
+
+#content #cores #actions .optimize
+{
+    background-image: url( ../img/ico/hammer-screwdriver.png );
+    display: none;
 }
 
 #content #cores #data #core-data h2 { background-image: url( ../img/ico/database.png ); }
@@ -2274,22 +2317,4 @@ ul
 #content #cores #data li dd.ico span
 {
     display: none;
-}
-
-#content #cores #data #index-data li.optimized dd a
-{
-    display: none;
-}
-
-#content #cores #data #index-data li.optimized dd.ico-0 a
-{
-    background-color: #f0f0f0;
-    background-image: url( ../img/ico/hammer-screwdriver.png );
-    background-position: 5px 50%;
-    border: 1px solid #c0c0c0;
-    display: block;
-    float: left;
-    margin-left: 50px;
-    padding: 0px 5px;
-    padding-left: 26px;
 }
