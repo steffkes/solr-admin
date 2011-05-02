@@ -2264,3 +2264,37 @@ ul
     float: right;
     width: 82%;
 }
+
+#content #cores #data li dd.ico
+{
+    background-image: url( ../img/ico/slash.png );
+    height: 20px;
+}
+
+#content #cores #data li dd.ico.ico-1
+{
+    background-image: url( ../img/ico/tick.png );
+}
+
+#content #cores #data li dd.ico span
+{
+    display: none;
+}
+
+#content #cores #data #index-data li.optimized dd a
+{
+    display: none;
+}
+
+#content #cores #data #index-data li.optimized dd.ico-0 a
+{
+    background-color: #f0f0f0;
+    background-image: url( ../img/ico/hammer-screwdriver.png );
+    background-position: 5px 50%;
+    border: 1px solid #c0c0c0;
+    display: block;
+    float: left;
+    margin-left: 50px;
+    padding: 0px 5px;
+    padding-left: 26px;
+}

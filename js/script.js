@@ -292,13 +292,22 @@ var sammy = $.sammy
                                             .html( core_data.index.maxDoc );
 
                                         $( '.optimized dd', index_data_element )
-                                            .html( core_data.index.optimized ? 'true' : 'false' );
+                                            .addClass( core_data.index.optimized ? 'ico-1' : 'ico-0' );
+
+                                        $( '.optimized dd span', index_data_element )
+                                            .html( core_data.index.optimized ? 'yes' : 'no' );
 
                                         $( '.current dd', index_data_element )
-                                            .html( core_data.index.current ? 'true' : 'false' );
+                                            .addClass( core_data.index.current ? 'ico-1' : 'ico-0' );
+
+                                        $( '.current dd span', index_data_element )
+                                            .html( core_data.index.current ? 'yes' : 'no' );
 
                                         $( '.hasDeletions dd', index_data_element )
-                                            .html( core_data.index.hasDeletions ? 'true' : 'false' );
+                                            .addClass( core_data.index.hasDeletions ? 'ico-1' : 'ico-0' );
+
+                                        $( '.hasDeletions dd span', index_data_element )
+                                            .html( core_data.index.hasDeletions ? 'yes' : 'no' );
 
                                         $( '.directory dd', index_data_element )
                                             .html
@@ -311,6 +320,45 @@ var sammy = $.sammy
                                             
 
                                         // layout
+
+                                        $( '.optimized dd.ico-0 a', index_data_element )
+                                            .die( 'click' )
+                                            .live
+                                            (
+                                                'click',
+                                                function( event )
+                                                {
+                                                    var core_basepath = $( '#' + current_core, app.menu_element ).attr( 'data-basepath' );
+                                                    $.ajax
+                                                    (
+                                                        {
+                                                            url : core_basepath + '/update?optimize=true&waitFlush=true&wt=json',
+                                                            dataType : 'json',
+                                                            context : $( this ),
+                                                            beforeSend : function( xhr, settings )
+                                                            {
+                                                                this
+                                                                    .addClass( 'loader' );
+                                                            },
+                                                            success : function( response, text_status, xhr )
+                                                            {
+                                                                this.parents( 'dd' )
+                                                                    .removeClass( 'ico-0' )
+                                                                    .addClass( 'ico-1' );
+                                                            },
+                                                            error : function( xhr, text_status, error_thrown)
+                                                            {
+                                                                console.warn( 'd0h, optimize broken!' );
+                                                            },
+                                                            complete : function( xhr, text_status )
+                                                            {
+                                                                this
+                                                                    .removeClass( 'loader' );
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            );
 
                                         $( '.timeago', data_element )
                                              .timeago();
