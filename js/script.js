@@ -107,6 +107,232 @@ var sammy = $.sammy
             }
         );
 
+        this.bind
+        (
+            'cores_load_data',
+            function( event, params )
+            {
+                if( app.cores_data )
+                {
+                    params.callback( app.cores_data );
+                    return true;
+                }
+
+                $.ajax
+                (
+                    {
+                        url : app.config.solr_path + app.config.core_admin_path + '?wt=json',
+                        dataType : 'json',
+                        beforeSend : function( xhr, settings )
+                        {
+                        },
+                        success : function( response, text_status, xhr )
+                        {
+                            app.cores_data = response.status;
+                            params.callback( app.cores_data );
+                        },
+                        error : function( xhr, text_status, error_thrown)
+                        {
+                        },
+                        complete : function( xhr, text_status )
+                        {
+                        }
+                    }
+                );
+            }
+        );
+
+        this.bind
+        (
+            'cores_build_navigation',
+            function( event, params )
+            {
+                var navigation_content = ['<ul>'];
+
+                for( var core in params.cores )
+                {
+                    navigation_content.push( '<li><a href="' + params.basepath + core + '">' + core + '</a></li>' );
+                }
+
+                params.navigation_element
+                    .html( navigation_content.join( "\n" ) );
+                
+                $( 'a[href="' + params.basepath + params.current_core + '"]', params.navigation_element ).parent()
+                    .addClass( 'current' );
+            }
+        );
+
+        this.bind
+        (
+            'cores_load_template',
+            function( event, params )
+            {
+                if( app.cores_template )
+                {
+                    params.callback();
+                    return true;
+                }
+
+                $.get
+                (
+                    'tpl/cores.html',
+                    function( template )
+                    {
+                        params.content_element
+                            .html( template );
+                     
+                        app.cores_template = template;   
+                        params.callback();
+                    }
+                );
+            }
+        );
+
+        // #/cores
+        this.get
+        (
+            /^#\/cores$/,
+            function( context )
+            {
+                sammy.trigger
+                (
+                    'cores_load_data',
+                    {
+                        callback :  function( cores )
+                        {
+                            var first_core = null;
+                            for( var key in cores )
+                            {
+                                if( !first_core )
+                                {
+                                    first_core = key;
+                                }
+                                continue;
+                            }
+                            context.redirect( context.path + '/' + first_core );
+                        }
+                    }
+                );
+            }
+        );
+
+        // #/cores
+        this.get
+        (
+            /^#\/cores\//,
+            function( context )
+            {
+                var content_element = $( '#content' );
+
+                var path_parts = this.path.match( /^(.+\/cores\/)(.*)$/ );
+                var current_core = path_parts[2];
+
+                $( '#cores', app.menu_element )
+                    .addClass( 'active' );
+
+                sammy.trigger
+                (
+                    'cores_load_data',
+                    {
+                        callback : function( cores )
+                        {
+                            sammy.trigger
+                            (
+                                'cores_load_template',
+                                {
+                                    content_element : content_element,
+                                    callback : function()
+                                    {
+                                        var cores_element = $( '#cores', content_element );
+                                        var navigation_element = $( '#navigation', cores_element );
+                                        var list_element = $( '#list', navigation_element );
+                                        var data_element = $( '#data', cores_element );
+                                        var core_data_element = $( '#core-data', data_element );
+                                        var index_data_element = $( '#index-data', data_element );
+
+                                        sammy.trigger
+                                        (
+                                            'cores_build_navigation',
+                                            {
+                                                cores : cores,
+                                                basepath : path_parts[1],
+                                                current_core : current_core,
+                                                navigation_element : list_element
+                                            }
+                                        );
+
+                                        var core_data = cores[current_core];
+
+                                        // core-data
+
+                                        $( 'h2 span', core_data_element )
+                                            .html( core_data.name );
+
+                                        $( '.startTime dd', core_data_element )
+                                            .html( core_data.startTime );
+
+                                        $( '.instanceDir dd', core_data_element )
+                                            .html( core_data.instanceDir );
+
+                                        $( '.dataDir dd', core_data_element )
+                                            .html( core_data.dataDir );
+
+                                        // index-data
+
+                                        $( '.lastModified dd', index_data_element )
+                                            .html( core_data.index.lastModified );
+
+                                        $( '.version dd', index_data_element )
+                                            .html( core_data.index.version );
+
+                                        $( '.numDocs dd', index_data_element )
+                                            .html( core_data.index.numDocs );
+
+                                        $( '.maxDoc dd', index_data_element )
+                                            .html( core_data.index.maxDoc );
+
+                                        $( '.optimized dd', index_data_element )
+                                            .html( core_data.index.optimized ? 'true' : 'false' );
+
+                                        $( '.current dd', index_data_element )
+                                            .html( core_data.index.current ? 'true' : 'false' );
+
+                                        $( '.hasDeletions dd', index_data_element )
+                                            .html( core_data.index.hasDeletions ? 'true' : 'false' );
+
+                                        $( '.directory dd', index_data_element )
+                                            .html
+                                            (
+                                                core_data.index.directory
+                                                    .replace( /:/g, ':&#8203;' )
+                                                    .replace( /@/g, '@&#8203;' )
+                                            );
+
+                                            
+
+                                        // layout
+
+                                        $( '.timeago', data_element )
+                                             .timeago();
+
+                                        $( 'ul', data_element )
+                                            .each
+                                            (
+                                                function( i, element )
+                                                {
+                                                    $( 'li:odd', element )
+                                                        .addClass( 'odd' );
+                                                }
+                                            )
+                                    }
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        );
+
         // #/logging
         this.get
         (
@@ -3135,6 +3361,7 @@ var solr_admin = function()
     menu_element = null,
 
     is_multicore = null,
+    cores_data = null,
     active_core = null,
     environment_basepath = null,
 
@@ -3203,7 +3430,14 @@ $( document ).ready
                 },
                 success : function( response )
                 {
+                    app.cores_data = response.status;
                     app.is_multicore = 'undefined' === typeof response.status[''];
+
+                    if( app.is_multicore )
+                    {
+                        $( '#cores', app.menu_element )
+                            .show();
+                    }
 
                     for( var core_name in response.status )
                     {

@@ -356,6 +356,11 @@ ul
     background-image: url( ../img/ico/ui-accordion.png );
 }
 
+#menu #cores p a
+{
+    background-image: url( ../img/ico/databases.png );
+}
+
 #menu .query a { background-image: url( ../img/ico/magnifier.png ); }
 #menu .schema a { background-image: url( ../img/ico/table.png ); }
 #menu .config a { background-image: url( ../img/ico/gear.png ); }
@@ -2174,4 +2179,88 @@ ul
 {
     background-position: 0 50%;
     padding-left: 21px;
+}
+
+/* cores */
+
+#content #cores
+{
+    background-image: url( ../img/div.gif );
+    background-position: 150px 0;
+    background-repeat: repeat-y;
+}
+
+#content #cores #frame
+{
+    float: right;
+    width: 620px;
+}
+
+#content #cores #list
+{
+    float: left;
+    width: 151px;
+}
+
+#content #cores #list a
+{
+    border-right: 1px solid #f0f0f0;
+    display: block;
+    margin-left: 1px;
+    padding: 3px 0;
+}
+
+#content #cores #list a:hover
+{
+    background-color: #fafafa;
+}
+
+#content #cores #list .current a
+{
+    background-color: #fff;
+    border-right-color: #fff;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: bold;
+}
+
+#content #cores #list .current:first-child a
+{
+    border-top-color: #fff;
+}
+
+#content #cores #list .current:last-child a
+{
+    border-bottom-color: #fff;
+}
+
+#content #cores #data #core-data h2 { background-image: url( ../img/ico/database.png ); }
+#content #cores #data #index-data h2 { background-image: url( ../img/ico/chart.png ); }
+
+#content #cores #data #index-data
+{
+    margin-top: 10px;
+}
+
+#content #cores #data li
+{
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+#content #cores #data li.odd
+{
+    background-color: #f8f8f8;
+}
+
+#content #cores #data li dt
+{
+    float: left;
+    width: 17%;
+}
+
+#content #cores #data li dd
+{
+    float: right;
+    width: 82%;
 }

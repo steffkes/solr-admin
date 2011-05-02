@@ -61,6 +61,10 @@
                         <p><a href="#/logging">Logging</a></p>
                     </li>
 
+                    <li id="cores" class="global optional">
+                        <p><a href="#/cores">Core Admin</a></p>
+                    </li>
+
                     <li id="java-properties" class="global">
                         <p><a href="#/java-properties">Java Properties</a>
                     </li>
