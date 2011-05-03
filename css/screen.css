@@ -2199,6 +2199,7 @@ ul
 #content #cores #list
 {
     float: left;
+    padding-top: 15px;
     width: 151px;
 }
 
@@ -2224,52 +2225,178 @@ ul
     font-weight: bold;
 }
 
-#content #cores button
+#content #cores #frame .actions
 {
-    background-position: 2px 50%;
+    margin-bottom: 20px;
+}
+
+#content #cores .actions form .buttons
+{
+    padding-left: 40px;
+}
+
+#content #cores .actions form a
+{
+    display: block;
+    float: left;
+    height: 20px;
+    margin-right: 5px;
     padding-left: 21px;
+}
+
+#content #cores .actions form a span
+{
+    display: none;
+}
+
+#content #cores .actions form a.submit
+{
+    background-image: url( ../img/ico/tick.png );
+    background-position: 50% 50%;
+}
+
+#content #cores .actions form a.submit:hover
+{
+    background-color: #e6f3e6;
+}
+
+#content #cores .actions form a.reset
+{
+    background-image: url( ../img/ico/cross.png );
+    background-position: 50% 50%;
+}
+
+#content #cores .actions form a.reset:hover
+{
+    background-color: #f3e6e6;
+}
+
+#content #cores .actions form p
+{
+    padding-bottom: 3px;
+}
+
+#content #cores .actions form label
+{
+    float: left;
+    width: 40px;
+}
+
+#content #cores .actions form input,
+#content #cores .actions form select
+{
+    width: 100px;
+}
+
+#content #cores .actions form select option.disabled
+{
+    color: #c0c0c0;
+}
+
+#content #cores .actions .button-holder
+{
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+#content #cores .actions .button-holder.active
+{
+    margin-bottom: 0;
+}
+
+#content #cores .actions .button-holder .button
+{
+    background-color: #f5f5f5;
+    border: 1px solid #c0c0c0;
+    position: relative;
+    z-index: 100;
+}
+
+#content #cores .actions .button-holder.active .button
+{
+    background-color: #fff;
+    border-bottom-color: #fff;
+    padding-bottom: 5px;
+}
+
+#content #cores .actions .button-holder .button a
+{
+    background-position: 5px 50%;
+    display: block;
+    padding: 1px 5px;
+    padding-left: 24px;
+}
+
+#content #cores .actions .button-holder.active .button a
+{
+    cursor: auto;
+}
+
+#content #cores .actions .button-holder .button-content
+{
+    background-color: #fff;
+    border: 1px solid #c0c0c0;
+    box-shadow: 5px 5px 10px #c0c0c0;
+    -moz-box-shadow: 5px 5px 10px #c0c0c0;
+    -webkit-box-shadow: 5px 5px 10px #c0c0c0;
+    display: none;
+    margin-top: -1px;
+    padding: 5px;
+    padding-top: 15px;
+    position: absolute;
+    z-index: 99;
+}
+
+#content #cores .actions .button-holder.active .button-content
+{
+    display: block;
+}
+
+#content #cores .actions .button .reload
+{
+    background-image: url( ../img/ico/arrow-circle.png );
+}
+
+#content #cores .actions .button .rename
+{
+    background-image: url( ../img/ico/ui-text-field-select.png );
+}
+
+#content #cores .actions .button .swap
+{
+    background-image: url( ../img/ico/arrow-switch.png );
+}
+
+#content #cores .actions .button .unload
+{
+    background-image: url( ../img/ico/cross.png );
+}
+
+#content #cores .actions .button .optimize
+{
+    background-image: url( ../img/ico/hammer-screwdriver.png );
+    display: none;
 }
 
 #content #cores #navigation .add
 {
     background-image: url( ../img/ico/plus-button.png );
-    margin-bottom: 20px;
 }
 
-#content #cores #actions
+#content #cores #navigation .add label
 {
-    margin-bottom: 20px;
+    width: 85px;
 }
 
-#content #cores #actions button
+#content #cores #navigation .add input
 {
-    margin-right: 10px;
+    width: 155px;
 }
 
-#content #cores #actions .reload
+#content #cores #navigation .add .buttons
 {
-    background-image: url( ../img/ico/arrow-circle.png );
-}
-
-#content #cores #actions .rename
-{
-    background-image: url( ../img/ico/ui-text-field-select.png );
-}
-
-#content #cores #actions .swap
-{
-    background-image: url( ../img/ico/arrow-switch.png );
-}
-
-#content #cores #actions .unload
-{
-    background-image: url( ../img/ico/cross.png );
-}
-
-#content #cores #actions .optimize
-{
-    background-image: url( ../img/ico/hammer-screwdriver.png );
-    display: none;
+    padding-left: 85px;
 }
 
 #content #cores #data #core-data h2 { background-image: url( ../img/ico/database.png ); }

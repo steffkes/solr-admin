@@ -321,9 +321,77 @@ var sammy = $.sammy
                                                     .replace( /@/g, '@&#8203;' )
                                             );
 
-                                            
+                                        var core_names = [];
+                                        var core_selects = $( '.swap select', cores_element );
+
+                                        for( var key in cores )
+                                        {
+                                            core_names.push( '<option>' + key + '</option>' )
+                                        }
+
+                                        
+                                        core_selects
+                                            .html( core_names.join( "\n") );
+                                        
+                                        $( 'option[value=' + current_core + ']', core_selects.filter( '.core' ) )
+                                            .attr( 'selected', 'selected' );
+
+                                        $( 'option[value=' + current_core + ']', core_selects.filter( '.other' ) )
+                                            .attr( 'disabled', 'disabled' )
+                                            .addClass( 'disabled' );
+                                        
+                                        $( '.rename input[name=core]', cores_element )
+                                            .val( current_core );
 
                                         // layout
+
+                                        var actions_element = $( '.actions', cores_element );
+                                        var button_holder_element = $( '.button-holder.options', actions_element );
+
+                                        button_holder_element
+                                            .die( 'toggle' )
+                                            .live
+                                            (
+                                                'toggle',
+                                                function( event )
+                                                {
+                                                    var element = $( this );
+                                                
+                                                    element
+                                                        .toggleClass( 'active' );
+                                                    
+                                                    if( element.hasClass( 'active' ) )
+                                                    {
+                                                        button_holder_element
+                                                            .not( element )
+                                                            .removeClass( 'active' );
+                                                    }
+                                                }
+                                            );
+
+                                        $( '.button a', button_holder_element )
+                                            .die( 'click' )
+                                            .live
+                                            (
+                                                'click',
+                                                function( event )
+                                                {
+                                                    $( this ).parents( '.button-holder' )
+                                                        .trigger( 'toggle' );
+                                                }
+                                            );
+
+                                        $( 'form a.reset', button_holder_element )
+                                            .die( 'click' )
+                                            .live
+                                            (
+                                                'click',
+                                                function( event )
+                                                {
+                                                    $( this ).parents( '.button-holder' )
+                                                        .trigger( 'toggle' );
+                                                }
+                                            );
 
                                         $( '#actions .optimize', cores_element )
                                             .die( 'click' )
