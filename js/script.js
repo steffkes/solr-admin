@@ -626,6 +626,7 @@ var sammy = $.sammy
             /^#\/(java-properties)$/,
             function( context )
             {
+                var core_basepath = $( 'li[data-basepath]', app.menu_element ).attr( 'data-basepath' );
                 var content_element = $( '#content' );
 
                 $( '#java-properties', app.menu_element )
@@ -637,7 +638,7 @@ var sammy = $.sammy
                 $.ajax
                 (
                     {
-                        url : app.config.java_properties_path,
+                        url : core_basepath + '/admin/properties?wt=json',
                         dataType : 'json',
                         context : $( '#java-properties', content_element ),
                         beforeSend : function( xhr, settings )
@@ -647,20 +648,20 @@ var sammy = $.sammy
                         },
                         success : function( response, text_status, xhr )
                         {
+                            var system_properties = response['system.properties'];
                             var properties_data = {};
                             var properties_content = [];
                             var properties_order = [];
 
-                            delete response['_dummy'];
-                            for( var key in response )
+                            for( var key in system_properties )
                             {
                                 var displayed_key = key.replace( /\./g, '.&#8203;' );
-                                var displayed_value = [ response[key] ];
+                                var displayed_value = [ system_properties[key] ];
                                 var item_class = 'clearfix';
 
                                 if( -1 !== key.indexOf( '.path' ) )
                                 {
-                                    displayed_value = response[key].split( ':' );
+                                    displayed_value = system_properties[key].split( ':' );
                                     if( 1 < displayed_value.length )
                                     {
                                         item_class += ' multi';
