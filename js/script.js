@@ -107,6 +107,71 @@ var sammy = $.sammy
             }
         );
 
+        // #/cloud
+        this.get
+        (
+            /^#\/cloud$/,
+            function( context )
+            {
+                var content_element = $( '#content' );
+            
+                $( '#cloud', app.menu_element )
+                    .addClass( 'active' );
+
+                $.get
+                (
+                    'tpl/cloud.html',
+                    function( template )
+                    {
+                        content_element
+                            .html( template );
+
+                        var zookeeper_element = $( '#zookeeper', content_element );
+
+                        $.ajax
+                        (
+                            {
+                                url : app.config.zookeeper_path,
+                                dataType : 'json',
+                                context : $( '.content', zookeeper_element ),
+                                beforeSend : function( xhr, settings )
+                                {
+                                    this
+                                        .html( '<div class="loader">Loading ...</div>' );
+                                },
+                                success : function( response, text_status, xhr )
+                                {
+                                    this
+                                        .html( '<div id="zookeeper-tree" class="tree"></div>' );
+                                    
+                                    $( '#zookeeper-tree', this )
+                                        .jstree
+                                        (
+                                            {
+                                                "plugins" : [ "json_data" ],
+                                                "json_data" : {
+                                                    "data" : response.tree,
+                                                    "progressive_render" : true
+                                                },
+                                                "core" : {
+                                                    "animation" : 0
+                                                }
+                                            }
+                                        );
+                                },
+                                error : function( xhr, text_status, error_thrown )
+                                {
+                                },
+                                complete : function( xhr, text_status )
+                                {
+                                }
+                            }
+                        );
+                    }
+                );
+            }
+        );
+
         this.bind
         (
             'cores_load_data',
@@ -3843,70 +3908,8 @@ var sammy = $.sammy
                                             .html( byte_value );
                                     }
                                 );
-                            
-                            // -- zookeeper tree
-
-                            var zookeeper_element = $( '#zookeeper', this );
-
-                            var has_zookeeper = false;
-                            zookeeper_element.hide();
-
-                            for( var key in app.dashboard_values['jvm']['jmx']['commandLineArgs'] )
-                            {
-                                if( 0 === app.dashboard_values['jvm']['jmx']['commandLineArgs'][key].indexOf( '-Dzk' ) )
-                                {
-                                    has_zookeeper = true;
-                                    break;
-                                }
-                            }
-
-                            if( has_zookeeper )
-                            {
-                                zookeeper_element
-                                    .show();
-
-                                $.ajax
-                                (
-                                    {
-                                        url : app.config.zookeeper_path,
-                                        dataType : 'json',
-                                        context : $( '.content', zookeeper_element ),
-                                        beforeSend : function( xhr, settings )
-                                        {
-                                            this
-                                                .html( '<div class="loader">Loading ...</div>' );
-                                        },
-                                        success : function( response, text_status, xhr )
-                                        {
-                                            this
-                                                .html( '<div id="zookeeper-tree" class="tree"></div>' );
-                                            
-                                            $( '#zookeeper-tree', this )
-                                                .jstree
-                                                (
-                                                    {
-                                                        "plugins" : [ "json_data" ],
-                                                        "json_data" : {
-                                                            "data" : response.tree,
-                                                            "progressive_render" : true
-                                                        },
-                                                        "core" : {
-                                                            "animation" : 0
-                                                        }
-                                                    }
-                                                );
-                                        },
-                                        error : function( xhr, text_status, error_thrown)
-                                        {
-                                        },
-                                        complete : function( xhr, text_status )
-                                        {
-                                        }
-                                    }
-                                );
-                            }
                         },
-                        error : function( xhr, text_status, error_thrown)
+                        error : function( xhr, text_status, error_thrown )
                         {
                         },
                         complete : function( xhr, text_status )
@@ -4052,6 +4055,7 @@ $( document ).ready
                                 app.dashboard_values = response;
 
                                 var environment_args = null;
+                                var cloud_args = null;
 
                                 if( response.jvm && response.jvm.jmx && response.jvm.jmx.commandLineArgs )
                                 {
@@ -4059,6 +4063,9 @@ $( document ).ready
 
                                     environment_args = command_line_args
                                                             .match( /-Dsolr.environment=((dev|test|prod)?[\w\d]*)/i );
+
+                                    cloud_args = command_line_args
+                                                            .match( /-Dzk/i );
                                 }
 
                                 // environment
@@ -4085,6 +4092,15 @@ $( document ).ready
                                 {
                                     environment_element
                                         .remove();
+                                }
+
+                                // cloud
+
+                                var cloud_nav_element = $( '#menu #cloud' );
+                                if( cloud_args )
+                                {
+                                    cloud_nav_element
+                                        .show();
                                 }
 
                                 // application

@@ -361,6 +361,11 @@ ul
     background-image: url( ../img/ico/databases.png );
 }
 
+#menu #cloud p a
+{
+    background-image: url( ../img/ico/network-cloud.png );
+}
+
 #menu .query a { background-image: url( ../img/ico/magnifier.png ); }
 #menu .schema a { background-image: url( ../img/ico/table.png ); }
 #menu .config a { background-image: url( ../img/ico/gear.png ); }
@@ -1124,7 +1129,6 @@ ul
 
 #content #index #data h2 { background-image: url( ../img/ico/server.png ); }
 #content #index #memory h2 { background-image: url( ../img/ico/battery.png ); }
-#content #index #zookeeper h2 { background-image: url( ../img/ico/network-cloud.png ); }
 
 #content #index #data li
 {
@@ -2915,3 +2919,7 @@ ul
 {
     background-image: url( ../img/ico/arrow-circle.png );
 }
+
+/* cloud */
+
+#content #cloud #zookeeper h2 { background-image: url( ../img/ico/sitemap.png ); }

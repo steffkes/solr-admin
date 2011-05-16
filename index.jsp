@@ -60,6 +60,10 @@
                         <p><a href="#/logging">Logging</a></p>
                     </li>
 
+                    <li id="cloud" class="global optional">
+                        <p><a href="#/cloud">Cloud</a></p>
+                    </li>
+
                     <li id="cores" class="global optional">
                         <p><a href="#/cores">Core Admin</a></p>
                     </li>
