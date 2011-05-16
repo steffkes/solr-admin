@@ -4044,49 +4044,55 @@ $( document ).ready
                         {
                             url : app.environment_basepath + '/admin/system?wt=json',
                             dataType : 'json',
-                            context : $( '#environment' ),
                             beforeSend : function( arr, form, options )
                             {
-                                this
-                                    .show();
-                                
-                                loader.show( this );
                             },
                             success : function( response )
                             {
                                 app.dashboard_values = response;
-                                sammy.run( location.hash );
 
                                 var environment_args = null;
 
                                 if( response.jvm && response.jvm.jmx && response.jvm.jmx.commandLineArgs )
                                 {
-                                    environment_args = response.jvm.jmx.commandLineArgs.join( ' | ' )
+                                    var command_line_args = response.jvm.jmx.commandLineArgs.join( ' | ' );
+
+                                    environment_args = command_line_args
                                                             .match( /-Dsolr.environment=((dev|test|prod)?[\w\d]*)/i );
                                 }
 
-                                if( !environment_args )
+                                // environment
+
+                                var environment_element = $( '#environment' );
+                                if( environment_args )
                                 {
-                                    this
-                                        .hide();
+                                    environment_element
+                                        .show();
+
+                                    if( environment_args[1] )
+                                    {
+                                        environment_element
+                                            .html( environment_args[1] );
+                                    }
+
+                                    if( environment_args[2] )
+                                    {
+                                        environment_element
+                                            .addClass( environment_args[2] );
+                                    }
+                                }
+                                else
+                                {
+                                    environment_element
+                                        .remove();
                                 }
 
-                                if( environment_args && environment_args[1] )
-                                {
-                                    this
-                                        .html( environment_args[1] );
-                                }
+                                // application
 
-                                if( environment_args && environment_args[2] )
-                                {
-                                    this
-                                        .addClass( environment_args[2] );
-                                }
+                                sammy.run( location.hash );
                             },
                             error : function()
                             {
-                                this
-                                    .remove();
                             },
                             complete : function()
                             {
