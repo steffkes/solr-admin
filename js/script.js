@@ -93,15 +93,20 @@ var sammy = $.sammy
 
                 if( this.params.splat )
                 {
-                    this.active_core = $( '#' + this.params.splat[0], app.menu_element );
+                    var active_element = $( '#' + this.params.splat[0], app.menu_element );
                     
-                    this.active_core
+                    active_element
                         .addClass( 'active' );
 
                     if( this.params.splat[1] )
                     {
-                        $( '.' + this.params.splat[1], this.active_core )
+                        $( '.' + this.params.splat[1], active_element )
                             .addClass( 'active' );
+                    }
+
+                    if( !active_element.hasClass( 'global' ) )
+                    {
+                        this.active_core = active_element;
                     }
                 }
             }
@@ -110,13 +115,10 @@ var sammy = $.sammy
         // #/cloud
         this.get
         (
-            /^#\/cloud$/,
+            /^#\/(cloud)$/,
             function( context )
             {
                 var content_element = $( '#content' );
-            
-                $( '#cloud', app.menu_element )
-                    .addClass( 'active' );
 
                 $.get
                 (
@@ -291,9 +293,6 @@ var sammy = $.sammy
 
                 var path_parts = this.path.match( /^(.+\/cores\/)(.*)$/ );
                 var current_core = path_parts[2];
-
-                $( '#cores', app.menu_element )
-                    .addClass( 'active' );
 
                 sammy.trigger
                 (
@@ -520,13 +519,10 @@ var sammy = $.sammy
         // #/logging
         this.get
         (
-            /^#\/logging$/,
+            /^#\/(logging)$/,
             function( context )
             {
                 var content_element = $( '#content' );
-
-                $( '#logging', app.menu_element )
-                    .addClass( 'active' );
                 
                 content_element
                     .html( '<div id="logging"></div>' );
@@ -694,9 +690,6 @@ var sammy = $.sammy
                 var core_basepath = $( 'li[data-basepath]', app.menu_element ).attr( 'data-basepath' );
                 var content_element = $( '#content' );
 
-                $( '#java-properties', app.menu_element )
-                    .addClass( 'active' );
-
                 content_element
                     .html( '<div id="java-properties"></div>' );
 
@@ -781,9 +774,6 @@ var sammy = $.sammy
             {
                 var core_basepath = $( 'li[data-basepath]', app.menu_element ).attr( 'data-basepath' );
                 var content_element = $( '#content' );
-
-                $( '#threads', app.menu_element )
-                    .addClass( 'active' );
 
                 $.get
                 (
