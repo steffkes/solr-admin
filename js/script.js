@@ -2349,6 +2349,7 @@ var sammy = $.sammy
                                 active_core : context.active_core,
                                 callback :  function( dataimport_handlers )
                                 {
+
                                     var handlers_element = $( '.handler', form_element );
                                     var handlers = [];
 
@@ -2365,7 +2366,7 @@ var sammy = $.sammy
                                     $( 'ul', handlers_element )
                                         .html( handlers.join( "\n") ) ;
                                     
-                                    $( 'a[href=' + context.path + ']', handlers_element ).parent()
+                                    $( 'a[href="' + context.path + '"]', handlers_element ).parent()
                                         .addClass( 'active' );
                                     
                                     handlers_element
