@@ -2315,7 +2315,7 @@ var sammy = $.sammy
         // #/:core/dataimport
         this.get
         (
-            /^#\/([\w\d]+)\/dataimport\//,
+            /^#\/([\w\d]+)\/(dataimport)\//,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -3315,70 +3315,7 @@ var sammy = $.sammy
                             .html( template );
                             
                         var dashboard_element = $( '#dashboard' );
-                        
-                        /*
-                        $.ajax
-                        (
-                            {
-                                url : core_basepath + '/admin/system?wt=json',
-                                dataType : 'json',
-                                context : $( '#system', dashboard_element ),
-                                beforeSend : function( xhr, settings )
-                                {
-                                    $( 'h2', this )
-                                        .addClass( 'loader' );
-                                    
-                                    $( '.message', this )
-                                        .show()
-                                        .html( 'Loading' );
-                                },
-                                success : function( response, text_status, xhr )
-                                {
-                                    $( '.message', this )
-                                        .empty()
-                                        .hide();
-                                    
-                                    $( 'dl', this )
-                                        .show();
-                                        
-                                    var data = {
-                                        'core_now' : response['core']['now'],
-                                        'core_start' : response['core']['start'],
-                                        'core_host' : response['core']['host'],
-                                        'core_schema' : response['core']['schema'],
-                                        'lucene_solr-spec-version' : response['lucene']['solr-spec-version'],
-                                        'lucene_solr-impl-version' : response['lucene']['solr-impl-version'],
-                                        'lucene_lucene-spec-version' : response['lucene']['lucene-spec-version'],
-                                        'lucene_lucene-impl-version' : response['lucene']['lucene-impl-version']
-                                    };
-                                    
-                                    for( var key in data )
-                                    {
-                                        $( '.' + key, this )
-                                            .show();
-                                        
-                                        $( '.value.' + key, this )
-                                            .html( data[key] );
-                                    }
-                                },
-                                error : function( xhr, text_status, error_thrown)
-                                {
-                                    this
-                                        .addClass( 'disabled' );
-                                    
-                                    $( '.message', this )
-                                        .show()
-                                        .html( 'System-Handler is not configured' );
-                                },
-                                complete : function( xhr, text_status )
-                                {
-                                    $( 'h2', this )
-                                        .removeClass( 'loader' );
-                                }
-                            }
-                        );
-                        //*/
-                        
+                                             
                         $.ajax
                         (
                             {
@@ -3559,68 +3496,68 @@ var sammy = $.sammy
                                     $( '.replication', context.active_core )
                                         .show();
                                     
-                                    var is_master = 'undefined' === typeof( response['details']['slave'] );
+                                    var data = response.details;
+                                    var is_slave = 'undefined' !== typeof( data.slave );
                                     var headline = $( 'h2 span', this );
+                                    var details_element = $( '#details', this );
+                                    var current_type_element = $( ( is_slave ? '.slave' : '.master' ), this );
 
-                                    if( is_master )
+                                    if( is_slave )
                                     {
                                         this
-                                            .addClass( 'is-master' );
-                                        
-                                        headline
-                                            .html( headline.html() + ' (Master)' );
-                                    }
-                                    else
-                                    {
-                                        this
-                                            .addClass( 'is-slave' );
+                                            .addClass( 'slave' );
                                         
                                         headline
                                             .html( headline.html() + ' (Slave)' );
                                     }
-                                    
-                                    var data = {
-                                        'details_index-version' : response['details']['indexVersion'],
-                                        'details_generation' : response['details']['generation'],
-                                        'details_index-size' : response['details']['indexSize']
-                                    };
-                                    
-                                    if( !is_master )
+                                    else
                                     {
-                                        $.extend
-                                        (
-                                            data,
-                                            {
-                                                'details_slave_master-details_index-version' : response['details']['slave']['masterDetails']['indexVersion'],
-                                                'details_slave_master-details_generation' : response['details']['slave']['masterDetails']['generation'],
-                                                'details_slave_master-details_index-size' : response['details']['slave']['masterDetails']['indexSize'],
-                                                'details_slave_master-url' : response['details']['slave']['masterUrl'],
-                                                'details_slave_poll-interval' : response['details']['slave']['pollInterval'],
-                                                'details_slave_next-execution-at' : response['details']['slave']['nextExecutionAt'],
-                                                'details_slave_index-replicated-at' : response['details']['slave']['indexReplicatedAt'],
-                                                'details_slave_last-cycle-bytes-downloaded' : response['details']['slave']['lastCycleBytesDownloaded'],
-                                                'details_slave_replication-failed-at' : response['details']['slave']['replicationFailedAt'],
-                                                'details_slave_previous-cycle-time-in-seconds' : response['details']['slave']['previousCycleTimeInSeconds'],
-                                                'details_slave_is-polling-disabled' : response['details']['slave']['isPollingDisabled'],
-                                                'details_slave_is-replicating' : response['details']['slave']['isReplicating']
-                                            }
-                                        );
-                                    
-                                        $( 'dl', this )
-                                            .show();
-                                    }
-                                    
-                                    for( var key in data )
-                                    {
-                                        $( '.' + key, this )
-                                            .show();
+                                        this
+                                            .addClass( 'master' );
                                         
-                                        $( '.value.' + key, this )
-                                            .html( data[key] );
+                                        headline
+                                            .html( headline.html() + ' (Master)' );
                                     }
 
-                                    // $( '.timeago', this )
-                                    //     .timeago();
+                                    $( '.version div', current_type_element )
+                                        .html( data.indexVersion );
+                                    $( '.generation div', current_type_element )
+                                        .html( data.generation );
+                                    $( '.size div', current_type_element )
+                                        .html( data.indexSize );
+                                    
+                                    if( is_slave )
+                                    {
+                                        var master_element = $( '.master', details_element );
+                                        $( '.version div', master_element )
+                                            .html( data.slave.masterDetails.indexVersion );
+                                        $( '.generation div', master_element )
+                                            .html( data.slave.masterDetails.generation );
+                                        $( '.size div', master_element )
+                                            .html( data.slave.masterDetails.indexSize );
+                                        
+                                        if( data.indexVersion !== data.slave.masterDetails.indexVersion )
+                                        {
+                                            $( '.version', details_element )
+                                                .addClass( 'diff' );
+                                        }
+                                        else
+                                        {
+                                            $( '.version', details_element )
+                                                .removeClass( 'diff' );
+                                        }
+                                        
+                                        if( data.generation !== data.slave.masterDetails.generation )
+                                        {
+                                            $( '.generation', details_element )
+                                                .addClass( 'diff' );
+                                        }
+                                        else
+                                        {
+                                            $( '.generation', details_element )
+                                                .removeClass( 'diff' );
+                                        }
+                                    }
                                 },
                                 error : function( xhr, text_status, error_thrown)
                                 {
@@ -3639,7 +3576,6 @@ var sammy = $.sammy
                             }
                         );
 
-                        /*
                         $.ajax
                         (
                             {
@@ -3685,7 +3621,7 @@ var sammy = $.sammy
                                     
                                     $( '.message', this )
                                         .show()
-                                        .html( 'DataImport is not configured' );
+                                        .html( 'Dataimport is not configured' );
                                 },
                                 complete : function( xhr, text_status )
                                 {
@@ -3694,7 +3630,6 @@ var sammy = $.sammy
                                 }
                             }
                         );
-                        //*/
                         
                         $.ajax
                         (
@@ -4014,7 +3949,7 @@ $( document ).ready
                                      + '        <li class="query"><a rel="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n"
                                      + '        <li class="schema"><a href="' + core_path + '/admin/file/?file=schema.xml" rel="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n"
                                      + '        <li class="config"><a href="' +core_path + '/admin/file/?file=solrconfig.xml" rel="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
-                                     + '        <li class="replication optional"><a rel="#/' + core_name + '/replication"><span>Replication</span></a></li>' + "\n"
+                                     + '        <li class="replication"><a rel="#/' + core_name + '/replication"><span>Replication</span></a></li>' + "\n"
                                      + '        <li class="analysis"><a rel="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
                                      + '        <li class="schema-browser"><a rel="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
                                      + '        <li class="stats"><a rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
