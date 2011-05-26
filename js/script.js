@@ -2778,7 +2778,7 @@ var sammy = $.sammy
                                 content += '<div class="block" id="' + key.toLowerCase() + '">' + "\n";
                                 content += '<h2><span>' + key + '</span></h2>' + "\n";
                                 content += '<div class="content">' + "\n";
-                                content += '<ul>' + "\n";
+                                content += '<ul>';
                                 
                                 for( var sort_key in sort_table[key] )
                                 {
@@ -2857,6 +2857,16 @@ var sammy = $.sammy
                                     {
                                         $( this ).parent()
                                             .toggleClass( 'expanded' );
+                                    }
+                                );
+                            
+                            $( '.block .content > ul:empty', this )
+                                .each
+                                (
+                                    function( index, element )
+                                    {
+                                        $( element ).parents( '.block' )
+                                            .hide();
                                     }
                                 );
                             
