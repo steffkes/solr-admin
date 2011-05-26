@@ -31,7 +31,7 @@
     
         <div id="header">
             
-            <a href="./"><span>Apache SOLR</span></a>
+            <a href="./" id="solr"><span>Apache SOLR</span></a>
 
             <p id="environment">&nbsp;</p>
 

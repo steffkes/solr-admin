@@ -71,7 +71,7 @@ ul
     position: relative;
 }
 
-#header a
+#header #solr
 {
     background-image: url( ../img/solr.png );
     display: block;
@@ -79,7 +79,7 @@ ul
     width: 200px;
 }
 
-#header a span
+#header #solr span
 {
     display: none;
 }
