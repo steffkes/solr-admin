@@ -33,6 +33,13 @@
             
             <a href="./" id="solr"><span>Apache SOLR</span></a>
 
+            <div id="wip-notice">
+                <a href="https://issues.apache.org/jira/browse/SOLR-2399">
+                    This UI is currently under development.<br>
+                    Bugs/Requests/Suggestions: <span>SOLR-2399</span>
+                </a>
+            </div>
+
             <p id="environment">&nbsp;</p>
 
         </div>
