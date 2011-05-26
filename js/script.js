@@ -2538,20 +2538,11 @@ var sammy = $.sammy
                                         {
                                             started_at = (new Date()).toGMTString();
                                         }
-                                        console.debug( 'started_at @ ', started_at );
 
                                         function dataimport_compute_details( response, details_element )
                                         {
                                             var details = [];
-
                                             
-                                            console.debug( 'elapsed @ ', $( 'str[name="Time Elapsed"]', response ).text() );
-                                            console.debug( 'taken @ ', $( 'str[name="Time taken "]', response ).text() );
-                                            console.debug( 'requests @ ', $( 'str[name="Total Requests made to DataSource"]', response ).text() );
-                                            console.debug( 'fetched @ ', $( 'str[name="Total Rows Fetched"]', response ).text() );
-                                            console.debug( 'skipped @ ', $( 'str[name="Total Documents Skipped"]', response ).text() );
-                                            console.debug( 'processed @ ', $( 'str[name="Total Documents Processed"]', response ).text() );
-
                                             var requests = parseInt( $( 'str[name="Total Requests made to DataSource"]', response ).text() );
                                             if( NaN !== requests )
                                             {
@@ -2613,7 +2604,6 @@ var sammy = $.sammy
                                             $( '.info strong', state_element )
                                                 .text( $( 'str[name=""]', response ).text() );
                                             
-                                            console.debug( 'failure' );
                                             console.debug( 'rollback @ ', rollback_element.text() );
                                         }
                                         else if( 'idle' === status && 0 !== messages_count )
@@ -2629,7 +2619,6 @@ var sammy = $.sammy
                                             $( '.info strong', state_element )
                                                 .text( $( 'str[name=""]', response ).text() );
 
-                                            console.debug( 'success' );
                                             dataimport_compute_details( response, $( '.info .details', state_element ) );
                                         }
                                         else if( 'busy' === status )
@@ -2648,7 +2637,6 @@ var sammy = $.sammy
                                             $( '.info strong', state_element )
                                                 .text( 'Indexing ...' );
                                             
-                                            console.debug( 'indexing' );
                                             dataimport_compute_details( response, $( '.info .details', state_element ) );
 
                                             window.setTimeout( dataimport_fetch_status, 2000 );
