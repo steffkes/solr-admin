@@ -640,6 +640,19 @@ ul
     max-width: 99%;
 }
 
+#content #analysis #analysis-error
+{
+    background-color: #f00;
+    background-image: url( ../img/ico/construction.png );
+    background-position: 10px 50%;
+    color: #fff;
+    display: none;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px;
+    padding-left: 35px;
+}
+
 #content #analysis .analysis-result h2
 {
     position: relative;

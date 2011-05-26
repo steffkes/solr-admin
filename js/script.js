@@ -3002,14 +3002,11 @@ var sammy = $.sammy
         // #/:core/analysis
         this.get
         (
-            /^#\/([\w\d]+)\/analysis$/,
+            /^#\/([\w\d]+)\/(analysis)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
                 var content_element = $( '#content' );
-                
-                $( 'li.analysis', this.active_core )
-                    .addClass( 'active' );
                 
                 $.get
                 (
@@ -3070,8 +3067,8 @@ var sammy = $.sammy
                                     
                                     this
                                         .html( content );
-                                    
-                                    $( 'option[value=fieldname\=' + response.schema.defaultSearchField + ']', this )
+
+                                    $( 'option[value="fieldname\=' + response.schema.defaultSearchField + '"]', this )
                                         .attr( 'selected', 'selected' );
                                 },
                                 error : function( xhr, text_status, error_thrown)
@@ -3119,6 +3116,11 @@ var sammy = $.sammy
                                         {
                                             build_analysis_table( 'type', name, response.analysis.field_types[name] );
                                         }
+                                    },
+                                    error : function( xhr, text_status, error_thrown )
+                                    {
+                                        $( '#analysis-error', analysis_element )
+                                            .show();
                                     },
                                     complete : function()
                                     {
@@ -3449,7 +3451,7 @@ var sammy = $.sammy
                                     $( '.timeago', this )
                                          .timeago();
                                 },
-                                error : function( xhr, text_status, error_thrown)
+                                error : function( xhr, text_status, error_thrown )
                                 {
                                     this
                                         .addClass( 'disabled' );
