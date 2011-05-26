@@ -3766,31 +3766,36 @@ var sammy = $.sammy
                                     .show();
                             }
 
-                            var cmd_arg_key_element = $( '.command_line_args dt', this );
-                            var cmd_arg_element = $( '.command_line_args dd', this );
-
-                            for( var key in app.dashboard_values['jvm']['jmx']['commandLineArgs'] )
+                            var commandLineArgs = app.dashboard_values['jvm']['jmx']['commandLineArgs'];
+                            if( 0 !== commandLineArgs.length )
                             {
-                                cmd_arg_element = cmd_arg_element.clone();
-                                cmd_arg_element.html( app.dashboard_values['jvm']['jmx']['commandLineArgs'][key] );
+                                var cmd_arg_element = $( '.command_line_args dt', this );
+                                var cmd_arg_key_element = $( '.command_line_args dt', this );
+                                var cmd_arg_element = $( '.command_line_args dd', this );
 
-                                cmd_arg_key_element
-                                    .after( cmd_arg_element );
+                                for( var key in commandLineArgs )
+                                {
+                                    cmd_arg_element = cmd_arg_element.clone();
+                                    cmd_arg_element.html( commandLineArgs[key] );
+
+                                    cmd_arg_key_element
+                                        .after( cmd_arg_element );
+                                }
+
+                                cmd_arg_key_element.closest( 'li' )
+                                    .show();
+
+                                $( '.command_line_args dd:last', this )
+                                    .remove();
+
+                                $( '.command_line_args dd:odd', this )
+                                    .addClass( 'odd' );
                             }
-
-                            cmd_arg_key_element.closest( 'li' )
-                                .show();
-
-                            $( '.command_line_args dd:last', this )
-                                .remove();
 
                             $( '.timeago', this )
                                 .timeago();
 
                             $( 'li:visible:odd', this )
-                                .addClass( 'odd' );
-
-                            $( '.command_line_args dd:odd', this )
                                 .addClass( 'odd' );
                             
                             // -- memory bar
