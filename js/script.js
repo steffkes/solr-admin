@@ -1348,7 +1348,7 @@ var sammy = $.sammy
                         'types' : []
                     }
 
-                    $( 'option[value=' + params.route_params.splat[2] + ']', related_select_element )
+                    $( 'option[value="' + params.route_params.splat[2] + '"]', related_select_element )
                         .attr( 'selected', 'selected' );
 
                     if( 'field' === type )
@@ -1787,20 +1787,18 @@ var sammy = $.sammy
             {
                 var callback = function( schema_browser_data, data_element )
                 {
-                    var sammy_basepath = '#/' + $( 'p a', context.active_core ).html() + '/schema-browser'
-
                     if( schema_browser_data.unique_key_field )
                     {
                         $( '.unique-key-field', data_element )
                             .show()
-                            .after( '<dd><a href="' + sammy_basepath + '/field/' + schema_browser_data.unique_key_field + '">' + schema_browser_data.unique_key_field + '</a></dd>' );
+                            .after( '<dd><a href="' + context.path + '/field/' + schema_browser_data.unique_key_field + '">' + schema_browser_data.unique_key_field + '</a></dd>' );
                     }
 
                     if( schema_browser_data.default_search_field )
                     {
                         $( '.default-search-field', data_element )
                             .show()
-                            .after( '<dd><a href="' + sammy_basepath + '/field/' + schema_browser_data.default_search_field + '">' + schema_browser_data.default_search_field + '</a></dd>' );
+                            .after( '<dd><a href="' + context.path + '/field/' + schema_browser_data.default_search_field + '">' + schema_browser_data.default_search_field + '</a></dd>' );
                     }
                 }
 
@@ -1826,7 +1824,7 @@ var sammy = $.sammy
                     var field = context.params.splat[4];
                     
                     var options_element = $( '.options', data_element );
-                    var sammy_basepath = '#/' + $( 'p a', context.active_core ).html() + '/schema-browser'
+                    var sammy_basepath = context.path.indexOf( '/', context.path.indexOf( '/', 2 ) + 1 );
 
                     var keystring_to_list = function( keystring )
                     {
