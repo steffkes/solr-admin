@@ -2287,7 +2287,7 @@ var sammy = $.sammy
         // #/:core/dataimport
         this.get
         (
-            /^#\/([\w\d]+)\/dataimport$/,
+            /^#\/([\w\d]+)\/(dataimport)$/,
             function( context )
             {
                 sammy.trigger
@@ -2297,6 +2297,14 @@ var sammy = $.sammy
                         active_core : this.active_core,
                         callback :  function( dataimport_handlers )
                         {
+                            if( 0 === dataimport_handlers.length )
+                            {
+                                $( '#content' )
+                                    .html( 'sorry, no dataimport-handler defined!' );
+
+                                return false;
+                            }
+
                             context.redirect( context.path + '/' + dataimport_handlers[0] );
                         }
                     }
