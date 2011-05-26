@@ -86,20 +86,20 @@ ul
 
 #header #wip-notice
 {
-    left: 212px;
-    position: absolute;
-    top: 10px;
-}
-
-#header #wip-notice a
-{
     background-color: #eceffa;
     background-image: url( ../img/ico/information-button.png );
     background-position: 8px 7px;
     border: 1px solid #4465cb;
-    display: block;
     padding: 5px 10px;
     padding-left: 31px;
+    left: 212px;
+    position: absolute;
+    top: 0;
+}
+
+#header #wip-notice a
+{
+    display: block;
 }
 
 #header #wip-notice span
