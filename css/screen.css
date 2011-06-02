@@ -1276,6 +1276,12 @@ ul
     padding-left: 10px;
 }
 
+#content #schema-browser #related #f-df-t
+{
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
 #content #schema-browser #related dl
 {
     margin-top: 15px;
@@ -1309,7 +1315,9 @@ ul
 #content #schema-browser #related .dynamic-field .dynamic-field,
 #content #schema-browser #related .dynamic-field .dynamic-field a,
 #content #schema-browser #related .type .type,
-#content #schema-browser #related .type .type a
+#content #schema-browser #related .type .type a,
+#content #schema-browser #related .active,
+#content #schema-browser #related .active a
 {
     color: #333;
 }
@@ -1318,6 +1326,11 @@ ul
 #content #schema-browser #related .copyfield a
 {
     color: #666;
+}
+
+#content #schema-browser #data
+{
+    display: none;
 }
 
 #content #schema-browser #data #index dt
@@ -1433,6 +1446,7 @@ ul
 
 #content #schema-browser #data #field .topterms-holder
 {
+    display: none;
     float: left;
 }
 

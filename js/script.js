@@ -1323,19 +1323,44 @@ var sammy = $.sammy
             'schema_browser_navi',
             function( event, params )
             {
-                var related_navigation_element = $( '#related dl', params.schema_browser_element );
+                var related_navigation_element = $( '#related dl#f-df-t', params.schema_browser_element );
+                var related_navigation_meta = $( '#related dl.ukf-dsf', params.schema_browser_element );
                 var related_select_element = $( '#related select', params.schema_browser_element )
                 var type = 'index';
 
-                if( !params.route_params )
+                var sammy_basepath = '#/' + $( 'p a', params.active_core ).html() + '/schema-browser';
+                
+                if( !related_navigation_meta.hasClass( 'done' ) )
                 {
-                    related_navigation_element
-                        .hide();
-                    
-                    $( 'option:selected', related_select_element )
-                        .removeAttr( 'selected' );
+                    if( app.schema_browser_data.unique_key_field )
+                    {
+                        $( '.unique-key-field', related_navigation_meta )
+                            .show()
+                            .after
+                            (
+                                '<dd class="unique-key-field"><a href="' + sammy_basepath + '/field/' +
+                                app.schema_browser_data.unique_key_field + '">' +
+                                app.schema_browser_data.unique_key_field + '</a></dd>'
+                            );
+                    }
+
+                    if( app.schema_browser_data.default_search_field )
+                    {
+                        $( '.default-search-field', related_navigation_meta )
+                            .show()
+                            .after
+                            (
+                                '<dd class="default-search-field"><a href="' + sammy_basepath + '/field/' +
+                                app.schema_browser_data.default_search_field + '">' +
+                                app.schema_browser_data.default_search_field + '</a></dd>'
+                            );
+                    }
+
+                    related_navigation_meta
+                        .addClass( 'done' );
                 }
-                else
+
+                if( params.route_params )
                 {
                     var type = params.route_params.splat[3];
                     var value = params.route_params.splat[4];
@@ -1396,7 +1421,6 @@ var sammy = $.sammy
                         }
                     }
 
-                    var sammy_basepath = '#/' + $( 'p a', params.active_core ).html() + '/schema-browser';
                     var navigation_content = '';
 
                     if( 0 !== navigation_data.fields.length )
@@ -1464,20 +1488,41 @@ var sammy = $.sammy
                         .attr( 'class', type )
                         .html( navigation_content );
                 }
-
-                $.get
-                (
-                        'tpl/schema-browser_'+ type + '.html',
-                    function( template )
-                    {
-                        var data_element = $( '#data', params.schema_browser_element );
+                else
+                {
+                    related_navigation_element
+                        .hide();
                     
-                        data_element
-                            .html( template );
+                    $( 'option:selected', related_select_element )
+                        .removeAttr( 'selected' );
+                }
 
-                        params.callback( app.schema_browser_data, data_element );
-                    }
-                );
+                if( 'field' === type && value === app.schema_browser_data.unique_key_field )
+                {
+                    $( '.unique-key-field', related_navigation_meta )
+                        .addClass( 'active' );
+                }
+                else
+                {
+                    $( '.unique-key-field', related_navigation_meta )
+                        .removeClass( 'active' );
+                }
+
+                if( 'field' === type && value === app.schema_browser_data.default_search_field )
+                {
+                    $( '.default-search-field', related_navigation_meta )
+                        .addClass( 'active' );
+                }
+                else
+                {
+                    $( '.default-search-field', related_navigation_meta )
+                        .removeClass( 'active' );
+                }
+
+                if( params.callback )
+                {
+                    params.callback( app.schema_browser_data, $( '#data', params.schema_browser_element ) );
+                }
             }
         );
 
@@ -1787,20 +1832,9 @@ var sammy = $.sammy
             {
                 var callback = function( schema_browser_data, data_element )
                 {
-                    if( schema_browser_data.unique_key_field )
-                    {
-                        $( '.unique-key-field', data_element )
-                            .show()
-                            .after( '<dd><a href="' + context.path + '/field/' + schema_browser_data.unique_key_field + '">' + schema_browser_data.unique_key_field + '</a></dd>' );
-                    }
-
-                    if( schema_browser_data.default_search_field )
-                    {
-                        $( '.default-search-field', data_element )
-                            .show()
-                            .after( '<dd><a href="' + context.path + '/field/' + schema_browser_data.default_search_field + '">' + schema_browser_data.default_search_field + '</a></dd>' );
-                    }
-                }
+                    data_element
+                        .hide();
+                };
 
                 sammy.trigger
                 (
@@ -1813,20 +1847,28 @@ var sammy = $.sammy
             }
         );
 
-        // #/:core/schema-browser/field/$field
+        // #/:core/schema-browser/field|dynamic-field|type/$field
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)(\/(field)\/(.+))$/,
+            /^#\/([\w\d]+)\/(schema-browser)(\/(field|dynamic-field|type)\/(.+))$/,
             function( context )
             {
                 var callback = function( schema_browser_data, data_element )
                 {
                     var field = context.params.splat[4];
+
+                    var type = context.params.splat[3];
+                    var is_f = 'field' === type;
+                    var is_df = 'dynamic-field' === type;
+                    var is_t = 'type' === type;
                     
                     var options_element = $( '.options', data_element );
                     var sammy_basepath = context.path.indexOf( '/', context.path.indexOf( '/', 2 ) + 1 );
 
-                    var keystring_to_list = function( keystring )
+                    data_element
+                        .show();
+
+                    var keystring_to_list = function( keystring, element_class )
                     {
                         var key_list = keystring.replace( /-/g, '' ).split( '' );
                         var list = [];
@@ -1847,7 +1889,12 @@ var sammy = $.sammy
 
                             if( option_key )
                             {
-                                list.push( '<dd>' + option_key + ',</dd>' );
+                                list.push
+                                (
+                                    '<dd ' + ( element_class ? ' class="' + element_class + '"' : '' ) + '>' +
+                                    option_key +
+                                    ',</dd>'
+                                );
                             }
                         }
 
@@ -1856,192 +1903,265 @@ var sammy = $.sammy
                         return list;
                     }
 
-                    // -- properties
-                    if( schema_browser_data.fields[field].flags )
+                    var flags = null;
+
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].flags )
                     {
-                        var properties_element = $( '.properties', options_element );
-                        var properties_keys = keystring_to_list( schema_browser_data.fields[field].flags );
+                        flags = schema_browser_data.fields[field].flags;
+                    }
+                    else if( is_df && schema_browser_data.dynamic_fields[field] && schema_browser_data.dynamic_fields[field].flags )
+                    {
+                        flags = schema_browser_data.dynamic_fields[field].flags;
+                    }
+
+                    // -- properties
+                    var properties_element = $( 'dt.properties', options_element );
+                    if( flags )
+                    {
+                        var properties_keys = keystring_to_list( flags, 'properties' );
+
+                        $( 'dd.properties', options_element )
+                            .remove();
 
                         properties_element
                             .show()
                             .after( properties_keys.join( "\n" ) );
                     }
+                    else
+                    {
+                        $( '.properties', options_element )
+                            .hide();
+                    }
 
                     // -- schema
-                    if( schema_browser_data.fields[field].schema )
+                    var schema_element = $( 'dt.schema', options_element );
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].schema )
                     {
-                        var schema_element = $( '.schema', options_element );
-                        var schema_keys = keystring_to_list( schema_browser_data.fields[field].schema );
+                        var schema_keys = keystring_to_list( schema_browser_data.fields[field].schema, 'schema' );
+
+                        $( 'dd.schema', options_element )
+                            .remove();
 
                         schema_element
                             .show()
                             .after( schema_keys.join( "\n" ) );
                     }
+                    else
+                    {
+                        $( '.schema', options_element )
+                            .hide();
+                    }
 
                     // -- index
-                    if( schema_browser_data.fields[field].index )
+                    var index_element = $( 'dt.index', options_element );
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].index )
                     {
-                        var index_element = $( '.index', options_element );
                         var index_keys = [];
 
                         if( 0 === schema_browser_data.fields[field].index.indexOf( '(' ) )
                         {
-                            index_keys.push( '<dd>' + schema_browser_data.fields[field].index + '</dd>' );
+                            index_keys.push( '<dd class="index">' + schema_browser_data.fields[field].index + '</dd>' );
                         }
                         else
                         {
-                            index_keys = keystring_to_list( schema_browser_data.fields[field].index );
+                            index_keys = keystring_to_list( schema_browser_data.fields[field].index, 'index' );
                         }
+
+                        $( 'dd.index', options_element )
+                            .remove();
 
                         index_element
                             .show()
                             .after( index_keys.join( "\n" ) );
                     }
+                    else
+                    {
+                        $( '.index', options_element )
+                            .hide();
+                    }
 
                     // -- docs
-                    if( schema_browser_data.fields[field].docs )
-                    { 
-                        var docs_element = $( '.docs', options_element );
+                    var docs_element = $( 'dt.docs', options_element );
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].docs )
+                    {
+                        $( 'dd.docs', options_element )
+                            .remove();
 
                         docs_element
                             .show()
-                            .after( '<dd>' + schema_browser_data.fields[field].docs + '</dd>' );
+                            .after( '<dd class="docs">' + schema_browser_data.fields[field].docs + '</dd>' );
+                    }
+                    else
+                    {
+                        $( '.docs', options_element )
+                            .hide();
                     }
 
                     // -- distinct 
-                    if( schema_browser_data.fields[field].distinct )
+                    var distinct_element = $( 'dt.distinct', options_element );
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].distinct )
                     {
-                        var distinct_element = $( '.distinct', options_element );
+                        $( 'dd.distinct', options_element )
+                            .remove();
 
                         distinct_element
                             .show()
-                            .after( '<dd>' + schema_browser_data.fields[field].distinct + '</dd>' );
+                            .after( '<dd class="distinct">' + schema_browser_data.fields[field].distinct + '</dd>' );
+                    }
+                    else
+                    {
+                        $( '.distinct', options_element )
+                            .hide();
                     }
 
                     // -- position-increment-gap 
-                    if( schema_browser_data.fields[field].positionIncrementGap )
+                    var pig_element = $( 'dt.position-increment-gap', options_element );
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].positionIncrementGap )
                     {
-                        var pig_element = $( '.position-increment-gap', options_element );
+                        $( 'dt.position-increment-gap', options_element )
+                            .remove();
 
                         pig_element
                             .show()
-                            .after( '<dd>' + schema_browser_data.fields[field].positionIncrementGap + '</dd>' );
+                            .after( '<dd class="position-increment-gap">' + schema_browser_data.fields[field].positionIncrementGap + '</dd>' );
+                    }
+                    else
+                    {
+                        $( '.position-increment-gap', options_element )
+                            .hide();
+                    }
+                    
+                    var analyzer_element = $( '.analyzer', data_element );
+                    var analyzer_data = null;
+
+                    if( is_f )
+                    {
+                        analyzer_data = schema_browser_data.types[schema_browser_data.relations.f_t[field]];
+                    }
+                    else if( is_df )
+                    {
+                        analyzer_data = schema_browser_data.types[schema_browser_data.relations.df_t[field]];
+                    }
+                    else if( is_t )
+                    {
+                        analyzer_data = schema_browser_data.types[field];
                     }
 
-                    var analyzer_data = schema_browser_data.types[schema_browser_data.relations.f_t[field]];
-                    var analyzer_element = $( '.analyzer', data_element );
-
-                    var transform_analyzer_data_into_list = function( analyzer_data )
+                    if( analyzer_data )
                     {
-                        var args = [];
-                        for( var key in analyzer_data.args )
+                        var transform_analyzer_data_into_list = function( analyzer_data )
                         {
-                            var arg_class = '';
-                            var arg_content = '';
+                            var args = [];
+                            for( var key in analyzer_data.args )
+                            {
+                                var arg_class = '';
+                                var arg_content = '';
 
-                            if( 'true' === analyzer_data.args[key] || '1' === analyzer_data.args[key] )
-                            {
-                                arg_class = 'ico-1';
-                                arg_content = key;
-                            }
-                            else if( 'false' === analyzer_data.args[key] || '0' === analyzer_data.args[key] )
-                            {
-                                arg_class = 'ico-0';
-                                arg_content = key;
-                            }
-                            else
-                            {
-                                arg_content = key + ': ';
-
-                                if( 'synonyms' === key || 'words' === key )
+                                if( 'true' === analyzer_data.args[key] || '1' === analyzer_data.args[key] )
                                 {
-                                    // @TODO: set link target for file
-                                    arg_content += '<a>' + analyzer_data.args[key] + '</a>';
+                                    arg_class = 'ico-1';
+                                    arg_content = key;
+                                }
+                                else if( 'false' === analyzer_data.args[key] || '0' === analyzer_data.args[key] )
+                                {
+                                    arg_class = 'ico-0';
+                                    arg_content = key;
                                 }
                                 else
                                 {
-                                    arg_content += analyzer_data.args[key];
+                                    arg_content = key + ': ';
+
+                                    if( 'synonyms' === key || 'words' === key )
+                                    {
+                                        // @TODO: set link target for file
+                                        arg_content += '<a>' + analyzer_data.args[key] + '</a>';
+                                    }
+                                    else
+                                    {
+                                        arg_content += analyzer_data.args[key];
+                                    }
                                 }
+
+                                args.push( '<dd class="' + arg_class + '">' + arg_content + '</dd>' );
                             }
 
-                            args.push( '<dd class="' + arg_class + '">' + arg_content + '</dd>' );
+                            var list_content = '<dt>' + analyzer_data.className + '</dt>';
+                            if( 0 !== args.length )
+                            {
+                                args.sort();
+                                list_content += args.join( "\n" );
+                            }
+
+                            return list_content;
                         }
 
-                        var list_content = '<dt>' + analyzer_data.className + '</dt>';
-                        if( 0 !== args.length )
+                        // -- field-type
+                        var field_type_element = $( 'dt.field-type', options_element );
+
+                        $( 'dd.field-type', options_element )
+                            .remove();
+
+                        field_type_element
+                            .show()
+                            .after( '<dd class="field-type">' + analyzer_data.className + '</dd>' );
+
+
+                        for( var key in analyzer_data )
                         {
-                            args.sort();
-                            list_content += args.join( "\n" );
-                        }
-
-                        return list_content;
-                    }
-
-                    // -- field-type
-                    var field_type_element = $( '.field-type', options_element );
-
-                    field_type_element
-                        .show()
-                        .after( '<dd>' + analyzer_data.className + '</dd>' );
-
-
-                    for( var key in analyzer_data )
-                    {
-                        var key_match = key.match( /^(.+)Analyzer$/ );
-                        if( !key_match )
-                        {
-                            continue;
-                        }
-
-                        var analyzer_key_element = $( '.' + key_match[1], analyzer_element );
-                        var analyzer_key_data = analyzer_data[key];
-
-                        analyzer_element.show();
-                        analyzer_key_element.show();
-
-                        if( analyzer_key_data.className )
-                        {
-                            $( 'dl:first dt', analyzer_key_element )
-                                .html( analyzer_key_data.className );
-                        }
-
-                        for( var type in analyzer_key_data )
-                        {
-                            if( 'object' !== typeof analyzer_key_data[type] )
+                            var key_match = key.match( /^(.+)Analyzer$/ );
+                            if( !key_match )
                             {
                                 continue;
                             }
 
-                            var type_element = $( '.' + type, analyzer_key_element );
-                            var type_content = [];
+                            var analyzer_key_element = $( '.' + key_match[1], analyzer_element );
+                            var analyzer_key_data = analyzer_data[key];
 
-                            type_element.show();
+                            analyzer_element.show();
+                            analyzer_key_element.show();
 
-                            if( analyzer_key_data[type].className )
+                            if( analyzer_key_data.className )
                             {
-                                type_content.push( transform_analyzer_data_into_list( analyzer_key_data[type] ) );
+                                $( 'dl:first dt', analyzer_key_element )
+                                    .html( analyzer_key_data.className );
                             }
-                            else
+
+                            $( 'ul li', analyzer_key_element )
+                                .hide();
+
+                            for( var type in analyzer_key_data )
                             {
-                                for( var entry in analyzer_key_data[type] )
+                                if( 'object' !== typeof analyzer_key_data[type] )
                                 {
-                                    type_content.push( transform_analyzer_data_into_list( analyzer_key_data[type][entry] ) );
+                                    continue;
                                 }
-                            }
 
-                            $( 'dl', type_element )
-                                .append( type_content.join( "\n" ) );
+                                var type_element = $( '.' + type, analyzer_key_element );
+                                var type_content = [];
+
+                                type_element.show();
+
+                                if( analyzer_key_data[type].className )
+                                {
+                                    type_content.push( transform_analyzer_data_into_list( analyzer_key_data[type] ) );
+                                }
+                                else
+                                {
+                                    for( var entry in analyzer_key_data[type] )
+                                    {
+                                        type_content.push( transform_analyzer_data_into_list( analyzer_key_data[type][entry] ) );
+                                    }
+                                }
+
+                                $( 'dl', type_element )
+                                    .empty()
+                                    .append( type_content.join( "\n" ) );
+                            }
                         }
                     }
 
-
                     var topterms_holder_element = $( '.topterms-holder', data_element );
-                    if( !schema_browser_data.fields[field].topTerms_hash )
-                    {
-                        topterms_holder_element
-                            .hide();
-                    }
-                    else
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].topTerms_hash )
                     {
                         topterms_holder_element
                             .show();
@@ -2075,6 +2195,7 @@ var sammy = $.sammy
                         topterms_content += '</tbody>';
 
                         topterms_table_element
+                            .empty()
                             .append( topterms_content );
                         
                         $( 'tbody', topterms_table_element )
@@ -2137,14 +2258,14 @@ var sammy = $.sammy
                                 }
                             );
                     }
-
-                    var histogram_holder_element = $( '.histogram-holder', data_element );
-                    if( !schema_browser_data.fields[field].histogram_hash )
+                    else
                     {
-                        histogram_holder_element
+                        topterms_holder_element
                             .hide();
                     }
-                    else
+
+                    var histogram_holder_element = $( '.histogram-holder', data_element );
+                    if( is_f && schema_browser_data.fields[field] && schema_browser_data.fields[field].histogram_hash )
                     {
                         histogram_holder_element
                             .show();
@@ -2182,52 +2303,11 @@ var sammy = $.sammy
                                 }
                             );
                     }
-                }
-
-                sammy.trigger
-                (
-                    'schema_browser_load',
+                    else
                     {
-                        callback : callback,
-                        active_core : this.active_core,
-                        route_params : this.params
+                        histogram_holder_element
+                            .hide();
                     }
-                );
-            }
-        );
-
-        // #/:core/schema-browser/dynamic-field/$field
-        this.get
-        (
-            /^#\/([\w\d]+)\/(schema-browser)(\/(dynamic-field)\/(.+))$/,
-            function( context )
-            {
-                var callback = function( schema_browser_data, data_element )
-                {
-                    console.debug( data_element );
-                }
-
-                sammy.trigger
-                (
-                    'schema_browser_load',
-                    {
-                        callback : callback,
-                        active_core : this.active_core,
-                        route_params : this.params
-                    }
-                );
-            }
-        );
-
-        // #/:core/schema-browser/type/$type
-        this.get
-        (
-            /^#\/([\w\d]+)\/(schema-browser)(\/(type)\/(.+))$/,
-            function( context )
-            {
-                var callback = function( schema_browser_data, data_element )
-                {
-                    console.debug( data_element );
                 }
 
                 sammy.trigger
