@@ -258,7 +258,7 @@ var sammy = $.sammy
         // #/cores
         this.get
         (
-            /^#\/cores$/,
+            /^#\/(cores)$/,
             function( context )
             {
                 sammy.trigger
@@ -286,7 +286,7 @@ var sammy = $.sammy
         // #/cores
         this.get
         (
-            /^#\/cores\//,
+            /^#\/(cores)\//,
             function( context )
             {
                 var content_element = $( '#content' );
@@ -386,25 +386,24 @@ var sammy = $.sammy
                                             );
 
                                         var core_names = [];
-                                        var core_selects = $( '.swap select', cores_element );
+                                        var core_selects = $( '#actions select', cores_element );
 
                                         for( var key in cores )
                                         {
-                                            core_names.push( '<option>' + key + '</option>' )
+                                            core_names.push( '<option value="' + key + '">' + key + '</option>' )
                                         }
 
-                                        
                                         core_selects
                                             .html( core_names.join( "\n") );
                                         
-                                        $( 'option[value=' + current_core + ']', core_selects.filter( '.core' ) )
+                                        $( 'option[value="' + current_core + '"]', core_selects.filter( '#swap_core' ) )
                                             .attr( 'selected', 'selected' );
 
-                                        $( 'option[value=' + current_core + ']', core_selects.filter( '.other' ) )
+                                        $( 'option[value="' + current_core + '"]', core_selects.filter( '.other' ) )
                                             .attr( 'disabled', 'disabled' )
                                             .addClass( 'disabled' );
                                         
-                                        $( '.rename input[name=core]', cores_element )
+                                        $( 'input[name="core"]', cores_element )
                                             .val( current_core );
 
                                         // layout
@@ -445,6 +444,57 @@ var sammy = $.sammy
                                                 }
                                             );
 
+                                        $( 'form a.submit', button_holder_element )
+                                            .die( 'click' )
+                                            .live
+                                            (
+                                                'click',
+                                                function( event )
+                                                {
+                                                    var element = $( this );
+                                                    var form_element = element.parents( 'form' );
+                                                    var action = $( 'input[name="action"]', form_element ).val().toLowerCase();
+
+                                                    form_element
+                                                        .ajaxSubmit
+                                                        (
+                                                            {
+                                                                url : app.config.solr_path + app.config.core_admin_path + '?wt=json',
+                                                                dataType : 'json',
+                                                                beforeSubmit : function( array, form, options )
+                                                                {
+                                                                    //loader
+                                                                },
+                                                                success : function( response, status_text, xhr, form )
+                                                                {
+                                                                    delete app.cores_data;
+
+                                                                    if( 'rename' === action )
+                                                                    {
+                                                                        context.redirect( path_parts[1] + $( 'input[name="other"]', form_element ).val() );
+                                                                    }
+                                                                    else if( 'swap' === action )
+                                                                    {
+                                                                        window.location.reload();
+                                                                    }
+                                                                    
+                                                                    $( 'a.reset', form )
+                                                                        .trigger( 'click' );
+                                                                },
+                                                                error : function( xhr, text_status, error_thrown )
+                                                                {
+                                                                },
+                                                                complete : function()
+                                                                {
+                                                                    //loader
+                                                                }
+                                                            }
+                                                        );
+
+                                                    return false;
+                                                }
+                                            );
+
                                         $( 'form a.reset', button_holder_element )
                                             .die( 'click' )
                                             .live
@@ -452,12 +502,101 @@ var sammy = $.sammy
                                                 'click',
                                                 function( event )
                                                 {
+                                                    $( this ).parents( 'form' )
+                                                        .resetForm();
+
                                                     $( this ).parents( '.button-holder' )
                                                         .trigger( 'toggle' );
+                                                    
+                                                    return false;
                                                 }
                                             );
 
-                                        $( '#actions .optimize', cores_element )
+                                        var reload_button = $( '#actions .reload', cores_element );
+                                        reload_button
+                                            .die( 'click' )
+                                            .live
+                                            (
+                                                'click',
+                                                function( event )
+                                                {
+                                                    $.ajax
+                                                    (
+                                                        {
+                                                            url : app.config.solr_path + app.config.core_admin_path + '?wt=json&action=RELOAD&core=' + current_core,
+                                                            dataType : 'json',
+                                                            context : $( this ),
+                                                            beforeSend : function( xhr, settings )
+                                                            {
+                                                                this
+                                                                    .addClass( 'loader' );
+                                                            },
+                                                            success : function( response, text_status, xhr )
+                                                            {
+                                                                this
+                                                                    .addClass( 'success' );
+
+                                                                window.setTimeout
+                                                                (
+                                                                    function()
+                                                                    {
+                                                                        reload_button
+                                                                            .removeClass( 'success' );
+                                                                    },
+                                                                    5000
+                                                                );
+                                                            },
+                                                            error : function( xhr, text_status, error_thrown )
+                                                            {
+                                                            },
+                                                            complete : function( xhr, text_status )
+                                                            {
+                                                                this
+                                                                    .removeClass( 'loader' );
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                        
+                                        $( '#actions .unload', cores_element )
+                                            .die( 'click' )
+                                            .live
+                                            (
+                                                'click',
+                                                function( event )
+                                                {
+                                                    $.ajax
+                                                    (
+                                                        {
+                                                            url : app.config.solr_path + app.config.core_admin_path + '?wt=json&action=UNLOAD&core=' + current_core,
+                                                            dataType : 'json',
+                                                            context : $( this ),
+                                                            beforeSend : function( xhr, settings )
+                                                            {
+                                                                this
+                                                                    .addClass( 'loader' );
+                                                            },
+                                                            success : function( response, text_status, xhr )
+                                                            {
+                                                                delete app.cores_data;
+                                                                context.redirect( path_parts[1].substr( 0, path_parts[1].length - 1 ) );
+                                                            },
+                                                            error : function( xhr, text_status, error_thrown )
+                                                            {
+                                                            },
+                                                            complete : function( xhr, text_status )
+                                                            {
+                                                                this
+                                                                    .removeClass( 'loader' );
+                                                            }
+                                                        }
+                                                    );
+                                                }
+                                            );
+
+                                        var optimize_button = $( '#actions .optimize', cores_element );
+                                        optimize_button
                                             .die( 'click' )
                                             .live
                                             (
@@ -477,6 +616,19 @@ var sammy = $.sammy
                                                             },
                                                             success : function( response, text_status, xhr )
                                                             {
+                                                                this
+                                                                    .addClass( 'success' );
+
+                                                                window.setTimeout
+                                                                (
+                                                                    function()
+                                                                    {
+                                                                        optimize_button
+                                                                            .removeClass( 'success' );
+                                                                    },
+                                                                    5000
+                                                                );
+                                                                
                                                                 $( '.optimized dd.ico-0', index_data_element )
                                                                     .removeClass( 'ico-0' )
                                                                     .addClass( 'ico-1' );
