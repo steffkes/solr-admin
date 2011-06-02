@@ -4091,7 +4091,7 @@ var sammy = $.sammy
     }
 );
 
-var solr_admin = function()
+var solr_admin = function( app_config )
 {
     menu_element = null,
 
@@ -4100,14 +4100,14 @@ var solr_admin = function()
     active_core = null,
     environment_basepath = null,
 
-    config = null,
+    config = app_config,
     params = null,
     dashboard_values = null,
     schema_browser_data = null,
     
     this.init_menu = function()
     {
-        $( '.ping a', this.menu_element )
+        $( '.ping a', menu_element )
             .live
             (
                 'click',
@@ -4122,7 +4122,7 @@ var solr_admin = function()
                 }
             );
         
-        $( 'a[rel]', this.menu_element )
+        $( 'a[rel]', menu_element )
             .live
             (
                 'click',
@@ -4133,30 +4133,13 @@ var solr_admin = function()
                 }
             );
     }
-    
-    this.__construct = function()
-    {
-        this.menu_element = $( '#menu ul' );
-        
-        this.init_menu();
-    }
-    this.__construct();
-}
 
-var app;
-$( document ).ready
-(
-    function()
+    this.init_cores = function()
     {
-        jQuery.timeago.settings.allowFuture = true;
-        
-        app = new solr_admin();
-        app.config = app_config;
-
         $.ajax
         (
             {
-                url : app.config.solr_path + app.config.core_admin_path + '?wt=json',
+                url : config.solr_path + config.core_admin_path + '?wt=json',
                 dataType : 'json',
                 beforeSend : function( arr, form, options )
                 {               
@@ -4165,28 +4148,28 @@ $( document ).ready
                 },
                 success : function( response )
                 {
-                    app.cores_data = response.status;
-                    app.is_multicore = 'undefined' === typeof response.status[''];
+                    this.cores_data = response.status;
+                    is_multicore = 'undefined' === typeof response.status[''];
 
-                    if( app.is_multicore )
+                    if( is_multicore )
                     {
-                        $( '#cores', app.menu_element )
+                        $( '#cores', menu_element )
                             .show();
                     }
 
                     for( var core_name in response.status )
                     {
-                        var core_path = app.config.solr_path + '/' + core_name;
+                        var core_path = config.solr_path + '/' + core_name;
 
                         if( !core_name )
                         {
                             core_name = 'singlecore';
-                            core_path = app.config.solr_path
+                            core_path = config.solr_path
                         }
 
-                        if( !app.environment_basepath )
+                        if( !environment_basepath )
                         {
-                            app.environment_basepath = core_path;
+                            environment_basepath = core_path;
                         }
 
                         var core_tpl = '<li id="' + core_name + '" data-basepath="' + core_path + '">' + "\n"
@@ -4207,21 +4190,21 @@ $( document ).ready
                                      + '    </ul>' + "\n"
                                      + '</li>';
 
-                        app.menu_element
+                        menu_element
                             .append( core_tpl );
                     }
 
                     $.ajax
                     (
                         {
-                            url : app.environment_basepath + '/admin/system?wt=json',
+                            url : environment_basepath + '/admin/system?wt=json',
                             dataType : 'json',
                             beforeSend : function( arr, form, options )
                             {
                             },
                             success : function( response )
                             {
-                                app.dashboard_values = response;
+                                dashboard_values = response;
 
                                 var environment_args = null;
                                 var cloud_args = null;
@@ -4294,5 +4277,28 @@ $( document ).ready
                 }
             }
         );
+    }
+    
+    this.__construct = function()
+    {
+        menu_element = $( '#menu ul' );
+        
+        this.init_menu();
+        this.init_cores();
+
+        this.menu_element = menu_element;
+        this.config = config;
+    }
+    this.__construct();
+}
+
+var app;
+$( document ).ready
+(
+    function()
+    {
+        jQuery.timeago.settings.allowFuture = true;
+        
+        app = new solr_admin( app_config );
     }
 );  
