@@ -1414,6 +1414,9 @@ var sammy = $.sammy
                                     error : function( xhr, text_status, error_thrown )
                                     {
                                         console.debug( arguments );
+                                        
+                                        $( '#content' )
+                                            .html( 'sorry, no replication-handler defined!' );
                                     },
                                     complete : function( xhr, text_status )
                                     {
