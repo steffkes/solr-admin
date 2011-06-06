@@ -3433,7 +3433,14 @@ var sammy = $.sammy
                                                 var length = raw_parts[key].length;
                                                 for( var j = 0; j < length; j++ )
                                                 {
-                                                    parts[key].push( '<td>' + raw_parts[key][j].join( "\n" ) + '</td>' );
+                                                    if( raw_parts[key][j] )
+                                                    {
+                                                        parts[key].push( '<td>' + raw_parts[key][j].join( "\n" ) + '</td>' );
+                                                    }
+                                                    else
+                                                    {
+                                                        parts[key].push( '<td><div class="empty">&empty;</div></td>' );
+                                                    }
                                                 }
                                             }
 
