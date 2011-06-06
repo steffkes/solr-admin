@@ -272,7 +272,7 @@ var sammy = $.sammy
             function( context )
             {
                 delete app.cores_template;
-                
+
                 sammy.trigger
                 (
                     'cores_load_data',
@@ -3524,13 +3524,33 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema|config)$/,
             function( context )
             {
-                var content_element = $( '#content' );
+                $.ajax
+                (
+                    {
+                        url : $( '.active a', this.active_core ).attr( 'href' ),
+                        dataType : 'xml',
+                        context : $( '#content' ),
+                        beforeSend : function( xhr, settings )
+                        {
+                            this
+                                .html( '<div class="loader">Loading ...</div>' );
+                        },
+                        complete : function( xhr, text_status )
+                        {
+                            var code = $(
+                                '<pre class="syntax language-xml"><code>' +
+                                xhr.responseText.replace( /\</g, '&lt;' ).replace( /\>/g, '&gt;' ) +
+                                '</code></pre>'
+                            );
+                            this.html( code );
 
-                content_element
-                    .html( '<iframe src="' + $( '.active a', this.active_core ).attr( 'href' ) + '"></iframe>' );
-                
-                $( 'iframe', content_element )
-                    .css( 'height', $( '#main' ).height() );
+                            if( 'success' === text_status )
+                            {
+                                hljs.highlightBlock( code.get(0) );
+                            }
+                        }
+                    }
+                );
             }
         );
         
