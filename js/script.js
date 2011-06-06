@@ -271,6 +271,8 @@ var sammy = $.sammy
             /^#\/(cores)$/,
             function( context )
             {
+                delete app.cores_template;
+                
                 sammy.trigger
                 (
                     'cores_load_data',
