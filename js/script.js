@@ -36,26 +36,31 @@ var sammy = $.sammy
             'ping',
             function( event )
             {
-                var element = $( this.params.element );
-                
                 $.ajax
                 (
                     {
-                        url : element.attr( 'href' ) + '?wt=json',
+                        url : $( this.params.element ).attr( 'href' ) + '?wt=json',
                         dataType : 'json',
+                        context: this.params.element,
                         beforeSend : function( arr, form, options )
                         {
-                            loader.show( element );
+                            loader.show( this );
                         },
-                        success : function( response )
+                        success : function( response, text_status, xhr )
                         {
-                            var qtime_element = $( '.qtime', element );
+                            $( this )
+                                .removeAttr( 'title' );
+                            
+                            $( this ).parents( 'li' )
+                                .removeClass( 'error' );
+                                
+                            var qtime_element = $( '.qtime', this );
                             
                             if( 0 === qtime_element.size() )
                             {
                                 qtime_element = $( '<small class="qtime"> (<span></span>)</small>' );
                                 
-                                element
+                                $( this )
                                     .append
                                     (
                                         qtime_element
@@ -65,12 +70,17 @@ var sammy = $.sammy
                             $( 'span', qtime_element )
                                 .html( response.responseHeader.QTime + 'ms' );
                         },
-                        error : function()
+                        error : function( xhr, text_status, error_thrown )
                         {
+                            $( this )
+                                .attr( 'title', '/admin/ping is not configured (' + xhr.status + ': ' + error_thrown + ')' );
+                            
+                            $( this ).parents( 'li' )
+                                .addClass( 'error' );
                         },
-                        complete : function()
+                        complete : function( xhr, text_status )
                         {
-                            loader.hide( element );
+                            loader.hide( this );
                         }
                     }
                 );

@@ -406,6 +406,18 @@ ul
 #menu .plugins a { background-image: url( ../img/ico/block.png ); }
 #menu .dataimport a { background-image: url( ../img/ico/document-import.png ); }
 
+#menu .ping.error
+{
+    background-color: #f7f7e9;
+}
+
+#menu .ping.error a
+{
+    background-color: transparent;
+    background-image: url( ../img/ico/system-monitor--exclamation.png );
+    cursor: help;
+}
+
 #content-wrapper
 {
     float: right;
