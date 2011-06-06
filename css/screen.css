@@ -293,7 +293,7 @@ ul
     display: none;
 }
 
-#menu .singlecore li.active:last-child
+#menu li.active:last-child
 {
     border-bottom: 0;
 }
@@ -310,8 +310,12 @@ ul
 
 #menu ul .active ul
 {
-    border-bottom: 1px solid #f0f0f0;
     display: block;
+}
+
+#menu ul li.active:last-child ul
+{
+    border-bottom: 1px solid #f0f0f0;
 }
 
 #menu ul ul li
