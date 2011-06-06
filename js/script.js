@@ -1991,6 +1991,8 @@ var sammy = $.sammy
                         .hide();
                 };
 
+                delete app.schema_browser_data;
+
                 sammy.trigger
                 (
                     'schema_browser_load',
