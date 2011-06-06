@@ -2189,22 +2189,27 @@ ul
 
 #content #cores
 {
-    background-image: url( ../img/div.gif );
-    background-position: 150px 0;
-    background-repeat: repeat-y;
 }
 
 #content #cores #frame
 {
     float: right;
-    width: 610px;
+    width: 78%;
+}
+
+#content #cores #navigation
+{
+    background-image: url( ../img/div.gif );
+    background-position: 100% 0;
+    background-repeat: repeat-y;
+    width: 20%;
 }
 
 #content #cores #list
 {
     float: left;
     padding-top: 15px;
-    width: 151px;
+    width: 100%;
 }
 
 #content #cores #list a
