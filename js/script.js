@@ -39,7 +39,7 @@ var sammy = $.sammy
                 $.ajax
                 (
                     {
-                        url : $( this.params.element ).attr( 'href' ) + '?wt=json',
+                        url : $( this.params.element ).attr( 'rel' ) + '?wt=json',
                         dataType : 'json',
                         context: this.params.element,
                         beforeSend : function( arr, form, options )
@@ -1425,8 +1425,6 @@ var sammy = $.sammy
                                     },
                                     error : function( xhr, text_status, error_thrown )
                                     {
-                                        console.debug( arguments );
-                                        
                                         $( '#content' )
                                             .html( 'sorry, no replication-handler defined!' );
                                     },
@@ -3552,10 +3550,12 @@ var sammy = $.sammy
             /^#\/([\w\d]+)\/(schema|config)$/,
             function( context )
             {
+                var core_basepath = this.active_core.attr( 'data-basepath' );
+
                 $.ajax
                 (
                     {
-                        url : $( '.active a', this.active_core ).attr( 'href' ),
+                        url : core_basepath + app.config[context.params.splat[1] + '_path'],
                         dataType : 'xml',
                         context : $( '#content' ),
                         beforeSend : function( xhr, settings )
@@ -4193,17 +4193,6 @@ var solr_admin = function( app_config )
                     return false;
                 }
             );
-        
-        $( 'a[rel]', menu_element )
-            .live
-            (
-                'click',
-                function()
-                {
-                    location.href = this.rel;
-                    return false;
-                }
-            );
     }
 
     this.init_cores = function()
@@ -4258,16 +4247,16 @@ var solr_admin = function( app_config )
                                      + '    <p><a href="#/' + core_name + '">' + core_name + '</a></p>' + "\n"
                                      + '    <ul>' + "\n"
 
-                                     + '        <li class="query"><a rel="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n"
-                                     + '        <li class="schema"><a href="' + core_path + '/admin/file/?file=schema.xml" rel="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n"
-                                     + '        <li class="config"><a href="' +core_path + '/admin/file/?file=solrconfig.xml" rel="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
-                                     + '        <li class="replication"><a rel="#/' + core_name + '/replication"><span>Replication</span></a></li>' + "\n"
-                                     + '        <li class="analysis"><a rel="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
-                                     + '        <li class="schema-browser"><a rel="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
-                                     + '        <li class="stats"><a rel="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
-                                     + '        <li class="ping"><a href="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
-                                     + '        <li class="plugins"><a rel="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
-                                     + '        <li class="dataimport"><a rel="#/' + core_name + '/dataimport"><span>Dataimport</span></a></li>' + "\n"
+                                     + '        <li class="query"><a href="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n"
+                                     + '        <li class="schema"><a href="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n"
+                                     + '        <li class="config"><a href="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
+                                     + '        <li class="replication"><a href="#/' + core_name + '/replication"><span>Replication</span></a></li>' + "\n"
+                                     + '        <li class="analysis"><a href="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
+                                     + '        <li class="schema-browser"><a href="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
+                                     + '        <li class="stats"><a href="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
+                                     + '        <li class="ping"><a rel="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
+                                     + '        <li class="plugins"><a href="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
+                                     + '        <li class="dataimport"><a href="#/' + core_name + '/dataimport"><span>Dataimport</span></a></li>' + "\n"
 
                                      + '    </ul>' + "\n"
                                      + '</li>';
