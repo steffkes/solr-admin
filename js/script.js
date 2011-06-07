@@ -3145,14 +3145,11 @@ var sammy = $.sammy
         // #/:core/query
         this.get
         (
-            /^#\/([\w\d]+)\/query$/,
+            /^#\/([\w\d]+)\/(query)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
                 var content_element = $( '#content' );
-                
-                $( 'li.query', this.active_core )
-                    .addClass( 'active' );
                 
                 $.get
                 (
