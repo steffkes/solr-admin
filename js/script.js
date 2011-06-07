@@ -3241,11 +3241,33 @@ var sammy = $.sammy
                                 'submit',
                                 function( event )
                                 {
+                                    var form_map = {};
+                                    var form_values = [];
+                                    var all_form_values = query_form.formToArray();
+
+                                    for( var i = 0; i < all_form_values.length; i++ )
+                                    {
+                                        if( !all_form_values[i].value || 0 === all_form_values[i].value.length )
+                                        {
+                                            continue;
+                                        }
+
+                                        var name_parts = all_form_values[i].name.split( '.' );
+                                        if( 1 < name_parts.length && !form_map[name_parts[0]] )
+                                        {
+                                            console.debug( 'skip "' + all_form_values[i].name + '", parent missing' );
+                                            continue;
+                                        }
+
+                                        form_map[all_form_values[i].name] = all_form_values[i].value;
+                                        form_values.push( all_form_values[i] );
+                                    }
+
                                     var query_url = window.location.protocol + '//' +
                                                     window.location.host +
                                                     core_basepath +
                                                     '/select?' +
-                                                    query_form.formSerialize();
+                                                    $.param( form_values );
                                     
                                     url_element
                                         .val( query_url )
