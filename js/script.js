@@ -3225,6 +3225,15 @@ var sammy = $.sammy
                                 }
                             )
 
+                        for( var key in context.params )
+                        {
+                            if( 'string' === typeof context.params[key] )
+                            {
+                                $( '[name="' + key + '"]', query_form )
+                                    .val( context.params[key] );
+                            }
+                        }
+
                         query_form
                             .die( 'submit' )
                             .live
