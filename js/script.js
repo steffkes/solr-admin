@@ -2942,47 +2942,40 @@ var sammy = $.sammy
             }
         );
 
-        // #/:core/info(/stats)
-        this.get
+
+
+        this.bind
         (
-            /^#\/([\w\d]+)\/info/,
-            function( context )
+            'plugins_load',
+            function( event, params )
             {
-                var core_basepath = this.active_core.attr( 'data-basepath' );
-                var content_element = $( '#content' );
-                var show_stats = 0 <= this.path.indexOf( 'stats' );
-                
-                if( show_stats )
+                var callback = function()
                 {
-                    $( 'li.stats', this.active_core )
-                        .addClass( 'active' );
-                }
-                else
-                {
-                    $( 'li.plugins', this.active_core )
-                        .addClass( 'active' );
+                    params.callback( app.plugin_data.plugin_data, app.plugin_data.sort_table, app.plugin_data.types );
                 }
                 
-                content_element
-                    .html( '<div id="plugins"></div>' );
-                
+                if( app.plugin_data )
+                {
+                    callback( app.plugin_data );
+                    return true;
+                }
+
+                var core_basepath = params.active_core.attr( 'data-basepath' );
                 $.ajax
                 (
                     {
                         url : core_basepath + '/admin/mbeans?stats=true&wt=json',
                         dataType : 'json',
-                        context : $( '#plugins', content_element ),
                         beforeSend : function( xhr, settings )
                         {
-                            this
-                                .html( '<div class="loader">Loading ...</div>' );
                         },
                         success : function( response, text_status, xhr )
                         {
+                            var types = [];
                             var sort_table = {};
-                            var content = '';
-                            
-                            response.plugins = {};
+                            var plugin_data = {};
+
+                            var types_obj = {};
                             var plugin_key = null;
 
                             for( var i = 0; i < response['solr-mbeans'].length; i++ )
@@ -2993,140 +2986,60 @@ var sammy = $.sammy
                                 }
                                 else
                                 {
-                                    response.plugins[plugin_key] = response['solr-mbeans'][i];
+                                    plugin_data[plugin_key] = response['solr-mbeans'][i];
                                 }
                             }
 
-                            for( var key in response.plugins )
+                            for( var key in plugin_data )
                             {
                                 sort_table[key] = {
                                     url : [],
                                     component : [],
                                     handler : []
                                 };
-                                for( var part_key in response.plugins[key] )
+                                for( var part_key in plugin_data[key] )
                                 {
                                     if( 0 < part_key.indexOf( '.' ) )
                                     {
+                                        types_obj[key] = true;
                                         sort_table[key]['handler'].push( part_key );
                                     }
                                     else if( 0 === part_key.indexOf( '/' ) )
                                     {
+                                        types_obj[key] = true;
                                         sort_table[key]['url'].push( part_key );
                                     }
                                     else
                                     {
+                                        types_obj[key] = true;
                                         sort_table[key]['component'].push( part_key );
                                     }
                                 }
-                                
-                                content += '<div class="block" id="' + key.toLowerCase() + '">' + "\n";
-                                content += '<h2><span>' + key + '</span></h2>' + "\n";
-                                content += '<div class="content">' + "\n";
-                                content += '<ul>';
-                                
-                                for( var sort_key in sort_table[key] )
-                                {
-                                    sort_table[key][sort_key].sort();
-                                    var sort_key_length = sort_table[key][sort_key].length;
-                                    
-                                    for( var i = 0; i < sort_key_length; i++ )
-                                    {
-                                        content += '<li class="entry"><a>' + sort_table[key][sort_key][i] + '</a>' + "\n";
-                                        content += '<ul class="detail">' + "\n";
-                                        
-                                        var details = response.plugins[key][ sort_table[key][sort_key][i] ];
-                                        for( var detail_key in details )
-                                        {
-                                            if( 'stats' !== detail_key )
-                                            {
-                                                var detail_value = details[detail_key];
-
-                                                if( 'description' === detail_key )
-                                                {
-                                                    detail_value = detail_value.replace( /,/g, ',&#8203;' );
-                                                }
-                                                else if( 'src' === detail_key )
-                                                {
-                                                    detail_value = detail_value.replace( /\//g, '/&#8203;' );
-                                                }
-
-                                                content += '<li><dl class="clearfix">' + "\n";
-                                                content += '<dt>' + detail_key + ':</dt>' + "\n";
-                                                content += '<dd>' + detail_value + '</dd>' + "\n";
-                                                content += '</dl></li>' + "\n";
-                                            }
-                                            else if( 'stats' === detail_key && details[detail_key] && show_stats )
-                                            {
-                                                content += '<li class="stats clearfix">' + "\n";
-                                                content += '<span>' + detail_key + ':</span>' + "\n";
-                                                content += '<ul>' + "\n";
-
-                                                for( var stats_key in details[detail_key] )
-                                                {
-                                                    var stats_value = details[detail_key][stats_key];
-
-                                                    if( 'readerDir' === stats_key )
-                                                    {
-                                                        stats_value = stats_value.replace( /@/g, '@&#8203;' );
-                                                    }
-
-                                                    content += '<li><dl class="clearfix">' + "\n";
-                                                    content += '<dt>' + stats_key + ':</dt>' + "\n";
-                                                    content += '<dd>' + stats_value + '</dd>' + "\n";
-                                                    content += '</dl></li>' + "\n";
-                                                }
-
-                                                content += '</ul></li>' + "\n";
-                                            }
-                                        }
-                                        
-                                        content += '</ul>' + "\n";
-                                    }
-                                }
-                                
-                                content += '</ul>' + "\n";
-                                content += '</div>' + "\n";
-                                content += '</div>' + "\n";
                             }
-                            
-                            this
-                                .html( content );
-                            
-                            $( '.block a', this )
-                                .die( 'click' )
-                                .live
-                                (
-                                    'click',
-                                    function( event )
-                                    {
-                                        $( this ).parent()
-                                            .toggleClass( 'expanded' );
-                                    }
-                                );
-                            
-                            $( '.block .content > ul:empty', this )
-                                .each
-                                (
-                                    function( index, element )
-                                    {
-                                        $( element ).parents( '.block' )
-                                            .hide();
-                                    }
-                                );
-                            
-                            $( '.entry', this )
-                                .each
-                                (
-                                    function( i, entry )
-                                    {
-                                        $( '.detail > li', entry ).not( '.stats' ).filter( ':even' )
-                                            .addClass( 'odd' );
 
-                                        $( '.stats li:odd', entry )
-                                            .addClass( 'odd' );
-                                    }
-                                );
+                            for( var type in types_obj )
+                            {
+                                types.push( type );
+                            }
+                            types.sort();
+                            
+                            app.plugin_data = {
+                                'plugin_data' : plugin_data,
+                                'sort_table' : sort_table,
+                                'types' : types
+                            }
+
+                            $.get
+                            (
+                                'tpl/plugins.html',
+                                function( template )
+                                {
+                                    $( '#content' )
+                                        .html( template );
+                                    
+                                    callback( app.plugin_data );
+                                }
+                            );
                         },
                         error : function( xhr, text_status, error_thrown)
                         {
@@ -3136,7 +3049,164 @@ var sammy = $.sammy
                         }
                     }
                 );
-                
+            }
+        );
+
+        // #/:core/plugins/$type
+        this.get
+        (
+            /^#\/([\w\d]+)\/(plugins)\/(\w+)$/,
+            function( context )
+            {
+                var content_element = $( '#content' );
+                var type = context.params.splat[2].toUpperCase();
+
+                sammy.trigger
+                (
+                    'plugins_load',
+                    {
+                        active_core : this.active_core,
+                        callback : function( plugin_data, plugin_sort, types )
+                        {
+                                    var frame_element = $( '#frame', content_element );
+                                    var navigation_element = $( '#navigation ul', content_element );
+
+                                    var navigation_content = [];
+                                    for( var i = 0; i < types.length; i++ )
+                                    {
+                                        var type_url = context.params.splat[0] + '/' + 
+                                                       context.params.splat[1] + '/' +
+                                                       types[i].toLowerCase();
+
+                                        navigation_content.push
+                                        (
+                                            '<li class="' + types[i].toLowerCase() + '">' +
+                                            '<a href="#/' + type_url + '">' + types[i] + '</a>' +
+                                            '</li>'
+                                        );
+                                    }
+
+                                    navigation_element
+                                        .html( navigation_content.join( "\n" ) );
+                                    
+                                    $( 'a[href="' + context.path + '"]', navigation_element )
+                                        .parent().addClass( 'current' );
+                                    
+                                    
+                                    var content = '<ul>';
+                                    for( var sort_key in plugin_sort[type] )
+                                    {
+                                        plugin_sort[type][sort_key].sort();
+                                        var plugin_type_length = plugin_sort[type][sort_key].length;
+                                        
+                                        for( var i = 0; i < plugin_type_length; i++ )
+                                        {
+                                            content += '<li class="entry"><a>' + plugin_sort[type][sort_key][i] + '</a>' + "\n";
+                                            content += '<ul class="detail">' + "\n";
+                                            
+                                            var details = plugin_data[type][ plugin_sort[type][sort_key][i] ];
+                                            for( var detail_key in details )
+                                            {
+                                                if( 'stats' !== detail_key )
+                                                {
+                                                    var detail_value = details[detail_key];
+
+                                                    if( 'description' === detail_key )
+                                                    {
+                                                        detail_value = detail_value.replace( /,/g, ',&#8203;' );
+                                                    }
+                                                    else if( 'src' === detail_key )
+                                                    {
+                                                        detail_value = detail_value.replace( /\//g, '/&#8203;' );
+                                                    }
+
+                                                    content += '<li><dl class="clearfix">' + "\n";
+                                                    content += '<dt>' + detail_key + ':</dt>' + "\n";
+                                                    content += '<dd>' + detail_value + '</dd>' + "\n";
+                                                    content += '</dl></li>' + "\n";
+                                                }
+                                                else if( 'stats' === detail_key && details[detail_key] )
+                                                {
+                                                    content += '<li class="stats clearfix">' + "\n";
+                                                    content += '<span>' + detail_key + ':</span>' + "\n";
+                                                    content += '<ul>' + "\n";
+
+                                                    for( var stats_key in details[detail_key] )
+                                                    {
+                                                        var stats_value = details[detail_key][stats_key];
+
+                                                        if( 'readerDir' === stats_key )
+                                                        {
+                                                            stats_value = stats_value.replace( /@/g, '@&#8203;' );
+                                                        }
+
+                                                        content += '<li><dl class="clearfix">' + "\n";
+                                                        content += '<dt>' + stats_key + ':</dt>' + "\n";
+                                                        content += '<dd>' + stats_value + '</dd>' + "\n";
+                                                        content += '</dl></li>' + "\n";
+                                                    }
+
+                                                    content += '</ul></li>' + "\n";
+                                                }
+                                            }
+                                            
+                                            content += '</ul>' + "\n";
+                                        }
+                                    }
+                                    content += '</ul>' + "\n";
+
+                                    frame_element
+                                        .html( content );
+
+                                    $( 'a', frame_element )
+                                        .die( 'click' )
+                                        .live
+                                        (
+                                            'click',
+                                            function( event )
+                                            {
+                                                $( this ).parent()
+                                                    .toggleClass( 'expanded' );
+                                            }
+                                        );
+                                    
+                                    $( '.entry', frame_element )
+                                        .each
+                                        (
+                                            function( i, entry )
+                                            {
+                                                $( '.detail > li', entry ).not( '.stats' ).filter( ':even' )
+                                                    .addClass( 'odd' );
+
+                                                $( '.stats li:odd', entry )
+                                                    .addClass( 'odd' );
+                                            }
+                                        );
+                        }
+                    }
+                );                
+            }
+        );
+
+        // #/:core/plugins
+        this.get
+        (
+            /^#\/([\w\d]+)\/(plugins)$/,
+            function( context )
+            {
+                delete app.plugin_data;
+
+                sammy.trigger
+                (
+                    'plugins_load',
+                    {
+                        active_core : this.active_core,
+                        callback :  function( plugin_data, plugin_sort, types )
+                        {
+                            context.redirect( context.path + '/' + types[0].toLowerCase() );
+                        }
+                    }
+                );
             }
         );
 
@@ -4176,6 +4246,8 @@ var solr_admin = function( app_config )
     params = null,
     dashboard_values = null,
     schema_browser_data = null,
+
+    plugin_data = null,
     
     this.init_menu = function()
     {
@@ -4247,15 +4319,14 @@ var solr_admin = function( app_config )
                                      + '    <p><a href="#/' + core_name + '">' + core_name + '</a></p>' + "\n"
                                      + '    <ul>' + "\n"
 
+                                     + '        <li class="ping"><a rel="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
                                      + '        <li class="query"><a href="#/' + core_name + '/query"><span>Query</span></a></li>' + "\n"
                                      + '        <li class="schema"><a href="#/' + core_name + '/schema"><span>Schema</span></a></li>' + "\n"
                                      + '        <li class="config"><a href="#/' + core_name + '/config"><span>Config</span></a></li>' + "\n"
                                      + '        <li class="replication"><a href="#/' + core_name + '/replication"><span>Replication</span></a></li>' + "\n"
                                      + '        <li class="analysis"><a href="#/' + core_name + '/analysis"><span>Analysis</span></a></li>' + "\n"
                                      + '        <li class="schema-browser"><a href="#/' + core_name + '/schema-browser"><span>Schema Browser</span></a></li>' + "\n"
-                                     + '        <li class="stats"><a href="#/' + core_name + '/info/stats"><span>Statistics</span></a></li>' + "\n"
-                                     + '        <li class="ping"><a rel="' + core_path + '/admin/ping"><span>Ping</span></a></li>' + "\n"
-                                     + '        <li class="plugins"><a href="#/' + core_name + '/info"><span>Plugins</span></a></li>' + "\n"
+                                     + '        <li class="plugins"><a href="#/' + core_name + '/plugins"><span>Plugins</span></a></li>' + "\n"
                                      + '        <li class="dataimport"><a href="#/' + core_name + '/dataimport"><span>Dataimport</span></a></li>' + "\n"
 
                                      + '    </ul>' + "\n"
