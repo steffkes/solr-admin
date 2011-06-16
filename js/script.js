@@ -4103,9 +4103,9 @@ var sammy = $.sammy
                             else
                             {
                                 var jvm_memory = app.dashboard_values['jvm']['memory'];
-                                memory_data['memory-bar-max'] = parseFloat( jvm_memory['max'] ) * 1024 * 1024;
-                                memory_data['memory-bar-total'] = parseFloat( jvm_memory['total'] ) * 1024 * 1024;
-                                memory_data['memory-bar-used'] = parseFloat( jvm_memory['used'] ) * 1024 * 1024;
+                                memory_data['memory-bar-max'] = parseFloat( jvm_memory['max'] ) * 1024 * 1024 *  (/GB/.test(jvm_memory['max'])?  1024:1);
+                                memory_data['memory-bar-total'] = parseFloat( jvm_memory['total'] ) * 1024 * 1024*  (/GB/.test(jvm_memory['total'])?  1024:1);
+                                memory_data['memory-bar-used'] = parseFloat( jvm_memory['used'] ) * 1024 * 1024*  (/GB/.test(jvm_memory['used'])?  1024:1);
                             }
             
                             for( var key in memory_data )
