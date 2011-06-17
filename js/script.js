@@ -4091,22 +4091,41 @@ var sammy = $.sammy
                         {
                             this
                                 .html( template );
-          
-                            var memory_data = {};
-                            if( app.dashboard_values['jvm']['memory']['raw'] )
+
+                            var jvm_memory = $.extend
+                            (
+                                {
+                                    'free' : null,
+                                    'total' : null,
+                                    'max' : null,
+                                    'used' : null,
+                                    'raw' : {
+                                        'free' : null,
+                                        'total' : null,
+                                        'max' : null,
+                                        'used' : null,
+                                        'used%' : null
+                                    }
+                                },
+                                app.dashboard_values['jvm']['memory']
+                            );
+
+                            var parse_memory_value = function( value )
                             {
-                                var jvm_memory = app.dashboard_values['jvm']['memory']['raw'];
-                                memory_data['memory-bar-max'] = parseInt( jvm_memory['max'] );
-                                memory_data['memory-bar-total'] = parseInt( jvm_memory['total'] );
-                                memory_data['memory-bar-used'] = parseInt( jvm_memory['used'] );
-                            }
-                            else
-                            {
-                                var jvm_memory = app.dashboard_values['jvm']['memory'];
-                                memory_data['memory-bar-max'] = parseFloat( jvm_memory['max'] ) * 1024 * 1024 *  (/GB/.test(jvm_memory['max'])?  1024:1);
-                                memory_data['memory-bar-total'] = parseFloat( jvm_memory['total'] ) * 1024 * 1024*  (/GB/.test(jvm_memory['total'])?  1024:1);
-                                memory_data['memory-bar-used'] = parseFloat( jvm_memory['used'] ) * 1024 * 1024*  (/GB/.test(jvm_memory['used'])?  1024:1);
-                            }
+                                if( value !== Number( value ) )
+                                {
+                                    var units = 'BKMGTPEZY';
+                                    var match = value.match( /^(\d+([,\.]\d+)?) (\w)\w?$/ );
+                                    var value = parseFloat( match[1] ) * Math.pow( 1024, units.indexOf( match[3].toUpperCase() ) );
+                                }
+                                
+                                return value;
+                            };
+                            var memory_data = {
+                                'memory-bar-max' : parse_memory_value( jvm_memory['raw']['max'] || jvm_memory['max'] ),
+                                'memory-bar-total' : parse_memory_value( jvm_memory['raw']['total'] || jvm_memory['total'] ),
+                                'memory-bar-used' : parse_memory_value( jvm_memory['raw']['used'] || jvm_memory['used'] )
+                            };                            
             
                             for( var key in memory_data )
                             {                                                        
