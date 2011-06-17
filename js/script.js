@@ -966,23 +966,23 @@ var sammy = $.sammy
                                         var state = threadDumpData[i].state;
                                         var name = '<a><span>' + threadDumpData[i].name + '</span></a>';
 
-                                        var class = [state];
+                                        var classes = [state];
                                         var details = '';
 
                                         if( 0 !== c % 2 )
                                         {
-                                            class.push( 'odd' );
+                                            classes.push( 'odd' );
                                         }
 
                                         if( threadDumpData[i].lock )
                                         {
-                                            class.push( 'lock' );
+                                            classes.push( 'lock' );
                                             name += "\n" + '<p title="Waiting on">' + threadDumpData[i].lock + '</p>';
                                         }
 
                                         if( threadDumpData[i].stackTrace && 0 !== threadDumpData[i].stackTrace.length )
                                         {
-                                            class.push( 'stacktrace' );
+                                            classes.push( 'stacktrace' );
 
                                             var stack_trace = threadDumpData[i].stackTrace
                                                                 .join( '</li><li>' )
@@ -995,7 +995,7 @@ var sammy = $.sammy
                                                     + '</div>';
                                         }
 
-                                        var item = '<tr class="' + class.join( ' ' ) +'">' + "\n"
+                                        var item = '<tr class="' + classes.join( ' ' ) +'">' + "\n"
 
                                                  + '<td class="ico" title="' + state +'"><span>' + state +'</span></td>' + "\n"
                                                  + '<td class="id">' + threadDumpData[i].id + '</td>' + "\n"
@@ -2510,8 +2510,8 @@ var sammy = $.sammy
                             var dataimport_handlers = [];
                             for( var key in handlers )
                             {
-                                if( handlers[key].class !== key &&
-                                    handlers[key].class === 'org.apache.solr.handler.dataimport.DataImportHandler' )
+                                if( handlers[key]['class'] !== key &&
+                                    handlers[key]['class'] === 'org.apache.solr.handler.dataimport.DataImportHandler' )
                                 {
                                     dataimport_handlers.push( key );
                                 }
