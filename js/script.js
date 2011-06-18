@@ -3060,6 +3060,7 @@ var sammy = $.sammy
             {
                 var content_element = $( '#content' );
                 var type = context.params.splat[2].toUpperCase();
+                var context_path = context.path.split( '?' ).shift();
 
                 sammy.trigger
                 (
@@ -3089,9 +3090,8 @@ var sammy = $.sammy
                                     navigation_element
                                         .html( navigation_content.join( "\n" ) );
                                     
-                                    $( 'a[href="' + context.path + '"]', navigation_element )
+                                    $( 'a[href="' + context_path + '"]', navigation_element )
                                         .parent().addClass( 'current' );
-                                    
                                     
                                     var content = '<ul>';
                                     for( var sort_key in plugin_sort[type] )
@@ -3101,7 +3101,10 @@ var sammy = $.sammy
                                         
                                         for( var i = 0; i < plugin_type_length; i++ )
                                         {
-                                            content += '<li class="entry"><a>' + plugin_sort[type][sort_key][i] + '</a>' + "\n";
+                                            content += '<li class="entry">' + "\n";
+                                            content += '<a href="' + context_path + '?entry=' + plugin_sort[type][sort_key][i] + '">';
+                                            content += plugin_sort[type][sort_key][i]
+                                            content += '</a>' + "\n";
                                             content += '<ul class="detail">' + "\n";
                                             
                                             var details = plugin_data[type][ plugin_sort[type][sort_key][i] ];
@@ -3158,17 +3161,8 @@ var sammy = $.sammy
                                     frame_element
                                         .html( content );
 
-                                    $( 'a', frame_element )
-                                        .die( 'click' )
-                                        .live
-                                        (
-                                            'click',
-                                            function( event )
-                                            {
-                                                $( this ).parent()
-                                                    .toggleClass( 'expanded' );
-                                            }
-                                        );
+                                    $( 'a[href="' + decodeURIComponent( context.path ) + '"]', frame_element )
+                                        .parent().addClass( 'expanded' );
                                     
                                     $( '.entry', frame_element )
                                         .each
