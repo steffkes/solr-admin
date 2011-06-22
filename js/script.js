@@ -39,7 +39,7 @@ var sammy = $.sammy
                 $.ajax
                 (
                     {
-                        url : $( this.params.element ).attr( 'rel' ) + '?wt=json',
+                        url : $( this.params.element ).attr( 'rel' ) + '?wt=json&ts=' + (new Date).getTime(),
                         dataType : 'json',
                         context: this.params.element,
                         beforeSend : function( arr, form, options )
