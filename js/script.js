@@ -883,7 +883,7 @@ var sammy = $.sammy
 
                                 if( -1 !== key.indexOf( '.path' ) )
                                 {
-                                    displayed_value = system_properties[key].split( ':' );
+                                    displayed_value = system_properties[key].split( system_properties['path.separator'] );
                                     if( 1 < displayed_value.length )
                                     {
                                         item_class += ' multi';
