@@ -2146,6 +2146,29 @@ pre.syntax .tex .formula
     display: none;
 }
 
+#content #threads .controls
+{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#content #threads .controls a
+{
+    background-image: url( ../img/ico/chevron-small-expand.png );
+    padding-left: 21px;
+}
+
+#content #threads.expanded .controls a
+{
+    background-image: url( ../img/ico/chevron-small.png );
+}
+
+#content #threads.expanded .controls .expand,
+#content #threads.collapsed .controls .collapse
+{
+    display: none;
+}
+
 /* dataimport */
 
 #content #dataimport

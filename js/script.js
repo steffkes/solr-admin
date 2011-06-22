@@ -958,6 +958,8 @@ var sammy = $.sammy
                                 },
                                 success : function( response, text_status, xhr )
                                 {
+                                    var self = this;
+
                                     var threadDumpData = response.system.threadDump;
                                     var threadDumpContent = [];
                                     var c = 0;
@@ -1024,7 +1026,42 @@ var sammy = $.sammy
                                                 $( this ).closest( 'tr' )
                                                     .toggleClass( 'open' );
                                             }
-                                        )
+                                        );
+                                    
+                                    $( '.controls a', this )
+                                        .die( 'click' )
+                                        .live
+                                        (
+                                            'click',
+                                            function( event )
+                                            {
+                                                var threads_element = $( self );
+                                                var is_collapsed = threads_element.hasClass( 'collapsed' );
+                                                var thread_rows = $( 'tr', threads_element );
+
+                                                thread_rows
+                                                    .each
+                                                    (
+                                                        function( index, element )
+                                                        {
+                                                            if( is_collapsed )
+                                                            {
+                                                                $( element )
+                                                                    .addClass( 'open' );
+                                                            }
+                                                            else
+                                                            {
+                                                                $( element )
+                                                                    .removeClass( 'open' );
+                                                            }
+                                                        }
+                                                    );
+
+                                                threads_element
+                                                    .toggleClass( 'collapsed' )
+                                                    .toggleClass( 'expanded' );
+                                            }
+                                        );
                                 },
                                 error : function( xhr, text_status, error_thrown)
                                 {
