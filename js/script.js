@@ -14,6 +14,11 @@ var loader = {
     
 };
 
+String.prototype.esc = function()
+{
+    return this.replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+}
+
 var sammy = $.sammy
 (
     function()
@@ -712,7 +717,7 @@ var sammy = $.sammy
 
                             for( var key in response.levels )
                             {
-                                var level = response.levels[key];
+                                var level = response.levels[key].esc();
                                 loglevel += '<li class="' + level + '"><a>' + level + '</a></li>' + "\n";
                             }
 
@@ -754,8 +759,8 @@ var sammy = $.sammy
                                     logger_content += '<li class="jstree-leaf">';
                                     logger_content += '<ins class="jstree-icon">&nbsp;</ins>';
                                     logger_content += '<a class="trigger ' + classes.join( ' ' ) + '" ' + "\n" +
-                                                         'title="' + logger_name + '"><span>' + "\n" +
-                                                        logger_name.split( '.' ).pop() + "\n" +
+                                                         'title="' + logger_name.esc() + '"><span>' + "\n" +
+                                                        logger_name.split( '.' ).pop().esc() + "\n" +
                                                       '</span></a>';
 
                                     logger_content += loglevel
@@ -800,7 +805,7 @@ var sammy = $.sammy
                                     function( index, element )
                                     {
                                         var element = $( element );
-                                        var effective_level = $( '.effective_level span', element ).html();
+                                        var effective_level = $( '.effective_level span', element ).text();
 
                                         element
                                             .css( 'z-index', 800 - index );
