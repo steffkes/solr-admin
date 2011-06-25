@@ -14,6 +14,11 @@ var loader = {
     
 };
 
+Number.prototype.esc = function()
+{
+    return new String( this ).esc();
+}
+
 String.prototype.esc = function()
 {
     return this.replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
@@ -970,8 +975,8 @@ var sammy = $.sammy
                                     var c = 0;
                                     for( var i = 1; i < threadDumpData.length; i += 2 )
                                     {
-                                        var state = threadDumpData[i].state;
-                                        var name = '<a><span>' + threadDumpData[i].name + '</span></a>';
+                                        var state = threadDumpData[i].state.esc();
+                                        var name = '<a><span>' + threadDumpData[i].name.esc() + '</span></a>';
 
                                         var classes = [state];
                                         var details = '';
@@ -984,7 +989,7 @@ var sammy = $.sammy
                                         if( threadDumpData[i].lock )
                                         {
                                             classes.push( 'lock' );
-                                            name += "\n" + '<p title="Waiting on">' + threadDumpData[i].lock + '</p>';
+                                            name += "\n" + '<p title="Waiting on">' + threadDumpData[i].lock.esc() + '</p>';
                                         }
 
                                         if( threadDumpData[i].stackTrace && 0 !== threadDumpData[i].stackTrace.length )
@@ -992,8 +997,10 @@ var sammy = $.sammy
                                             classes.push( 'stacktrace' );
 
                                             var stack_trace = threadDumpData[i].stackTrace
-                                                                .join( '</li><li>' )
-                                                                .replace( /\(/g, '&#8203;(' );
+                                                                .join( '###' )
+                                                                .esc()
+                                                                .replace( /\(/g, '&#8203;(' )
+                                                                .replace( /###/g, '</li><li>' );
 
                                             name += '<div>' + "\n"
                                                     + '<ul>' + "\n"
@@ -1005,10 +1012,10 @@ var sammy = $.sammy
                                         var item = '<tr class="' + classes.join( ' ' ) +'">' + "\n"
 
                                                  + '<td class="ico" title="' + state +'"><span>' + state +'</span></td>' + "\n"
-                                                 + '<td class="id">' + threadDumpData[i].id + '</td>' + "\n"
+                                                 + '<td class="id">' + threadDumpData[i].id.esc() + '</td>' + "\n"
                                                  + '<td class="name">' + name + '</td>' + "\n"
-                                                 + '<td class="time">' + threadDumpData[i].cpuTime + '</td>' + "\n"
-                                                 + '<td class="time">' + threadDumpData[i].userTime + '</td>' + "\n"
+                                                 + '<td class="time">' + threadDumpData[i].cpuTime.esc() + '</td>' + "\n"
+                                                 + '<td class="time">' + threadDumpData[i].userTime.esc() + '</td>' + "\n"
 
                                                  + '</tr>';
                                         
