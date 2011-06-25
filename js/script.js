@@ -896,11 +896,11 @@ var sammy = $.sammy
                                 }
 
                                 var item_content = '<li><dl class="' + item_class + '">' + "\n" +
-                                                   '<dt>' + displayed_key + '</dt>' + "\n";
+                                                   '<dt>' + displayed_key.esc() + '</dt>' + "\n";
 
                                 for( var i in displayed_value )
                                 {
-                                    item_content += '<dd>' + displayed_value[i] + '</dd>' + "\n";
+                                    item_content += '<dd>' + displayed_value[i].esc() + '</dd>' + "\n";
                                 }
 
                                 item_content += '</dl></li>';
