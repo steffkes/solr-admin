@@ -4161,7 +4161,7 @@ var sammy = $.sammy
                             for( var key in memory_data )
                             {                                                        
                                 $( '.value.' + key, this )
-                                    .html( memory_data[key] );
+                                    .text( memory_data[key] );
                             }
             
                             var data = {
@@ -4184,7 +4184,7 @@ var sammy = $.sammy
                                 var value_element = $( '.' + key + ' dd', this );
 
                                 value_element
-                                    .html( data[key] );
+                                    .text( data[key] );
                                 
                                 value_element.closest( 'li' )
                                     .show();
@@ -4200,7 +4200,7 @@ var sammy = $.sammy
                                 for( var key in commandLineArgs )
                                 {
                                     cmd_arg_element = cmd_arg_element.clone();
-                                    cmd_arg_element.html( commandLineArgs[key] );
+                                    cmd_arg_element.text( commandLineArgs[key] );
 
                                     cmd_arg_key_element
                                         .after( cmd_arg_element );
@@ -4247,7 +4247,7 @@ var sammy = $.sammy
                             var headline = $( '#memory h2 span', this );
                                 
                             headline
-                                .html( headline.html() + ' (' + memory_percentage + '%)' );
+                                .text( headline.html() + ' (' + memory_percentage + '%)' );
 
                             $( '#memory-bar .value', this )
                                 .each
@@ -4266,7 +4266,7 @@ var sammy = $.sammy
                                         byte_value = byte_value.toFixed( 2 ) + ' MB';
 
                                         self
-                                            .html( byte_value );
+                                            .text( byte_value );
                                     }
                                 );
                         },
