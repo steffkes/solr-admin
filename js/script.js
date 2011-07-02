@@ -3701,20 +3701,31 @@ var sammy = $.sammy
                                                 for( var key in analysis_data[type][i+1][j] )
                                                 {
                                                     var short_key = key.split( '#' ).pop();
-
+                                                    
                                                     if( 'positionHistory' === short_key || 'match' === short_key )
                                                     {
                                                         continue;
                                                     }
 
+                                                    var classes = [];
+                                                    classes.push( generate_class_name( short_key ) );
+
                                                     var data = analysis_data[type][i+1][j][key];
+                                                    if( 'object' === typeof data && data instanceof Array )
+                                                    {
+                                                        data = data.join( ' ' );
+                                                    }
                                                     if( 'string' === typeof data )
                                                     {
                                                         data = data.esc();
                                                     }
 
-                                                    var classes = [];
-                                                    classes.push( generate_class_name( short_key ) );
+                                                    if( null === data || 0 === data.length )
+                                                    {
+                                                        classes.push( 'empty' );
+                                                        data = '&empty;';
+                                                    }
+
                                                     if( analysis_data[type][i+1][j].match && 
                                                         ( 'text' === short_key || 'raw_bytes' === short_key ) )
                                                     {

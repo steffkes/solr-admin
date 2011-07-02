@@ -999,6 +999,11 @@ pre.syntax .tex .formula
     border-right: 0;
 }
 
+#content #analysis #analysis-result td.details tr.empty td
+{
+    color: #f0f0f0;
+}
+
 #content #analysis #analysis-result .part table table td
 {
     border-top: 1px solid #f0f0f0;
