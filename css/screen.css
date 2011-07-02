@@ -1004,6 +1004,11 @@ pre.syntax .tex .formula
     color: #f0f0f0;
 }
 
+#content #analysis #analysis-result td.details tr.raw_bytes td
+{
+    letter-spacing: -1px;
+}
+
 #content #analysis #analysis-result .part table table td
 {
     border-top: 1px solid #f0f0f0;
