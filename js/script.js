@@ -3595,14 +3595,31 @@ var sammy = $.sammy
                                     var type_length = analysis_data[type].length;
                                     if( 0 !== type_length )
                                     {
-                                        var elements_count = analysis_data[type][1].length;
+                                        var global_elements_count = 0;
+                                        for( var i = 0; i < analysis_data[type].length; i += 2 )
+                                        {
+                                            if( 'string' === typeof analysis_data[type][i+1] )
+                                            {
+                                                analysis_data[type][i+1] = [{ 'text': analysis_data[type][i+1] }]
+                                            }
+                                            global_elements_count = Math.max( global_elements_count,
+                                                                              analysis_data[type][i+1].length );
+                                        }
 
                                         var content = '<div class="' + type + '">' + "\n";
                                         content += '<table border="0" cellspacing="0" cellpadding="0">' + "\n";
                                         
                                         for( var i = 0; i < analysis_data[type].length; i += 2 )
                                         {
+                                            var colspan = 1;
                                             var elements = analysis_data[type][i+1];
+                                            var elements_count = global_elements_count;
+                                            
+                                            if( !elements[0].positionHistory )
+                                            {
+                                                colspan = elements_count;
+                                                elements_count = 1;
+                                            }
 
                                             var legend = [];
                                             for( var key in elements[0] )
@@ -3654,8 +3671,11 @@ var sammy = $.sammy
                                                 content += '</table></td></tr></table></td>' + "\n";
 
                                                 // data
-                                                var cells = new Array( elements_count + 1 )
-                                                                .join( '<td class="part data spacer"><div class="holder">&nbsp;</div></td>' );
+                                                var cell_content = '<td class="part data spacer" '
+                                                                 + '    colspan="' + colspan + '">'
+                                                                 + '<div class="holder">&nbsp;</div>'
+                                                                 + '</td>';
+                                                var cells = new Array( elements_count + 1 ).join( cell_content );
                                                 content += cells + "\n";
 
                                             content += '</tr>' + "\n";
@@ -3676,7 +3696,9 @@ var sammy = $.sammy
                                         {
                                             for( var j = 0; j < analysis_data[type][i+1].length; j += 1 )
                                             {
-                                                var pos = analysis_data[type][i+1][j].positionHistory[0];
+                                                var pos = analysis_data[type][i+1][j].positionHistory
+                                                        ? analysis_data[type][i+1][j].positionHistory[0]
+                                                        : 1;
                                                 var selector = 'tr.step:eq(' + ( i / 2 ) +') '
                                                              + 'td.data:eq(' + ( pos - 1 ) + ') '
                                                              + '.holder';
