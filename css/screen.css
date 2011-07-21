@@ -873,17 +873,60 @@ pre.syntax .tex .formula
     max-width: 99%;
 }
 
-#content #analysis #analysis-error
+#content #analysis .analysis-error
+{
+    display: none;
+    margin-bottom: 20px;
+}
+
+#content #analysis .analysis-error .head,
+#content #analysis .analysis-error .head a
+{
+    color: #fff;
+    font-weight: bold;
+}
+
+#content #analysis .analysis-error .head
 {
     background-color: #f00;
     background-image: url( ../img/ico/construction.png );
     background-position: 10px 50%;
-    color: #fff;
-    display: none;
-    font-weight: bold;
-    margin-bottom: 20px;
     padding: 10px;
     padding-left: 35px;
+}
+
+#content #analysis .analysis-error .head a
+{
+    display: block;
+}
+
+#content #analysis .analysis-error .head a span
+{
+    background-image: url( ../img/ico/chevron-small-expand.png );
+    background-position: 100% 50%;
+    padding-right: 21px;
+}
+
+#content #analysis .analysis-error .body
+{
+    display: none;
+    padding-left: 35px;
+    padding-top: 5px;
+}
+
+#content #analysis #analysis-error .body
+{
+    white-space: pre;
+}
+
+#content #analysis .analysis-error.expanded .head a span
+{
+    background-image: url( ../img/ico/chevron-small.png );
+}
+
+#content #analysis .analysis-error.expanded .body
+{
+    display: block;
 }
 
 #content #analysis #analysis-result
