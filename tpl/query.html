@@ -40,6 +40,18 @@
 				</label>
 				<input type="text" name="qt" id="qt" value="">
 
+				<label for="wt">
+					<a rel="help">wt</a>
+				</label>
+				<select name="wt" id="wt">
+					<option>xml</option>
+					<option>json</option>
+					<option>python</option>
+					<option>ruby</option>
+					<option>php</option>
+					<option>csv</option>
+				</select>
+
 				<label for="debugQuery" class="checkbox">
 					<input type="checkbox" name="debugQuery" id="debugQuery" value="true">
 					<a rel="help">debugQuery</a>
@@ -227,11 +239,7 @@
 
 	<div id="result">
 
-		<div id="url">
-
-			<input type="text" readonly="readonly">
-		
-		</div>
+		<a id="url" href="#"></a>
 
 		<div id="response">
 

@@ -3272,7 +3272,7 @@ var sammy = $.sammy
 
                         var query_element = $( '#query', content_element );
                         var query_form = $( '#form form', query_element );
-                        var url_element = $( '#url input', query_element );
+                        var url_element = $( '#url', query_element );
                         var result_element = $( '#result', query_element );
                         var response_element = $( '#response iframe', result_element );
 
@@ -3310,7 +3310,7 @@ var sammy = $.sammy
                                     check_iframe_ready_state();
 
                                     response_element
-                                        .attr( 'src', this.value )
+                                        .attr( 'src', this.href )
                                     
                                     if( !response_element.hasClass( 'resized' ) )
                                     {
@@ -3381,7 +3381,8 @@ var sammy = $.sammy
                                                     $.param( form_values );
                                     
                                     url_element
-                                        .val( query_url )
+                                        .text( query_url )
+                                        .attr( 'href', query_url )
                                         .trigger( 'change' );
                                     
                                     result_element
