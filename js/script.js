@@ -3118,113 +3118,133 @@ var sammy = $.sammy
                         active_core : this.active_core,
                         callback : function( plugin_data, plugin_sort, types )
                         {
-                                    var frame_element = $( '#frame', content_element );
-                                    var navigation_element = $( '#navigation ul', content_element );
+                            var frame_element = $( '#frame', content_element );
+                            var navigation_element = $( '#navigation', content_element );
+                            var navigation_list = $( 'ul', navigation_element );
 
-                                    var navigation_content = [];
-                                    for( var i = 0; i < types.length; i++ )
+                            var navigation_content = [];
+                            for( var i = 0; i < types.length; i++ )
+                            {
+                                var type_url = context.params.splat[0] + '/' + 
+                                               context.params.splat[1] + '/' +
+                                               types[i].toLowerCase();
+
+                                navigation_content.push
+                                (
+                                    '<li class="' + types[i].toLowerCase() + '">' +
+                                    '<a href="#/' + type_url + '">' + types[i] + '</a>' +
+                                    '</li>'
+                                );
+                            }
+
+                            navigation_list
+                                .html( navigation_content.join( "\n" ) );
+                            
+                            $( 'a[href="' + context_path + '"]', navigation_list )
+                                .parent().addClass( 'current' );
+                            
+                            $( 'a.toggle', navigation_element )
+                                .die( 'click' )
+                                .live
+                                (
+                                    'click',
+                                    function( event )
                                     {
-                                        var type_url = context.params.splat[0] + '/' + 
-                                                       context.params.splat[1] + '/' +
-                                                       types[i].toLowerCase();
-
-                                        navigation_content.push
-                                        (
-                                            '<li class="' + types[i].toLowerCase() + '">' +
-                                            '<a href="#/' + type_url + '">' + types[i] + '</a>' +
-                                            '</li>'
-                                        );
-                                    }
-
-                                    navigation_element
-                                        .html( navigation_content.join( "\n" ) );
-                                    
-                                    $( 'a[href="' + context_path + '"]', navigation_element )
-                                        .parent().addClass( 'current' );
-                                    
-                                    var content = '<ul>';
-                                    for( var sort_key in plugin_sort[type] )
-                                    {
-                                        plugin_sort[type][sort_key].sort();
-                                        var plugin_type_length = plugin_sort[type][sort_key].length;
+                                        $( this )
+                                            .toggleClass( 'expand' )
+                                            .toggleClass( 'collapse' );
                                         
-                                        for( var i = 0; i < plugin_type_length; i++ )
+                                        $( '.entry', frame_element ).not( '.default' )
+                                            .toggleClass( 'expanded' );
+                                    }
+                                )
+                                .removeClass( 'collapse' )
+                                .addClass( 'expand' );
+                            
+                            var content = '<ul>';
+                            for( var sort_key in plugin_sort[type] )
+                            {
+                                plugin_sort[type][sort_key].sort();
+                                var plugin_type_length = plugin_sort[type][sort_key].length;
+                                
+                                for( var i = 0; i < plugin_type_length; i++ )
+                                {
+                                    content += '<li class="entry">' + "\n";
+                                    content += '<a href="' + context_path + '?entry=' + plugin_sort[type][sort_key][i] + '">';
+                                    content += plugin_sort[type][sort_key][i]
+                                    content += '</a>' + "\n";
+                                    content += '<ul class="detail">' + "\n";
+                                    
+                                    var details = plugin_data[type][ plugin_sort[type][sort_key][i] ];
+                                    for( var detail_key in details )
+                                    {
+                                        if( 'stats' !== detail_key )
                                         {
-                                            content += '<li class="entry">' + "\n";
-                                            content += '<a href="' + context_path + '?entry=' + plugin_sort[type][sort_key][i] + '">';
-                                            content += plugin_sort[type][sort_key][i]
-                                            content += '</a>' + "\n";
-                                            content += '<ul class="detail">' + "\n";
-                                            
-                                            var details = plugin_data[type][ plugin_sort[type][sort_key][i] ];
-                                            for( var detail_key in details )
+                                            var detail_value = details[detail_key];
+
+                                            if( 'description' === detail_key )
                                             {
-                                                if( 'stats' !== detail_key )
-                                                {
-                                                    var detail_value = details[detail_key];
-
-                                                    if( 'description' === detail_key )
-                                                    {
-                                                        detail_value = detail_value.replace( /,/g, ',&#8203;' );
-                                                    }
-                                                    else if( 'src' === detail_key )
-                                                    {
-                                                        detail_value = detail_value.replace( /\//g, '/&#8203;' );
-                                                    }
-
-                                                    content += '<li><dl class="clearfix">' + "\n";
-                                                    content += '<dt>' + detail_key + ':</dt>' + "\n";
-                                                    content += '<dd>' + detail_value + '</dd>' + "\n";
-                                                    content += '</dl></li>' + "\n";
-                                                }
-                                                else if( 'stats' === detail_key && details[detail_key] )
-                                                {
-                                                    content += '<li class="stats clearfix">' + "\n";
-                                                    content += '<span>' + detail_key + ':</span>' + "\n";
-                                                    content += '<ul>' + "\n";
-
-                                                    for( var stats_key in details[detail_key] )
-                                                    {
-                                                        var stats_value = details[detail_key][stats_key];
-
-                                                        if( 'readerDir' === stats_key )
-                                                        {
-                                                            stats_value = stats_value.replace( /@/g, '@&#8203;' );
-                                                        }
-
-                                                        content += '<li><dl class="clearfix">' + "\n";
-                                                        content += '<dt>' + stats_key + ':</dt>' + "\n";
-                                                        content += '<dd>' + stats_value + '</dd>' + "\n";
-                                                        content += '</dl></li>' + "\n";
-                                                    }
-
-                                                    content += '</ul></li>' + "\n";
-                                                }
+                                                detail_value = detail_value.replace( /,/g, ',&#8203;' );
                                             }
-                                            
-                                            content += '</ul>' + "\n";
+                                            else if( 'src' === detail_key )
+                                            {
+                                                detail_value = detail_value.replace( /\//g, '/&#8203;' );
+                                            }
+
+                                            content += '<li><dl class="clearfix">' + "\n";
+                                            content += '<dt>' + detail_key + ':</dt>' + "\n";
+                                            content += '<dd>' + detail_value + '</dd>' + "\n";
+                                            content += '</dl></li>' + "\n";
+                                        }
+                                        else if( 'stats' === detail_key && details[detail_key] )
+                                        {
+                                            content += '<li class="stats clearfix">' + "\n";
+                                            content += '<span>' + detail_key + ':</span>' + "\n";
+                                            content += '<ul>' + "\n";
+
+                                            for( var stats_key in details[detail_key] )
+                                            {
+                                                var stats_value = details[detail_key][stats_key];
+
+                                                if( 'readerDir' === stats_key )
+                                                {
+                                                    stats_value = stats_value.replace( /@/g, '@&#8203;' );
+                                                }
+
+                                                content += '<li><dl class="clearfix">' + "\n";
+                                                content += '<dt>' + stats_key + ':</dt>' + "\n";
+                                                content += '<dd>' + stats_value + '</dd>' + "\n";
+                                                content += '</dl></li>' + "\n";
+                                            }
+
+                                            content += '</ul></li>' + "\n";
                                         }
                                     }
-                                    content += '</ul>' + "\n";
-
-                                    frame_element
-                                        .html( content );
-
-                                    $( 'a[href="' + decodeURIComponent( context.path ) + '"]', frame_element )
-                                        .parent().addClass( 'expanded' );
                                     
-                                    $( '.entry', frame_element )
-                                        .each
-                                        (
-                                            function( i, entry )
-                                            {
-                                                $( '.detail > li', entry ).not( '.stats' ).filter( ':even' )
-                                                    .addClass( 'odd' );
+                                    content += '</ul>' + "\n";
+                                }
+                            }
+                            content += '</ul>' + "\n";
 
-                                                $( '.stats li:odd', entry )
-                                                    .addClass( 'odd' );
-                                            }
-                                        );
+                            frame_element
+                                .html( content );
+
+                            $( 'a[href="' + decodeURIComponent( context.path ) + '"]', frame_element ).parent()
+                                .addClass( 'expanded' )
+                                .addClass( 'default' );
+                            
+                            $( '.entry', frame_element )
+                                .each
+                                (
+                                    function( i, entry )
+                                    {
+                                        $( '.detail > li', entry ).not( '.stats' ).filter( ':even' )
+                                            .addClass( 'odd' );
+
+                                        $( '.stats li:odd', entry )
+                                            .addClass( 'odd' );
+                                    }
+                                );
                         }
                     }
                 );                

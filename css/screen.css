@@ -1072,10 +1072,11 @@ pre.syntax .tex .formula
     background-image: url( ../img/div.gif );
     background-position: 100% 0;
     background-repeat: repeat-y;
+    position: relative;
     width: 20%;
 }
 
-#content #plugins #navigation a
+#content #plugins #navigation ul a
 {
     background-position: 0 50%;
     border-right: 1px solid #f0f0f0;
@@ -1092,18 +1093,55 @@ pre.syntax .tex .formula
 #content #plugins #navigation .updatehandler a{ background-image: url( ../img/ico/arrow-circle.png ); }
 #content #plugins #navigation .queryhandler a { background-image: url( ../img/ico/magnifier.png ); }
 
-#content #plugins #navigation a:hover
+#content #plugins #navigation ul a:hover
 {
     background-color: #fafafa;
 }
 
-#content #plugins #navigation .current a
+#content #plugins #navigation ul .current a
 {
     background-color: #fff;
     border-right-color: #fff;
     border-top: 1px solid #f0f0f0;
     border-bottom: 1px solid #f0f0f0;
     font-weight: bold;
+}
+
+#content #plugins #navigation .toggle
+{
+    border: 0;
+    color: #c0c0c0;
+    font-size: 11px;
+    margin-top: 20px;
+    position: absolute;
+}
+
+#content #plugins #navigation a.toggle:hover
+{
+    color: #333;
+}
+
+#content #plugins #navigation .toggle span
+{
+    background-position: 2px 50%;
+    display: none;
+    padding-left: 21px;
+}
+
+#content #plugins #navigation .toggle.expand .expand,
+#content #plugins #navigation .toggle.collapse .collapse
+{
+    display: block;
+}
+
+#content #plugins #navigation .toggle .expand
+{
+    background-image: url( ../img/ico/chevron-small-expand.png );
+}
+
+#content #plugins #navigation .toggle .collapse
+{
+    background-image: url( ../img/ico/chevron-small.png );
 }
 
 #content #plugins #frame
