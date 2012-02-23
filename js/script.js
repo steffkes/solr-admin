@@ -119,7 +119,7 @@ var sammy = $.sammy
         this.before
         (
             {},
-            function()
+            function( context )
             {
                 $( 'li[id].active', app.menu_element )
                     .removeClass( 'active' );
@@ -131,6 +131,15 @@ var sammy = $.sammy
                 {
                     var active_element = $( '#' + this.params.splat[0], app.menu_element );
                     
+                    if( 0 === active_element.size() )
+                    {
+                        var first_core = $( 'li[data-basepath]', app.menu_element ).attr( 'id' );
+                        var first_core_url = context.path.replace( new RegExp( '/' + this.params.splat[0] + '/' ), '/' + first_core + '/' );
+
+                        context.redirect( first_core_url );
+                        return false;
+                    }
+
                     active_element
                         .addClass( 'active' );
 
@@ -907,7 +916,7 @@ var sammy = $.sammy
                                 var displayed_value = [ system_properties[key] ];
                                 var item_class = 'clearfix';
 
-                                if( -1 !== key.indexOf( '.path' ) )
+                                if( -1 !== key.indexOf( '.path' ) || -1 !== key.indexOf( '.dirs' ) )
                                 {
                                     displayed_value = system_properties[key].split( system_properties['path.separator'] );
                                     if( 1 < displayed_value.length )
@@ -1107,7 +1116,7 @@ var sammy = $.sammy
         // #/:core/replication
         this.get
         (
-            /^#\/([\w\d]+)\/(replication)$/,
+            /^#\/([\w\d-]+)\/(replication)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -1782,7 +1791,7 @@ var sammy = $.sammy
                     $.ajax
                     (
                         {
-                            url : core_basepath + '/admin/luke?numTerms=50&wt=json',
+                            url : core_basepath + '/admin/luke?numTerms=0&wt=json',
                             dataType : 'json',
                             beforeSend : function( xhr, settings )
                             {
@@ -2057,7 +2066,7 @@ var sammy = $.sammy
         // #/:core/schema-browser
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)$/,
+            /^#\/([\w\d-]+)\/(schema-browser)$/,
             function( context )
             {
                 var callback = function( schema_browser_data, data_element )
@@ -2082,7 +2091,7 @@ var sammy = $.sammy
         // #/:core/schema-browser/field|dynamic-field|type/$field
         this.get
         (
-            /^#\/([\w\d]+)\/(schema-browser)(\/(field|dynamic-field|type)\/(.+))$/,
+            /^#\/([\w\d-]+)\/(schema-browser)(\/(field|dynamic-field|type)\/(.+))$/,
             function( context )
             {
                 var callback = function( schema_browser_data, data_element )
@@ -2597,7 +2606,7 @@ var sammy = $.sammy
         // #/:core/dataimport
         this.get
         (
-            /^#\/([\w\d]+)\/(dataimport)$/,
+            /^#\/([\w\d-]+)\/(dataimport)$/,
             function( context )
             {
                 sammy.trigger
@@ -2625,7 +2634,7 @@ var sammy = $.sammy
         // #/:core/dataimport
         this.get
         (
-            /^#\/([\w\d]+)\/(dataimport)\//,
+            /^#\/([\w\d-]+)\/(dataimport)\//,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -3120,7 +3129,7 @@ var sammy = $.sammy
         // #/:core/plugins/$type
         this.get
         (
-            /^#\/([\w\d]+)\/(plugins)\/(\w+)$/,
+            /^#\/([\w\d-]+)\/(plugins)\/(\w+)$/,
             function( context )
             {
                 var content_element = $( '#content' );
@@ -3270,7 +3279,7 @@ var sammy = $.sammy
         // #/:core/plugins
         this.get
         (
-            /^#\/([\w\d]+)\/(plugins)$/,
+            /^#\/([\w\d-]+)\/(plugins)$/,
             function( context )
             {
                 delete app.plugin_data;
@@ -3292,7 +3301,7 @@ var sammy = $.sammy
         // #/:core/query
         this.get
         (
-            /^#\/([\w\d]+)\/(query)$/,
+            /^#\/([\w\d-]+)\/(query)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -3346,7 +3355,7 @@ var sammy = $.sammy
                                     check_iframe_ready_state();
 
                                     response_element
-                                        .attr( 'src', this.href )
+                                        .attr( 'src', this.href );
                                     
                                     if( !response_element.hasClass( 'resized' ) )
                                     {
@@ -3417,8 +3426,8 @@ var sammy = $.sammy
                                                     $.param( form_values );
                                     
                                     url_element
-                                        .text( query_url )
                                         .attr( 'href', query_url )
+                                        .text( query_url )
                                         .trigger( 'change' );
                                     
                                     result_element
@@ -3435,7 +3444,7 @@ var sammy = $.sammy
         // #/:core/analysis
         this.get
         (
-            /^#\/([\w\d]+)\/(analysis)$/,
+            /^#\/([\w\d-]+)\/(analysis)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -3856,7 +3865,7 @@ var sammy = $.sammy
         // #/:core/schema, #/:core/config
         this.get
         (
-            /^#\/([\w\d]+)\/(schema|config)$/,
+            /^#\/([\w\d-]+)\/(schema|config)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -3894,7 +3903,7 @@ var sammy = $.sammy
         // #/:core
         this.get
         (
-            /^#\/([\w\d]+)$/,
+            /^#\/([\w\d-]+)$/,
             function( context )
             {
                 var core_basepath = this.active_core.attr( 'data-basepath' );
@@ -3942,7 +3951,7 @@ var sammy = $.sammy
                         $.ajax
                         (
                             {
-                                url : core_basepath + '/admin/luke?wt=json',
+                                url : core_basepath + '/admin/luke?wt=json&show=index&numTerms=0',
                                 dataType : 'json',
                                 context : $( '#statistics', dashboard_element ),
                                 beforeSend : function( xhr, settings )
