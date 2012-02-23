@@ -76,7 +76,7 @@ sammy.get
         var content_element = $( '#content' );
 
         var path_parts = this.path.match( /^(.+\/dataimport\/)(.*)$/ );
-        var current_handler = path_parts[2];
+        var handler_url = core_basepath + path_parts[2];
         
         $( 'li.dataimport', this.active_core )
             .addClass( 'active' );
@@ -136,7 +136,7 @@ sammy.get
                     $.ajax
                     (
                         {
-                            url : core_basepath + '/select?qt=' + current_handler  + '&command=show-config',
+                            url : handler_url + '?command=show-config',
                             dataType : 'xml',
                             context : $( '#dataimport_config', config_element ),
                             beforeSend : function( xhr, settings )
@@ -226,7 +226,7 @@ sammy.get
                             $.ajax
                             (
                                 {
-                                    url : core_basepath + '/select?qt=' + current_handler  + '&command=reload-config',
+                                    url : handler_url + '?command=reload-config',
                                     dataType : 'xml',
                                     context: $( this ),
                                     beforeSend : function( xhr, settings )
@@ -274,7 +274,7 @@ sammy.get
                     $.ajax
                     (
                         {
-                            url : core_basepath + '/select?qt=' + current_handler  + '&command=status',
+                            url : handler_url + '?command=status',
                             dataType : 'xml',
                             beforeSend : function( xhr, settings )
                             {
@@ -424,7 +424,7 @@ sammy.get
                             $.ajax
                             (
                                 {
-                                    url : core_basepath + '/select?qt=' + current_handler  + '&command=full-import',
+                                    url : handler_url + '?command=full-import',
                                     dataType : 'xml',
                                     beforeSend : function( xhr, settings )
                                     {
