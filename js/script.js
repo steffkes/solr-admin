@@ -3958,6 +3958,8 @@ var sammy = $.sammy
                                     var data = {
                                         'index_num-docs' : response['index']['numDocs'],
                                         'index_max-doc' : response['index']['maxDoc'],
+                                        'index_version' : response['index']['version'],
+                                        'index_segmentCount' : response['index']['segmentCount'],
                                         'index_last-modified' : response['index']['lastModified']
                                     };
                                     
@@ -3971,7 +3973,7 @@ var sammy = $.sammy
                                     }
 
                                     var optimized_element = $( '.value.index_optimized', this );
-                                    if( response['index']['optimized'] )
+                                    if( !response['index']['hasDeletions'] )
                                     {
                                         optimized_element
                                             .addClass( 'ico-1' );
@@ -4004,20 +4006,6 @@ var sammy = $.sammy
 
                                         $( 'span', current_element )
                                             .html( 'no' );
-                                    }
-
-                                    var deletions_element = $( '.value.index_has-deletions', this );
-                                    if( response['index']['hasDeletions'] )
-                                    {
-                                        deletions_element.prev()
-                                            .show();
-                                        
-                                        deletions_element
-                                            .show()
-                                            .addClass( 'ico-0' );
-
-                                        $( 'span', deletions_element )
-                                            .html( 'yes' );
                                     }
 
                                     $( 'a', optimized_element )
