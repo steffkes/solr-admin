@@ -3144,8 +3144,7 @@ var sammy = $.sammy
                         callback : function( plugin_data, plugin_sort, types )
                         {
                             var frame_element = $( '#frame', content_element );
-                            var navigation_element = $( '#navigation', content_element );
-                            var navigation_list = $( 'ul', navigation_element );
+                            var navigation_element = $( '#navigation ul', content_element );
 
                             var navigation_content = [];
                             for( var i = 0; i < types.length; i++ )
@@ -3162,29 +3161,11 @@ var sammy = $.sammy
                                 );
                             }
 
-                            navigation_list
+                            navigation_element
                                 .html( navigation_content.join( "\n" ) );
                             
-                            $( 'a[href="' + context_path + '"]', navigation_list )
+                            $( 'a[href="' + context_path + '"]', navigation_element )
                                 .parent().addClass( 'current' );
-                            
-                            $( 'a.toggle', navigation_element )
-                                .die( 'click' )
-                                .live
-                                (
-                                    'click',
-                                    function( event )
-                                    {
-                                        $( this )
-                                            .toggleClass( 'expand' )
-                                            .toggleClass( 'collapse' );
-                                        
-                                        $( '.entry', frame_element ).not( '.default' )
-                                            .toggleClass( 'expanded' );
-                                    }
-                                )
-                                .removeClass( 'collapse' )
-                                .addClass( 'expand' );
                             
                             var content = '<ul>';
                             for( var sort_key in plugin_sort[type] )
@@ -3254,9 +3235,8 @@ var sammy = $.sammy
                             frame_element
                                 .html( content );
 
-                            $( 'a[href="' + decodeURIComponent( context.path ) + '"]', frame_element ).parent()
-                                .addClass( 'expanded' )
-                                .addClass( 'default' );
+                            $( 'a[href="' + decodeURIComponent( context.path ) + '"]', frame_element )
+                                .parent().addClass( 'expanded' );
                             
                             $( '.entry', frame_element )
                                 .each
