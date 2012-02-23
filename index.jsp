@@ -11,8 +11,23 @@
     
     <title>solr-admin</title>
     
-    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="icon" type="image/ico" href="img/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="css/styles/common.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/analysis.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/cloud.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/cores.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/dataimport.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/index.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/java-properties.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/logging.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/menu.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/plugins.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/query.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/replication.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/schema-browser.css">
+    <link rel="stylesheet" type="text/css" href="css/styles/threads.css">
     
     <script type="text/javascript">
     
