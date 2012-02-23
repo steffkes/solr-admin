@@ -13,6 +13,7 @@
  *
  * Copyright (c) 2008-2011, Ryan McGeary (ryanonjavascript -[at]- mcgeary [*dot*] org)
  */
+
 (function($) {
   $.timeago = function(timestamp) {
     if (timestamp instanceof Date) {
