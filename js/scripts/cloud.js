@@ -62,6 +62,11 @@ sammy.get
                                             "animation" : 0
                                         }
                                     }
+                                )
+                                .jstree
+                                (
+                                    'open_node',
+                                    'li:first'
                                 );
 
                             var tree_links = $( '#tree a', this );
