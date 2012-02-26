@@ -203,7 +203,7 @@ sammy.get
                             {
                                 var code = $(
                                     '<pre class="syntax language-xml"><code>' +
-                                    xhr.responseText.replace( /\</g, '&lt;' ).replace( /\>/g, '&gt;' ) +
+                                    xhr.responseText.esc() +
                                     '</code></pre>'
                                 );
                                 this.html( code );
