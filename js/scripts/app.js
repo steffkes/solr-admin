@@ -257,6 +257,23 @@ var solr_admin = function( app_config )
                             },
                             error : function()
                             {
+                                var main = $( '#main' );
+
+                                $( 'div[id$="-wrapper"]', main )
+                                    .remove();
+
+                                main
+                                    .addClass( 'error' )
+                                    .append
+                                    (
+                                       '<div class="message">This interface requires that you activate the admin request handlers, add the following configuration to your <code>solrconfig.xml:</code></div>' +
+                                       '<div class="code"><pre class="syntax language-xml"><code>' +
+                                       '<!-- Admin Handlers - This will register all the standard admin RequestHandlers. -->'.esc() + "\n" +
+                                       '<requestHandler name="/admin/" class="solr.admin.AdminHandlers" />'.esc() +
+                                       '</code></pre></div>'
+                                    );
+
+                                hljs.highlightBlock( $( 'pre', main ).get(0) );
                             },
                             complete : function()
                             {
