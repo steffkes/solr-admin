@@ -160,7 +160,12 @@ var logging_handler = function( response, text_status, xhr )
             'toggle',
             function( event )
             {
-                $( this ).closest( 'li' )
+                var row = $( this ).closest( 'li' );
+
+                $( 'a:first', row )
+                    .toggleClass( 'open' );
+
+                $( '.selector-holder:first', row )
                     .toggleClass( 'open' );
             }
         );

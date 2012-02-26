@@ -29,7 +29,7 @@
 }
 
 #content #logging .jstree a:hover,
-#content #logging .jstree .open a.trigger
+#content #logging .jstree a.open
 {
     background-color: #f0f0f0;
 }
@@ -68,7 +68,7 @@
     z-index: 700;
 }
 
-#content #logging .jstree .open .selector-holder
+#content #logging .jstree .selector-holder.open
 {
     background-color: #fff;
     margin-left: -19px;
