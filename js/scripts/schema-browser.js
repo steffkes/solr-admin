@@ -15,6 +15,30 @@
  limitations under the License.
 */
 
+var luke_array_to_struct = function( array )
+{
+    var struct = {
+        keys : [],
+        values : []
+    };
+    for( var i = 0; i < array.length; i += 2 )
+    {
+        struct.keys.push( array[i] );
+        struct.values.push( array[i+1] );
+    }
+    return struct;
+}
+
+var luke_array_to_hash = function( array )
+{
+    var hash = {};
+    for( var i = 0; i < array.length; i += 2 )
+    {
+        hash[ array[i] ] = array[i+1];
+    }
+    return hash;
+}
+
 sammy.bind
 (
     'schema_browser_navi',
@@ -291,30 +315,6 @@ sammy.bind
 
                                     app.schema_browser_data.dynamic_fields = response.schema.dynamicFields;
                                     app.schema_browser_data.types = response.schema.types;
-
-                                    var luke_array_to_struct = function( array )
-                                    {
-                                        var struct = {
-                                            keys : [],
-                                            values : []
-                                        };
-                                        for( var i = 0; i < array.length; i += 2 )
-                                        {
-                                            struct.keys.push( array[i] );
-                                            struct.values.push( array[i+1] );
-                                        }
-                                        return struct;
-                                    }
-
-                                    var luke_array_to_hash = function( array )
-                                    {
-                                        var hash = {};
-                                        for( var i = 0; i < array.length; i += 2 )
-                                        {
-                                            hash[ array[i] ] = array[i+1];
-                                        }
-                                        return hash;
-                                    }
 
                                     for( var field in response.schema.fields )
                                     {
@@ -871,30 +871,6 @@ sammy.get
 
                             var topterms_holder_element = $( '.topterms-holder', data_element );
                             var histogram_holder_element = $( '.histogram-holder', data_element );
-
-                            var luke_array_to_struct = function( array )
-                            {
-                                var struct = {
-                                    keys : [],
-                                    values : []
-                                };
-                                for( var i = 0; i < array.length; i += 2 )
-                                {
-                                    struct.keys.push( array[i] );
-                                    struct.values.push( array[i+1] );
-                                }
-                                return struct;
-                            }
-
-                            var luke_array_to_hash = function( array )
-                            {
-                                var hash = {};
-                                for( var i = 0; i < array.length; i += 2 )
-                                {
-                                    hash[ array[i] ] = array[i+1];
-                                }
-                                return hash;
-                            }
 
                             if( !field_data.topTerms )
                             {
