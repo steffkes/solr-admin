@@ -53,7 +53,7 @@
             <div id="wip-notice">
                 <p>This interface is work in progress. It works best in Chrome.</p>
                 <p><a href="admin">Use the <span>old admin interface</span> if there are problems with this one.</a></p>
-                <p><a href="https://issues.apache.org/jira/browse/SOLR-2667">Bugs/Requests/Suggestions: <span>SOLR-2667</span></a></p>
+                <p><a href="https://issues.apache.org/jira/browse/SOLR-3162">Bugs/Requests/Suggestions: <span>SOLR-3162</span></a></p>
             </div>
 
             <p id="environment">&nbsp;</p>
