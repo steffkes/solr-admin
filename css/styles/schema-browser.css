@@ -106,7 +106,7 @@
 
 #content #schema-browser #data #field .field-options
 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 #content #schema-browser #data #field .field-options .options dt,
@@ -205,6 +205,12 @@
 #content #schema-browser #data #field .head
 {
     margin-bottom: 5px;
+}
+
+#content #schema-browser #data #field .terminfo-holder
+{
+    border-top: 1px solid #c0c0c0;
+    padding-top: 10px;
 }
 
 #content #schema-browser #data #field .topterms-holder
