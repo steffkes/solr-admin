@@ -869,6 +869,14 @@ sammy.get
 
                             var field_data = response.fields[field];
 
+                            if( !field_data )
+                            {
+                                terminfo_element
+                                    .hide();
+
+                                return false;
+                            }
+
                             var topterms_holder_element = $( '.topterms-holder', data_element );
                             var histogram_holder_element = $( '.histogram-holder', data_element );
 
