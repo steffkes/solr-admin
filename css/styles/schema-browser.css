@@ -109,6 +109,11 @@
     margin-bottom: 10px;
 }
 
+#content #schema-browser #data #field .field-options .head h2
+{
+    padding-left: 5px;
+}
+
 #content #schema-browser #data #field .field-options .options dt,
 #content #schema-browser #data #field .field-options .options dd
 {
@@ -127,6 +132,7 @@
 {
     margin-right: 5px;
 }
+
 
 #content #schema-browser #data #field .field-options .analyzer,
 #content #schema-browser #data #field .field-options .analyzer li,
@@ -149,6 +155,25 @@
     width: 100px;
 }
 
+#content #schema-browser #data #field .field-options .analyzer a
+{
+    cursor: auto;
+}
+
+#content #schema-browser #data #field .field-options .analyzer .toggle
+{
+    background-image: url( ../../img/ico/chevron-small-expand.png );
+    background-position: 100% 50%;
+    cursor: pointer;
+    display: block;
+    padding-right: 21px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer .open .toggle
+{
+    background-image: url( ../../img/ico/chevron-small.png );
+}
+
 #content #schema-browser #data #field .field-options .analyzer li
 {
     border-top: 1px solid #f0f0f0;
@@ -159,9 +184,14 @@
 #content #schema-browser #data #field .field-options .analyzer ul
 {
     clear: left;
-    display: block;
+    display: none;
     margin-left: 30px;
     padding-top: 5px;
+}
+
+#content #schema-browser #data #field .field-options .analyzer .open ul
+{
+    display: block;
 }
 
 #content #schema-browser #data #field .field-options .analyzer ul li
@@ -213,10 +243,58 @@
     padding-top: 10px;
 }
 
-#content #schema-browser #data #field .topterms-holder
+#content #schema-browser #data #field .terminfo-holder .trigger
 {
+    float: left;
+    width: 130px;
+}
+
+#content #schema-browser #data #field .terminfo-holder .trigger button
+{
+    background-image: url( ../../img/ico/information.png );
+    background-position: 3px 50%;
+    display: block;
+    padding-left: 23px;
+}
+
+#content #schema-browser #data #field .terminfo-holder .status
+{
+    border-left: 1px solid #f0f0f0;
     display: none;
     float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#content #schema-browser #data #field .terminfo-holder.disabled .trigger button
+{
+    background-color: #f0f0f0;
+    background-image: url( ../../img/ico/prohibition.png );
+    border-color: #fff;
+    color: #c0c0c0;
+    cursor: auto;
+}
+
+#content #schema-browser #data #field .terminfo-holder.disabled .status
+{
+    display: block;
+}
+
+#content #schema-browser #data #field .topterms-holder
+{
+    border-left: 1px solid #f0f0f0;
+    display: none;
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#content #schema-browser #data #field .topterms-holder .head input
+{
+    height: 18px;
+    line-height: 16px;
+    text-align: right;
+    width: 30px;
 }
 
 #content #schema-browser #data #field .topterms-holder .head .max-holder
@@ -224,95 +302,62 @@
     color: #c0c0c0;
 }
 
-#content #schema-browser #data #field .topterms-holder table
+#content #schema-browser #data #field .topterms-holder .head .max-holder:hover .max
 {
-    border-collapse: collapse;
-    width: 100%;
+    color: #008;
 }
 
-#content #schema-browser #data #field .topterms-holder th,
-#content #schema-browser #data #field .topterms-holder td
+#content #schema-browser .topterms-holder li
 {
-    border: 1px solid #f0f0f0;
-    padding: 1px 4px;
+    border-top: 1px solid  #999;
+    margin-bottom: 5px;
 }
 
-#content #schema-browser #data #field .topterms-holder thead tr
+#content #schema-browser .topterms-holder li p
 {
-    background-color: #c0c0c0;
+    background-color:  #999;
+    color: #fff;
+    float: left;
+    width: 25px;
 }
 
-#content #schema-browser #data #field .topterms-holder thead th
+#content #schema-browser .topterms-holder li p span
 {
-    text-align: left;
+    display: block;
+    padding-right: 2px;
+    text-align: right;
 }
 
-#content #schema-browser #data #field .topterms-holder tbody
+#content #schema-browser .topterms-holder li ul
 {
-    display: none;
+    margin-left: 30px;
 }
 
-#content #schema-browser #data #field .topterms-holder tbody .odd
+#content #schema-browser .topterms-holder li li
+{
+    border-top: 0;
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+#content #schema-browser .topterms-holder li li.odd
 {
     background-color: #f0f0f0;
 }
 
-#content #schema-browser #data #field .topterms-holder tbody .position
+#content #schema-browser .topterms-holder li li span
 {
-    color: #c0c0c0;
-    text-align: right;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi
-{
-    margin-top: 5px;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi a
-{
-    color: #c0c0c0;
-    display: block;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    width: 49%;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi a:hover
-{
-    background-color: #f8f8f8;
-    color: #333;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi .less
-{
-    float: left;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi .less span
-{
-    background-image: url( ../../img/ico/chevron-small.png );
-    background-position: 0 50%;
-    padding-left: 18px;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi .more
-{
-    float: right;
-    text-align: right;
-}
-
-#content #schema-browser #data #field .topterms-holder .navi .more span
-{
-    background-image: url( ../../img/ico/chevron-small-expand.png );
-    background-position: 100% 50%;
-    padding-right: 18px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 #content #schema-browser #data #field .histogram-holder
 {
+    border-left: 1px solid #f0f0f0;
     display: none;
     float: left;
-    margin-left: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #content #schema-browser #data #field .histogram-holder .histogram

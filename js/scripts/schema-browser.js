@@ -39,6 +39,157 @@ var luke_array_to_hash = function( array )
     return hash;
 }
 
+var load_terminfo = function( trigger_element, core_basepath, field, data_element, terminfo_element )
+{
+    var luke_url = core_basepath + '/admin/luke?wt=json&fl=' + field;
+    var topterms_count_element = $( '.topterms-holder .head input', terminfo_element );
+
+    var term_load_count = parseInt( topterms_count_element.val(), 10 );
+    if( term_load_count )
+    {
+        luke_url += '&numTerms=' + term_load_count;
+    }
+
+    $.ajax
+    (
+        {
+            url : luke_url,
+            dataType : 'json',
+            context : terminfo_element,
+            beforeSend : function( xhr, settings )
+            {
+                trigger_element
+                    .addClass( 'loader' );
+            },
+            success : function( response, text_status, xhr )
+            {
+                trigger_element
+                    .removeClass( 'loader' );
+
+                var field_data = response.fields[field];
+
+                if( !field_data || !( field_data.topTerms && field_data.histogram ) )
+                {
+                    terminfo_element
+                        .addClass( 'disabled' );
+
+                    return false;
+                }
+
+                var topterms_holder_element = $( '.topterms-holder', data_element );
+                var histogram_holder_element = $( '.histogram-holder', data_element );
+
+                if( !field_data.topTerms )
+                {
+                    topterms_holder_element
+                        .hide();
+                }
+                else
+                {
+                    topterms_holder_element
+                        .show();
+
+                    var topterms_table_element = $( 'ul', topterms_holder_element );
+
+                    var topterms = field_data.topTerms;
+                    var topterms_count = topterms.length;
+                    
+                    var topterms_content = '';
+                    var topterms_frq_last = null;
+
+                    for( var i = 0; i < topterms_count; i += 2 )
+                    {
+                        if( topterms_frq_last !== topterms[i+1] )
+                        {
+                            if( topterms_frq_last )
+                            {
+                                topterms_content += '</ul></li>' + "\n";
+                            }
+
+                            topterms_frq_last = topterms[i+1];
+                            topterms_content += '<li class="clearfix">'
+                                             +  '<p><span>' + topterms_frq_last.esc() + '</span></p>' + "\n"
+                                             +  '<ul>' + "\n";
+                        }
+
+                        topterms_content += '<li><span>' + topterms[i].esc() + '</span></li>' + "\n";
+                    }
+
+                    topterms_content += '</li>';
+
+                    topterms_count = topterms_count / 2;
+
+                    $( 'input', trigger_element )
+                        .val( topterms_count );
+
+                    topterms_table_element
+                        .html( topterms_content );
+
+                    topterms_count_element
+                        .val( topterms_count );
+
+                    $( 'p.head .max', topterms_holder_element )
+                        .html( field_data.distinct );
+
+                    $( 'ul li:even', topterms_table_element )
+                        .addClass( 'odd' );
+                }
+
+                if( !field_data.histogram )
+                {
+                    histogram_holder_element
+                        .hide();
+                }
+                else
+                {
+                    histogram_holder_element
+                        .show();
+
+                    var histogram_element = $( '.histogram', histogram_holder_element );
+
+                    var histogram_values = luke_array_to_hash( field_data.histogram );
+                    var histogram_legend = '';
+
+                    histogram_holder_element
+                        .show();
+
+                    for( var key in histogram_values )
+                    {
+                        histogram_legend += '<dt><span>' + key + '</span></dt>' + "\n" +
+                                            '<dd title="' + key + '">' +
+                                            '<span>' + histogram_values[key] + '</span>' +
+                                            '</dd>' + "\n";
+                    }
+
+                    $( 'dl', histogram_holder_element )
+                        .html( histogram_legend );
+
+                    histogram_element
+                        .sparkline
+                        (
+                            luke_array_to_struct( field_data.histogram ).values,
+                            {
+                                type : 'bar',
+                                barColor : '#c0c0c0',
+                                zeroColor : '#ffffff',
+                                height : histogram_element.height(),
+                                barWidth : 46,
+                                barSpacing : 3
+                            }
+                        );
+                }
+
+            },
+            error : function( xhr, text_status, error_thrown)
+            {
+            },
+            complete : function( xhr, text_status )
+            {
+            }
+        }
+    );
+}
+
 sammy.bind
 (
     'schema_browser_navi',
@@ -186,7 +337,7 @@ sammy.bind
                 navigation_content += '<dt class="dynamic-field">Dynamic Fields</dt>' + "\n";
                 for( var i in navigation_data.dynamic_fields )
                 {
-                    var href = sammy_basepath + '/dynamic-field/' + navigation_data.dynamic_fields[i];
+                    var href = sammy_basepath + '?dynamic-field=' + navigation_data.dynamic_fields[i];
                     navigation_content += '<dd class="dynamic-field"><a href="' + href + '">' + 
                                           navigation_data.dynamic_fields[i] + '</a></dd>' + "\n";
                 }
@@ -582,6 +733,23 @@ sammy.get
                     flags = schema_browser_data.dynamic_fields[field].flags;
                 }
 
+                // -- head
+
+                var head_element = $( '.head', data_element );
+                if( is_f )
+                {
+                    $( '.type', head_element ).html( 'Field' );
+                }
+                else if( is_df )
+                {
+                    $( '.type', head_element ).html( 'Dynamic Field' );
+                }
+                else if( is_t )
+                {
+                    $( '.type', head_element ).html( 'Type' );
+                }
+                $( '.name', head_element ).html( field.esc() );
+
                 // -- properties
                 var properties_element = $( 'dt.properties', options_element );
                 if( flags )
@@ -773,6 +941,19 @@ sammy.get
                         .show()
                         .after( '<dd class="field-type">' + analyzer_data.className + '</dd>' );
 
+                    $( '.toggle', analyzer_element )
+                        .die( 'click' )
+                        .live
+                        (
+                            'click',
+                            function( event )
+                            {
+                                $( this ).closest( 'li' )
+                                    .toggleClass( 'open' );
+
+                                return false;
+                            }
+                        );
 
                     for( var key in analyzer_data )
                     {
@@ -788,13 +969,8 @@ sammy.get
                         analyzer_element.show();
                         analyzer_key_element.show();
 
-                        if( analyzer_key_data.className )
-                        {
-                            $( 'dl:first dt', analyzer_key_element )
-                                .html( analyzer_key_data.className );
-                        }
-
                         $( 'ul li', analyzer_key_element )
+                            .removeClass( 'data' )
                             .hide();
 
                         for( var type in analyzer_key_data )
@@ -807,7 +983,9 @@ sammy.get
                             var type_element = $( '.' + type, analyzer_key_element );
                             var type_content = [];
 
-                            type_element.show();
+                            type_element
+                                .addClass( 'data' )
+                                .show();
 
                             if( analyzer_key_data[type].className )
                             {
@@ -825,10 +1003,83 @@ sammy.get
                                 .empty()
                                 .append( type_content.join( "\n" ) );
                         }
+
+                        var name_element = $( 'dl:first dt a', analyzer_key_element );
+                        if( analyzer_key_data.className )
+                        {
+                            name_element
+                                .html( analyzer_key_data.className );
+                        }
+
+                        0 === $( 'ul li.data', analyzer_key_element ).size()
+                            ? name_element.removeClass( 'toggle' )
+                            : name_element.addClass( 'toggle' );
                     }
                 }
 
                 var terminfo_element = $( '.terminfo-holder', data_element );
+
+                terminfo_element
+                    .removeClass( 'disabled' );
+
+                var trigger_element = $( '.trigger button', terminfo_element );
+                var form_element = $( 'form', terminfo_element );
+
+                trigger_element
+                    .die( 'click' )
+                    .live
+                    (
+                        'click',
+                        function( event )
+                        {
+                            form_element
+                                .trigger( 'submit' );
+
+                            return false;
+                        }
+                    );
+
+                form_element
+                    .clearForm()
+                    .die( 'submit' )
+                    .live
+                    (
+                        'submit',
+                        function( event )
+                        {
+                            load_terminfo( trigger_element, core_basepath, field, data_element, terminfo_element );
+
+                            terminfo_element
+                                .addClass( 'loaded' );
+
+                            return false;
+                        }
+                    );
+
+                $( '.max-holder', terminfo_element )
+                    .die( 'click' )
+                    .live
+                    (
+                        'click',
+                        function( event )
+                        {
+                            var element = $( this );
+
+                            $( 'input', element.closest( 'form' ) )
+                                .val( $( '.max', element ).text() );
+
+                            form_element
+                                .trigger( 'submit' );
+
+                            return false;
+                        }
+                    );
+
+                terminfo_element
+                    .removeClass( 'loaded' );
+
+                $( 'div[class$="-holder"]', terminfo_element )
+                    .hide();
 
                 if( !is_f )
                 {
@@ -839,193 +1090,6 @@ sammy.get
                 {
                     terminfo_element
                         .show();
-
-                    var status_element = $( '.status', terminfo_element );
-                    
-                    $.ajax
-                    (
-                        {
-                            url : core_basepath + '/admin/luke?numTerms=50&wt=json&fl=' + field,
-                            dataType : 'json',
-                            context : terminfo_element,
-                            beforeSend : function( xhr, settings )
-                            {
-                            },
-                            success : function( response, text_status, xhr )
-                            {
-                                status_element
-                                    .hide();
-
-                                var field_data = response.fields[field];
-
-                                if( !field_data )
-                                {
-                                    terminfo_element
-                                        .hide();
-
-                                    return false;
-                                }
-
-                                var topterms_holder_element = $( '.topterms-holder', data_element );
-                                var histogram_holder_element = $( '.histogram-holder', data_element );
-
-                                if( !field_data.topTerms )
-                                {
-                                    topterms_holder_element
-                                        .hide();
-                                }
-                                else
-                                {
-                                    topterms_holder_element
-                                        .show();
-
-                                    var topterms_table_element = $( 'table', topterms_holder_element );
-
-                                    var topterms_navi_less = $( 'p.navi .less', topterms_holder_element );
-                                    var topterms_navi_more = $( 'p.navi .more', topterms_holder_element );
-
-                                    var topterms_count = luke_array_to_struct( field_data.topTerms ).keys.length; 
-                                    var topterms_hash = luke_array_to_hash( field_data.topTerms );
-                                    var topterms_content = '<tbody>';
-
-                                    var i = 1;
-                                    for( var term in topterms_hash )
-                                    {
-                                        topterms_content += '<tr>' + "\n" +
-                                                            '<td class="position">' + i + '</td>' + "\n" + 
-                                                            '<td class="term">' + term + '</td>' + "\n" + 
-                                                            '<td class="frequency">' + topterms_hash[term] + '</td>' + "\n" + 
-                                                            '</tr>' + "\n";
-
-                                        if( i !== topterms_count && 0 === i % 10 )
-                                        {
-                                            topterms_content += '</tbody><tbody>';
-                                        }
-
-                                        i++;
-                                    }
-
-                                    topterms_content += '</tbody>';
-
-                                    topterms_table_element
-                                        .empty()
-                                        .append( topterms_content );
-                                    
-                                    $( 'tbody', topterms_table_element )
-                                        .die( 'change' )
-                                        .live
-                                        (
-                                            'change',
-                                            function()
-                                            {
-                                                var blocks = $( 'tbody', topterms_table_element );
-                                                var visible_blocks = blocks.filter( ':visible' );
-                                                var hidden_blocks = blocks.filter( ':hidden' );
-
-                                                $( 'p.head .shown', topterms_holder_element )
-                                                    .html( $( 'tr', visible_blocks ).size() );
-
-                                                0 < hidden_blocks.size()
-                                                    ? topterms_navi_more.show()
-                                                    : topterms_navi_more.hide();
-
-                                                1 < visible_blocks.size()
-                                                    ? topterms_navi_less.show()
-                                                    : topterms_navi_less.hide();
-                                            }
-                                        );
-
-                                    $( 'tbody tr:odd', topterms_table_element )
-                                        .addClass( 'odd' );
-
-                                    $( 'tbody:first', topterms_table_element )
-                                        .show()
-                                        .trigger( 'change' );
-
-                                    $( 'p.head .max', topterms_holder_element )
-                                        .html( field_data.distinct );
-
-                                    topterms_navi_less
-                                        .die( 'click' )
-                                        .live
-                                        (
-                                            'click',
-                                            function( event )
-                                            {
-                                                $( 'tbody:visible', topterms_table_element ).last()
-                                                    .hide()
-                                                    .trigger( 'change' );
-                                            }
-                                        );
-
-                                    topterms_navi_more
-                                        .die( 'click' )
-                                        .live
-                                        (
-                                            'click',
-                                            function( event )
-                                            {
-                                                $( 'tbody:hidden', topterms_table_element ).first()
-                                                    .show()
-                                                    .trigger( 'change' );
-                                            }
-                                        );
-                                }
-
-                                if( !field_data.histogram )
-                                {
-                                    histogram_holder_element
-                                        .hide();
-                                }
-                                else
-                                {
-                                    histogram_holder_element
-                                        .show();
-
-                                    var histogram_element = $( '.histogram', histogram_holder_element );
-
-                                    var histogram_values = luke_array_to_hash( field_data.histogram );
-                                    var histogram_legend = '';
-
-                                    histogram_holder_element
-                                        .show();
-
-                                    for( var key in histogram_values )
-                                    {
-                                        histogram_legend += '<dt><span>' + key + '</span></dt>' + "\n" +
-                                                            '<dd title="' + key + '">' +
-                                                            '<span>' + histogram_values[key] + '</span>' +
-                                                            '</dd>' + "\n";
-                                    }
-
-                                    $( 'dl', histogram_holder_element )
-                                        .html( histogram_legend );
-
-                                    histogram_element
-                                        .sparkline
-                                        (
-                                            luke_array_to_struct( field_data.histogram ).values,
-                                            {
-                                                type : 'bar',
-                                                barColor : '#c0c0c0',
-                                                zeroColor : '#ffffff',
-                                                height : histogram_element.height(),
-                                                barWidth : 46,
-                                                barSpacing : 3
-                                            }
-                                        );
-                                }
-
-                            },
-                            error : function( xhr, text_status, error_thrown)
-                            {
-                            },
-                            complete : function( xhr, text_status )
-                            {
-                            }
-                        }
-                    );
-
                 }
             }
         }

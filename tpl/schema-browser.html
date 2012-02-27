@@ -24,6 +24,13 @@ limitations under the License.
 
                 <div class="field-options">
 
+                    <div class="block head">
+                        <h2>
+                            <span class="type"></span>:
+                            <span class="name"></span>
+                        </h2>
+                    </div>
+
                     <dl class="options clearfix">
 
                         <dt class="field-type">Field-Type:</dt>
@@ -47,7 +54,7 @@ limitations under the License.
 
                             <p>Index Analyzer:</p>
                             <dl>
-                                <dt></dt>
+                                <dt><a class="toggle"></a></dt>
                             </dl>
 
                             <ul>
@@ -68,7 +75,7 @@ limitations under the License.
 
                             <p>Query Analyzer:</p>
                             <dl>
-                                <dt></dt>
+                                <dt><a class="toggle"></a></dt>
                             </dl>
 
                             <ul>
@@ -91,32 +98,26 @@ limitations under the License.
 
                 <div class="terminfo-holder clearfix">
 
-                    <div class="status loader">Loading Term Info ...</div>
+                    <div class="trigger">
+
+                        <button class="submit">Load Term Info</button>
+
+                    </div>
+
+                    <p class="status">Sorry, no Term Info available :(</p>
 
                     <div class="topterms-holder">
 
-                        <p class="head">Top <span class="shown"></span><span class="max-holder">/<span class="max"></span></span> Terms:</p>
-
-                        <table border="0" cellspacing="0" cellpadding="0">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th class="position" title="Position">&nbsp;</th>
-                                    <th class="term">Term</th>
-                                    <th class="frequency" title="Frequency">Frq</th>
-                                
-                                </tr>
-
-                            </thead>
-
-                        </table>
-
-                        <p class="navi clearfix">
-                            <a class="less"><span>less</span></a>
-                            <a class="more"><span>more</span></a>
+                        <form>
+                        <p class="head">
+                            <input type="text">
+                            <a class="max-holder" title="Load all Top-Terms">/<span class="max"></span></a> Top-Terms:
                         </p>
+                        </form>
+
+                        <ul>
+
+                        </ul>
 
                     </div>
 
