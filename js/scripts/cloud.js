@@ -21,6 +21,7 @@ sammy.get
     /^#\/(cloud)$/,
     function( context )
     {
+        var core_basepath = $( 'li[data-basepath]', app.menu_element ).attr( 'data-basepath' );
         var content_element = $( '#content' );
 
         $.get
@@ -37,7 +38,7 @@ sammy.get
                 $.ajax
                 (
                     {
-                        url : app.config.zookeeper_path,
+                        url : core_basepath + '/admin/zookeeper?wt=json',
                         dataType : 'json',
                         context : cloud_content,
                         beforeSend : function( xhr, settings )
