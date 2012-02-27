@@ -9,7 +9,7 @@
 <html>
 <head>
     
-    <title>solr-admin</title>
+    <title>Solr Admin</title>
     
     <link rel="icon" type="image/ico" href="img/favicon.ico">
 

@@ -216,6 +216,11 @@ var solr_admin = function( app_config )
                                                             .match( /-Dzk/i );
                                 }
 
+                                // title
+
+                                $( 'title', document )
+                                    .append( ' (' + response.core.host + ')' );
+
                                 // environment
 
                                 var environment_element = $( '#environment' );
