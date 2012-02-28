@@ -59,34 +59,14 @@ sammy.get
                         },
                         app.dashboard_values['jvm']['memory']
                     );
-
-                    var parse_memory_value = function( value )
-                    {
-                        if( value !== Number( value ) )
-                        {
-                            var units = 'BKMGTPEZY';
-                            var match = value.match( /^(\d+([,\.]\d+)?) (\w)\w?$/ );
-                            var value = parseFloat( match[1] ) * Math.pow( 1024, units.indexOf( match[3].toUpperCase() ) );
-                        }
-                        
-                        return value;
-                    };
-                    var memory_data = {
-                        'memory-bar-max' : parse_memory_value( jvm_memory['raw']['max'] || jvm_memory['max'] ),
-                        'memory-bar-total' : parse_memory_value( jvm_memory['raw']['total'] || jvm_memory['total'] ),
-                        'memory-bar-used' : parse_memory_value( jvm_memory['raw']['used'] || jvm_memory['used'] )
-                    };                            
-    
-                    for( var key in memory_data )
-                    {                                                        
-                        $( '.value.' + key, this )
-                            .text( memory_data[key] );
-                    }
     
                     var data = {
                         'start_time' : app.dashboard_values['jvm']['jmx']['startTime'],
                         'host' : app.dashboard_values['core']['host'],
-                        'jvm' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
+                        'dir_instance' : app.dashboard_values['core']['directory']['instance'],
+                        'dir_data' : app.dashboard_values['core']['directory']['data'],
+                        'dir_index' : app.dashboard_values['core']['directory']['index'],
+                        'jvm_version' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
                         'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
                         'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
                         'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
@@ -95,7 +75,7 @@ sammy.get
 
                     if( app.dashboard_values['core']['directory']['cwd'] )
                     {
-                        data['cwd'] = app.dashboard_values['core']['directory']['cwd'];
+                        data['dir_cwd'] = app.dashboard_values['core']['directory']['cwd'];
                     }
     
                     for( var key in data )
@@ -103,7 +83,7 @@ sammy.get
                         var value_element = $( '.' + key + ' dd', this );
 
                         value_element
-                            .text( data[key] );
+                            .text( data[key].esc() );
                         
                         value_element.closest( 'li' )
                             .show();
@@ -138,56 +118,127 @@ sammy.get
                     $( '.timeago', this )
                         .timeago();
 
-                    $( 'li:visible:odd', this )
+                    $( '#instance li:visible:odd, #versions li:visible:odd', this )
                         .addClass( 'odd' );
                     
-                    // -- memory bar
+                    // -- common bar
 
-                    var max_height = Math.round( $( '#memory-bar-max', this ).height() );
-                    var total_height = Math.round( ( memory_data['memory-bar-total'] * max_height ) / memory_data['memory-bar-max'] );
-                    var used_height = Math.round( ( memory_data['memory-bar-used'] * max_height ) / memory_data['memory-bar-max'] );
-
-                    var memory_bar_total_value = $( '#memory-bar-total span', this ).first();
-
-                    $( '#memory-bar-total', this )
-                        .height( total_height );
-                    
-                    $( '#memory-bar-used', this )
-                        .height( used_height );
-
-                    if( used_height < total_height + memory_bar_total_value.height() )
+                    var parse_memory_value = function( value )
                     {
-                        memory_bar_total_value
-                            .addClass( 'upper' )
-                            .css( 'margin-top', memory_bar_total_value.height() * -1 );
-                    }
-
-                    var memory_percentage = ( ( memory_data['memory-bar-used'] / memory_data['memory-bar-max'] ) * 100 ).toFixed(1);
-                    var headline = $( '#memory h2 span', this );
+                        if( value !== Number( value ) )
+                        {
+                            var units = 'BKMGTPEZY';
+                            var match = value.match( /^(\d+([,\.]\d+)?) (\w)\w?$/ );
+                            var value = parseFloat( match[1] ) * Math.pow( 1024, units.indexOf( match[3].toUpperCase() ) );
+                        }
                         
-                    headline
-                        .text( headline.html() + ' (' + memory_percentage + '%)' );
+                        return value;
+                    };
 
-                    $( '#memory-bar .value', this )
-                        .each
-                        (
-                            function()
-                            {
-                                var self = $( this );
+                    var generate_bar = function( bar_holder, bar_data, convert_label_values )
+                    {
+                        var bar_level = 1;
+                        var max_width = Math.round( $( '.bar-max', bar_holder ).width() );
+                        $( '.bar-max.val', bar_holder ).text( bar_data['max'] );
+                        
+                        bar_level++;
+                        var total_width = Math.round( ( bar_data['total'] * max_width ) / bar_data['max'] );
+                        $( '.bar-total.bar', bar_holder ).width( Math.max( total_width, 1 ) );
+                        $( '.bar-total.val', bar_holder ).text( bar_data['total'] );
 
-                                var byte_value = parseInt( self.html() );
+                        if( bar_data['used'] )
+                        {
+                            bar_level++;
+                            var used_width = Math.round( ( bar_data['used'] * max_width ) / bar_data['max'] );
+                            $( '.bar-used.bar', bar_holder ).width( Math.min( used_width, total_width - 1 ) );
+                            $( '.bar-used.val', bar_holder ).text( bar_data['used'] );
+                        }
 
-                                self
-                                    .attr( 'title', 'raw: ' + byte_value + ' B' );
+                        bar_holder
+                            .addClass( 'bar-lvl-' + bar_level );
 
-                                byte_value /= 1024;
-                                byte_value /= 1024;
-                                byte_value = byte_value.toFixed( 2 ) + ' MB';
+                        var percentage = ( ( ( bar_data['used'] || bar_data['total'] ) / bar_data['max'] ) * 100 ).toFixed(1);
+                            
+                        $( '[data-desc="' + bar_holder.attr( 'id' ) + '"]' )
+                            .append( ' (' + percentage + '%)' );
 
-                                self
-                                    .text( byte_value );
-                            }
-                        );
+                        if( !!convert_label_values )
+                        {
+                            $( '.val', bar_holder )
+                                .each
+                                (
+                                    function()
+                                    {
+                                        var self = $( this );
+
+                                        var unit = null;
+                                        var byte_value = parseInt( self.html() );
+
+                                        self
+                                            .attr( 'title', 'raw: ' + byte_value + ' B' );
+
+                                        byte_value /= 1024;
+                                        byte_value /= 1024;
+                                        unit = 'MB';
+
+                                        if( 1024 <= byte_value )
+                                        {
+                                            byte_value /= 1024;
+                                            unit = 'GB';
+                                        }
+
+                                        byte_value = byte_value.toFixed( 2 ) + ' ' + unit;
+
+                                        self
+                                            .text( byte_value );
+                                    }
+                                );
+                        }
+                    };
+
+                    // -- physical-memory-bar
+                    
+                    var bar_holder = $( '#physical-memory-bar', this );
+                    var system_data = app.dashboard_values['system'];
+                    var bar_data = {
+                        'max' : parse_memory_value( system_data['totalPhysicalMemorySize'] ),
+                        'total' : parse_memory_value( system_data['totalPhysicalMemorySize'] - system_data['freePhysicalMemorySize'] )
+                    };
+
+                    generate_bar( bar_holder, bar_data, true );
+
+                    // -- swap-space-bar
+                    
+                    var bar_holder = $( '#swap-space-bar', this );
+                    var system_data = app.dashboard_values['system'];
+                    var bar_data = {
+                        'max' : parse_memory_value( system_data['totalSwapSpaceSize'] ),
+                        'total' : parse_memory_value( system_data['totalSwapSpaceSize'] - system_data['freeSwapSpaceSize'] )
+                    };
+
+                    generate_bar( bar_holder, bar_data, true );
+
+                    // -- swap-space-bar
+                    
+                    var bar_holder = $( '#file-descriptor-bar', this );
+                    var system_data = app.dashboard_values['system'];
+                    var bar_data = {
+                        'max' : parse_memory_value( system_data['maxFileDescriptorCount'] ),
+                        'total' : parse_memory_value( system_data['openFileDescriptorCount'] )
+                    };
+
+                    generate_bar( bar_holder, bar_data );
+
+                    // -- memory-bar
+                    
+                    var bar_holder = $( '#jvm-memory-bar', this );
+                    var bar_data = {
+                        'max' : parse_memory_value( jvm_memory['raw']['max'] || jvm_memory['max'] ),
+                        'total' : parse_memory_value( jvm_memory['raw']['total'] || jvm_memory['total'] ),
+                        'used' : parse_memory_value( jvm_memory['raw']['used'] || jvm_memory['used'] )
+                    };
+
+                    generate_bar( bar_holder, bar_data, true );
                 },
                 error : function( xhr, text_status, error_thrown )
                 {
