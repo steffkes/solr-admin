@@ -1,3 +1,11 @@
+#content #index .bar-desc
+{
+    color: #c0c0c0;
+    font-weight: normal;
+    margin-left: 10px;
+    white-space: pre;
+}
+
 #content #index .bar-holder
 {
     box-shadow: 5px 5px 10px #c0c0c0;
@@ -141,14 +149,6 @@
 #content #index #system
 {
     position: relative;
-}
-
-#content #index #system h2 small
-{
-    color: #c0c0c0;
-    font-weight: normal;
-    margin-left: 10px;
-    white-space: pre;
 }
 
 #content #index #system .reload

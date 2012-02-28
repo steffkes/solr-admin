@@ -53,11 +53,11 @@ var generate_bar = function( bar_holder, bar_data, convert_label_values )
         
     var hl = $( '[data-desc="' + bar_holder.attr( 'id' ) + '"]' );
 
-    $( '.desc', hl )
+    $( '.bar-desc', hl )
         .remove();
 
     hl
-        .append( ' <span class="desc">(' + percentage + '%)</span>' );
+        .append( ' <small class="bar-desc">' + percentage + '%</small>' );
 
     if( !!convert_label_values )
     {
@@ -102,11 +102,11 @@ var system_info = function( element, system_data )
     {
         var hl = $( '#system h2', element );
 
-        $( '.desc', hl )
+        $( '.bar-desc', hl )
             .remove();
 
         hl
-            .append( ' <small class="desc">' + load_average[1].split( ', ' ).join( '  ' ).esc() + '</small>' );
+            .append( ' <small class="bar-desc">' + load_average[1].split( ', ' ).join( '  ' ).esc() + '</small>' );
     }
 
     // -- physical-memory-bar
