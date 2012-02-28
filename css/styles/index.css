@@ -138,12 +138,39 @@
 
 #content #index #system h2 { background-image: url( ../../img/ico/system-monitor.png ); }
 
+#content #index #system
+{
+    position: relative;
+}
+
 #content #index #system h2 small
 {
     color: #c0c0c0;
     font-weight: normal;
     margin-left: 10px;
     white-space: pre;
+}
+
+#content #index #system .reload
+{
+    background-image: url( ../../img/ico/arrow-circle.png );
+    background-position: 50% 50%;
+    display: block;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+}
+
+#content #index #system .reload.loader
+{
+    padding-left: 0;
+}
+
+#content #index #system .reload span
+{
+    display: none;
 }
 
 #content #index #system .content p
