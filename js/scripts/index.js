@@ -196,6 +196,15 @@ sammy.get
                         }
                     };
 
+                    // -- usage
+
+                    var load_average = app.dashboard_values['system']['uptime'].match( /load average: (.+)/ );
+                    if( load_average && load_average[1] )
+                    {
+                        $( '#system h2' )
+                            .append( ' <small>' + load_average[1].split( ', ' ).join( '  ' ).esc() + '</small>' );
+                    }
+
                     // -- physical-memory-bar
                     
                     var bar_holder = $( '#physical-memory-bar', this );

@@ -138,17 +138,12 @@
 
 #content #index #system h2 { background-image: url( ../../img/ico/system-monitor.png ); }
 
-#content #index #system
+#content #index #system h2 small
 {
-    position: relative;
-}
-
-#content #index #system .usage
-{
-    display: none;
-    position: absolute;
-    right: 5px;
-    top: 5px;
+    color: #c0c0c0;
+    font-weight: normal;
+    margin-left: 10px;
+    white-space: pre;
 }
 
 #content #index #system .content p
