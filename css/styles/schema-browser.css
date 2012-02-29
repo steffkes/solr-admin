@@ -280,6 +280,32 @@
     display: block;
 }
 
+#content #schema-browser #data #field .terminfo-holder .trigger .autoload
+{
+    display: none;
+}
+
+#content #schema-browser #data #field .terminfo-holder.loaded .trigger .autoload
+{
+    background-image: url( ../../img/ico/ui-check-box-uncheck.png );
+    background-position: 0 50%;
+    color: #c0c0c0;
+    display: block;
+    margin-top: 10px;
+    padding-left: 21px;
+}
+
+#content #schema-browser #data #field .terminfo-holder .trigger .autoload:hover
+{
+    color: #008;
+}
+
+#content #schema-browser #data #field .terminfo-holder .trigger .autoload.on
+{
+    background-image: url( ../../img/ico/ui-check-box.png );
+    color: #333;
+}
+
 #content #schema-browser #data #field .topterms-holder
 {
     border-left: 1px solid #f0f0f0;

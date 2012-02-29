@@ -15,6 +15,8 @@
  limitations under the License.
 */
 
+var cookie_name = 'schema-browser_autoload';
+
 var luke_array_to_struct = function( array )
 {
     var struct = {
@@ -1020,7 +1022,8 @@ sammy.get
                 var terminfo_element = $( '.terminfo-holder', data_element );
 
                 terminfo_element
-                    .removeClass( 'disabled' );
+                    .removeClass( 'disabled' )
+                    .removeClass( 'loaded' );
 
                 var trigger_element = $( '.trigger button', terminfo_element );
                 var form_element = $( 'form', terminfo_element );
@@ -1075,8 +1078,44 @@ sammy.get
                         }
                     );
 
-                terminfo_element
-                    .removeClass( 'loaded' );
+                $( '.trigger .autoload', terminfo_element )
+                    .die( 'click' )
+                    .live
+                    (
+                        'click',
+                        function( event )
+                        {
+                            $.cookie( cookie_name, $.cookie( cookie_name ) ? null : true );
+                            $( this ).trigger( 'state' );
+
+                            return false;
+                        }
+                    )
+                    .die( 'state' )
+                    .live
+                    (
+                        'state',
+                        function( event )
+                        {
+                            $( this ).toggleClass( 'on' );
+                        }
+                    )
+                    .die( 'init' )
+                    .live
+                    (
+                        'init',
+                        function( event )
+                        {
+                            if( !$.cookie( cookie_name ) )
+                            {
+                                return false;
+                            }
+
+                            $( this ).trigger( 'state' );
+                            trigger_element.trigger( 'click' );
+                        }
+                    )
+                    .trigger( 'init' );
 
                 $( 'div[class$="-holder"]', terminfo_element )
                     .hide();
