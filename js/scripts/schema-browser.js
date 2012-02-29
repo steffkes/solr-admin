@@ -166,19 +166,25 @@ var load_terminfo = function( trigger_element, core_basepath, field, data_elemen
                     $( 'dl', histogram_holder_element )
                         .html( histogram_legend );
 
+                    var histogram_values = luke_array_to_struct( field_data.histogram ).values;
+
                     histogram_element
                         .sparkline
                         (
-                            luke_array_to_struct( field_data.histogram ).values,
+                            histogram_values,
                             {
                                 type : 'bar',
                                 barColor : '#c0c0c0',
-                                zeroColor : '#ffffff',
+                                zeroColor : '#000000',
                                 height : histogram_element.height(),
                                 barWidth : 46,
                                 barSpacing : 3
                             }
                         );
+
+                    1 === histogram_values.length
+                        ? histogram_element.addClass( 'single' )
+                        : histogram_element.removClass( 'single' );
                 }
 
             },

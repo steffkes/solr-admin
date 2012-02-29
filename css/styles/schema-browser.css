@@ -391,6 +391,11 @@
     height: 150px;
 }
 
+#content #schema-browser #data #field .histogram-holder .histogram.single canvas
+{
+    background-color: #c0c0c0;
+}
+
 #content #schema-browser #data #field .histogram-holder dt,
 #content #schema-browser #data #field .histogram-holder dd
 {
