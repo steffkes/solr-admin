@@ -112,32 +112,63 @@ var system_info = function( element, system_data )
     // -- physical-memory-bar
     
     var bar_holder = $( '#physical-memory-bar', element );
-    var bar_data = {
-        'max' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] ),
-        'total' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] - system_data['system']['freePhysicalMemorySize'] )
-    };
+    if( !system_data['system']['totalPhysicalMemorySize'] )
+    {
+        bar_holder.hide();
+    }
+    else
+    {
+        bar_holder.show();
+    
+        var bar_data = {
+            'max' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] ),
+            'total' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] - system_data['system']['freePhysicalMemorySize'] )
+        };
 
-    generate_bar( bar_holder, bar_data, true );
+        generate_bar( bar_holder, bar_data, true );
+    }
 
     // -- swap-space-bar
     
     var bar_holder = $( '#swap-space-bar', element );
-    var bar_data = {
-        'max' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] ),
-        'total' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] - system_data['system']['freeSwapSpaceSize'] )
-    };
+    if( !system_data['system']['totalSwapSpaceSize'] )
+    {
+        bar_holder.hide();
+    }
+    else
+    {
+        bar_holder.show();
 
-    generate_bar( bar_holder, bar_data, true );
+        var bar_data = {
+            'max' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] ),
+            'total' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] - system_data['system']['freeSwapSpaceSize'] )
+        };
+
+        generate_bar( bar_holder, bar_data, true );
+    }
 
     // -- swap-space-bar
     
     var bar_holder = $( '#file-descriptor-bar', element );
-    var bar_data = {
-        'max' : parse_memory_value( system_data['system']['maxFileDescriptorCount'] ),
-        'total' : parse_memory_value( system_data['system']['openFileDescriptorCount'] )
-    };
+    if( !system_data['system']['maxFileDescriptorCount'] )
+    {
+        bar_holder.hide();
+    }
+    else
+    {
+        bar_holder.show();
 
-    generate_bar( bar_holder, bar_data );
+        var bar_data = {
+            'max' : parse_memory_value( system_data['system']['maxFileDescriptorCount'] ),
+            'total' : parse_memory_value( system_data['system']['openFileDescriptorCount'] )
+        };
+
+        generate_bar( bar_holder, bar_data );
+    }
+
+    0 === $( '#system div[id$="-bar"]:visible', element ).size()
+        ? $( '#system .no-info', element ).show()
+        : $( '#system .no-info', element ).hide();
 
     // -- memory-bar
 

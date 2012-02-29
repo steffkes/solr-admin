@@ -180,6 +180,13 @@
     margin-bottom: 5px;
 }
 
+#content #index #system .content .no-info
+{
+    color: #c0c0c0;
+    display: none;
+    font-style: italic;
+}
+
 #content #index #jvm-memory h2 { background-image: url( ../../img/ico/memory.png ); }
 
 #content #index #jvm-memory-bar
