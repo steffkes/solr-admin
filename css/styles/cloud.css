@@ -18,6 +18,75 @@
 
 #content #cloud h2 { background-image: url( ../../img/ico/sitemap.png ); }
 
+#content #cloud
+{
+    position: relative;
+}
+
+#content #cloud a.debug
+{
+    background-color: #c0c0c0;
+    background-image: url( ../../img/ico/exclamation-button.png );
+    background-position: 5px 50%;
+    border-radius: 5px;
+    display: block;
+    padding: 2px 5px;
+    padding-left: 26px;
+    position: absolute;
+    left: 150px;
+    top: 3px;
+}
+
+#content #cloud a.debug:hover
+{
+    background-color: #fff;
+    color: #00f;
+}
+
+#content #cloud #debug
+{
+    background-color: #fff;
+    box-shadow: 5px 5px 10px #c0c0c0;
+    -moz-box-shadow: 5px 5px 10px #c0c0c0;
+    -webkit-box-shadow: 5px 5px 10px #c0c0c0;
+    display: none;
+    padding: 20px;
+    position: absolute;
+    left: 50px;
+    top: 50px;
+}
+
+#content #cloud #debug .close
+{
+    background-image: url( ../../img/ico/cross-0.png );
+    background-position: 50% 50%;
+    display: block;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+}
+
+#content #cloud #debug .close:hover
+{
+    background-image: url( ../../img/ico/cross-1.png );
+}
+
+#content #cloud #debug .close span
+{
+    display: none;
+}
+
+#content #cloud #debug .debug
+{
+    border: 1px solid #f0f0f0;
+    max-height: 500px;
+    overflow: auto;
+    padding: 5px;
+    width: 500px;
+}
+
 #content #cloud .content
 {
     padding-left: 0;

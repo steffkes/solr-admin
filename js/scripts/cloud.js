@@ -35,6 +35,37 @@ sammy.get
                 var cloud_element = $( '#cloud', content_element );
                 var cloud_content = $( '.content', cloud_element );
 
+                var debug_element = $( '#debug', cloud_element );
+                var debug_button = $( 'a.debug', cloud_element );
+
+                debug_button
+                    .die( 'click' )
+                    .live
+                    (
+                        'click',
+                        function( event )
+                        {
+                            debug_button.hide();
+                            debug_element.show();
+
+                            return false;
+                        }
+                    );
+
+                $( '.close', debug_element )
+                    .die( 'click' )
+                    .live
+                    (
+                        'click',
+                        function( event )
+                        {
+                            debug_button.show();
+                            debug_element.hide();
+                            
+                            return false;
+                        }
+                    );
+
                 $.ajax
                 (
                     {
