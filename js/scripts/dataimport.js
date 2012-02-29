@@ -432,35 +432,26 @@ sammy.get
                 // form
 
                 $( 'form', form_element )
-                    .die( 'submit' )
-                    .live
+                    .ajaxForm
                     (
-                        'submit',
-                        function( event )
                         {
-                            $.ajax
-                            (
-                                {
-                                    url : handler_url + '?command=full-import',
-                                    dataType : 'xml',
-                                    beforeSend : function( xhr, settings )
-                                    {
-                                    },
-                                    success : function( response, text_status, xhr )
-                                    {
-                                        console.debug( response );
-                                        dataimport_fetch_status();
-                                    },
-                                    error : function( xhr, text_status, error_thrown )
-                                    {
-                                        console.debug( arguments );
-                                    },
-                                    complete : function( xhr, text_status )
-                                    {
-                                    }
-                                }
-                            );
-                            return false;
+                            url : handler_url,
+                            dataType : 'xml',
+                            beforeSend : function( xhr, settings )
+                            {
+                            },
+                            success : function( response, text_status, xhr )
+                            {
+                                console.debug( response );
+                                dataimport_fetch_status();
+                            },
+                            error : function( xhr, text_status, error_thrown )
+                            {
+                                console.debug( arguments );
+                            },
+                            complete : function( xhr, text_status )
+                            {
+                            }
                         }
                     );
             }
