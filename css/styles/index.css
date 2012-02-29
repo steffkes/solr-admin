@@ -142,6 +142,7 @@
 
 #content #index #jvm h2 { background-image: url( ../../img/ico/jar.png ); }
 #content #index #jvm .jvm_version dt span { background-image: url( ../../img/ico/jar.png ); }
+#content #index #jvm .processors dt span { background-image: url( ../../img/ico/processor.png ); }
 #content #index #jvm .command_line_args dt span { background-image: url( ../../img/ico/terminal.png ); }
 
 #content #index #system h2 { background-image: url( ../../img/ico/system-monitor.png ); }

@@ -205,6 +205,7 @@ sammy.get
                         'dir_data' : app.dashboard_values['core']['directory']['data'],
                         'dir_index' : app.dashboard_values['core']['directory']['index'],
                         'jvm_version' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
+                        'processors' : app.dashboard_values['jvm']['processors'],
                         'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
                         'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
                         'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
@@ -256,7 +257,7 @@ sammy.get
                     $( '.timeago', this )
                         .timeago();
 
-                    $( '#instance li:visible:odd, #versions li:visible:odd', this )
+                    $( '.index-left .block li:visible:odd', this )
                         .addClass( 'odd' );
                     
                     // -- system_info
