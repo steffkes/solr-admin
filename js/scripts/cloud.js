@@ -38,7 +38,7 @@ sammy.get
                 $.ajax
                 (
                     {
-                        url : core_basepath + '/admin/zookeeper?wt=json',
+                        url : core_basepath + '/zookeeper?wt=json',
                         dataType : 'json',
                         context : cloud_content,
                         beforeSend : function( xhr, settings )
