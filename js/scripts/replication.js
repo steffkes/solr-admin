@@ -167,6 +167,7 @@ sammy.get
                                     var iterations_data = [];
                                     $.merge( iterations_data, data.slave.indexReplicatedAtList );
                                     $.merge( iterations_data, data.slave.replicationFailedAtList );
+                                    iterations_data = $.unique( iterations_data ).reverse();
 
                                     if( 0 !== iterations_data.length )
                                     {
