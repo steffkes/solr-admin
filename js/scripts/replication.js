@@ -380,7 +380,7 @@ sammy.get
 
 
 
-                                if( 'true' === data.slave.isReplicating )
+                                if( data.slave && 'true' === data.slave.isReplicating )
                                 {
                                     replication_element
                                         .addClass( 'replicating' );
