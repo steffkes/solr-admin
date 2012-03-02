@@ -193,11 +193,6 @@
     margin-left: 20px;
 }
 
-#content #replication #iterations
-{
-    display: none;
-}
-
 #content #replication #iterations .label span
 {
     background-image: url( ../../img/ico/node-design.png );
