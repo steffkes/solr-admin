@@ -38,6 +38,9 @@ sammy.get
                 var debug_element = $( '#debug', cloud_element );
                 var debug_button = $( 'a.debug', cloud_element );
 
+                var clipboard_element = $( '.clipboard', debug_element );
+                var clipboard_button = $( 'a', clipboard_element );
+
                 debug_button
                     .die( 'click' )
                     .live
@@ -45,9 +48,7 @@ sammy.get
                         'click',
                         function( event )
                         {
-                            debug_button.hide();
-                            debug_element.show();
-
+                            debug_element.trigger( 'show' );
                             return false;
                         }
                     );
@@ -59,10 +60,114 @@ sammy.get
                         'click',
                         function( event )
                         {
+                            debug_element.trigger( 'hide' );
+                            return false;
+                        }
+                    );
+
+                $( '.clipboard', debug_element )
+                    .die( 'click' )
+                    .live
+                    (
+                        'click',
+                        function( event )
+                        {
+                            return false;
+                        }
+                    );
+
+                debug_element
+                    .die( 'show' )
+                    .live
+                    (
+                        'show',
+                        function( event )
+                        {
+                            debug_button.hide();
+                            debug_element.show();
+
+                            $.ajax
+                            (
+                                {
+                                    url : core_basepath + '/zookeeper?wt=json&dump=true',
+                                    dataType : 'text',
+                                    context : debug_element,
+                                    beforeSend : function( xhr, settings )
+                                    {
+                                        $( '.debug', debug_element )
+                                            .addClass( 'loader' )
+                                            .text( 'Loading Dump ...' );
+
+                                        ZeroClipboard.setMoviePath( 'img/ZeroClipboard.swf' );
+
+                                        clipboard_client = new ZeroClipboard.Client();
+                                    
+                                        clipboard_client.addEventListener
+                                        (
+                                            'load',
+                                            function( client )
+                                            {
+                                            }
+                                        );
+
+                                        clipboard_client.addEventListener
+                                        (
+                                            'complete',
+                                            function( client, text )
+                                            {
+                                                clipboard_element
+                                                    .addClass( 'copied' );
+
+                                                clipboard_button
+                                                    .data( 'text', clipboard_button.text() )
+                                                    .text( clipboard_button.data( 'copied' ) );
+                                            }
+                                        );
+                                    },
+                                    success : function( response, text_status, xhr )
+                                    {
+                                        clipboard_client.glue
+                                        (
+                                            clipboard_element.get(0),
+                                            clipboard_button.get(0)
+                                        );
+
+                                        clipboard_client.setText( response.replace( /\\/g, '\\\\' ) );
+
+                                        $( '.debug', debug_element )
+                                            .removeClass( 'loader' )
+                                            .text( response );
+                                    },
+                                    error : function( xhr, text_status, error_thrown )
+                                    {
+                                    },
+                                    complete : function( xhr, text_status )
+                                    {
+                                    }
+                                }
+                            );
+                        }
+                    )
+                    .die( 'hide' )
+                    .live
+                    (
+                        'hide',
+                        function( event )
+                        {
+                            $( '.debug', debug_element )
+                                .empty();
+
+                            clipboard_element
+                                .removeClass( 'copied' );
+
+                            clipboard_button
+                                .data( 'copied', clipboard_button.text() )
+                                .text( clipboard_button.data( 'text' ) );
+
+                            clipboard_client.destroy();
+
                             debug_button.show();
                             debug_element.hide();
-                            
-                            return false;
                         }
                     );
 

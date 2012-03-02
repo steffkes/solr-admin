@@ -56,35 +56,73 @@
     top: 50px;
 }
 
+#content #cloud #debug ul
+{
+    margin-bottom: 5px;
+}
+
+#content #cloud #debug ul a
+{
+    background-position: 4px 50%;
+    display: block;
+    padding: 2px 4px;
+    padding-left: 25px;
+}
+
+#content #cloud #debug ul a:hover,
+#content #cloud #debug ul a.hover
+{
+    background-color: #f0f0f0;
+}
+
+#content #cloud #debug .clipboard
+{
+    float: left;
+    position: relative;
+}
+
+#content #cloud #debug .clipboard a
+{
+    background-image: url( ../../img/ico/clipboard-paste.png );
+    z-index: 98;
+}
+
+#content #cloud #debug .clipboard a:hover,
+#content #cloud #debug .clipboard a.hover,
+#content #cloud #debug .clipboard.copied a
+{
+    background-image: url( ../../img/ico/clipboard-paste-document-text.png );
+}
+
 #content #cloud #debug .close
 {
-    background-image: url( ../../img/ico/cross-0.png );
-    background-position: 50% 50%;
-    display: block;
-    height: 20px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 20px;
+    float: right;
 }
 
-#content #cloud #debug .close:hover
+#content #cloud #debug .close a
+{
+    background-image: url( ../../img/ico/cross-0.png );
+    padding-left: 21px;
+}
+
+#content #cloud #debug .close a:hover
 {
     background-image: url( ../../img/ico/cross-1.png );
-}
-
-#content #cloud #debug .close span
-{
-    display: none;
 }
 
 #content #cloud #debug .debug
 {
     border: 1px solid #f0f0f0;
-    max-height: 500px;
+    max-height: 400px;
     overflow: auto;
     padding: 5px;
     width: 500px;
+}
+
+#content #cloud #debug .debug.loader
+{
+    background-position: 5px 50%;
+    padding: 10px 26px;
 }
 
 #content #cloud .content
