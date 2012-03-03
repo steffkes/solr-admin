@@ -165,8 +165,29 @@ sammy.get
                                     var iterations_list = $( '.iterations ul', iterations_element );
 
                                     var iterations_data = [];
-                                    $.merge( iterations_data, data.slave.indexReplicatedAtList );
-                                    $.merge( iterations_data, data.slave.replicationFailedAtList );
+                                    var iterations_obj = {};
+
+                                    for( var i in data.slave.indexReplicatedAtList )
+                                    {
+                                        var date = data.slave.indexReplicatedAtList[i];
+                                        if( !iterations_obj[date] )
+                                        {
+                                            iterations_obj[date] = true;
+                                            iterations_data.push( date );
+                                        }
+                                    }
+
+                                    for( var i in data.slave.replicationFailedAtList )
+                                    {
+                                        var date = data.slave.replicationFailedAtList[i];
+                                        if( !iterations_obj[date] )
+                                        {
+                                            iterations_obj[date] = true;
+                                            iterations_data.push( date );
+                                        }
+                                    }
+
+                                    iterations_data.sort().reverse();
 
                                     if( 0 !== iterations_data.length )
                                     {
