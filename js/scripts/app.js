@@ -41,6 +41,15 @@ String.prototype.esc = function()
     return this.replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 }
 
+SolrDate = function( date )
+{
+    // ["Sat Mar 03 11:00:00 CET 2012", "Sat", "Mar", "03", "11:00:00", "CET", "2012"]
+    var parts = date.match( /^(\w+)\s+(\w+)\s+(\d+)\s+(\d+\:\d+\:\d+)\s+(\w+)\s+(\d+)$/ );
+    
+    // "Sat Mar 03 2012 10:37:33"
+    return new Date( parts[1] + ' ' + parts[2] + ' ' + parts[3] + ' ' + parts[6] + ' ' + parts[4] );
+}
+
 var sammy = $.sammy
 (
     function()

@@ -407,6 +407,45 @@
     background-image: url( ../../img/ico/tick.png );
 }
 
+#content #replication .timer
+{
+    box-shadow: 5px 5px 10px #c0c0c0;
+    -moz-box-shadow: 5px 5px 10px #c0c0c0;
+    -webkit-box-shadow: 5px 5px 10px #c0c0c0;
+    display: none;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+#content #replication .timer p,
+#content #replication .timer small
+{
+    padding-left: 21px;
+}
+
+#content #replication .timer p
+{
+    background-image: url( ../../img/ico/clock-select-remain.png );
+    background-position: 0 50%;
+}
+
+#content #replication .timer p .approx
+{
+    color: #c0c0c0;
+    margin-right: 1px;
+}
+
+#content #replication .timer p .tick
+{
+    font-weight: bold;
+}
+
+#content #replication .timer small
+{
+    color: #c0c0c0;
+    display: none;
+}
+
 #content #replication #navigation button
 {
     background-position: 2px 50%;
