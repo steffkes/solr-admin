@@ -95,8 +95,7 @@ sammy.get
                   beforeSend : function( xhr, settings )
                   {
                     $( '.debug', debug_element )
-                      .addClass( 'loader' )
-                      .text( 'Loading Dump ...' );
+                      .html( '<span class="loader">Loading Dump ...</span>' );
 
                     ZeroClipboard.setMoviePath( 'img/ZeroClipboard.swf' );
 

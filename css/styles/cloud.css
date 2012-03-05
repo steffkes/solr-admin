@@ -119,9 +119,10 @@
   width: 500px;
 }
 
-#content #cloud #debug .debug.loader
+#content #cloud #debug .debug .loader
 {
   background-position: 5px 50%;
+  display: block;
   padding: 10px 26px;
 }
 
