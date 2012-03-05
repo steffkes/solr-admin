@@ -1098,7 +1098,9 @@ sammy.get
             'state',
             function( event )
             {
-              $( this ).toggleClass( 'on' );
+              $.cookie( cookie_name )
+                ? $( this ).addClass( 'on' )
+                : $( this ).removeClass( 'on' );
             }
           )
           .die( 'init' )
