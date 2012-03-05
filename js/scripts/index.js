@@ -17,326 +17,326 @@
 
 var parse_memory_value = function( value )
 {
-    if( value !== Number( value ) )
-    {
-        var units = 'BKMGTPEZY';
-        var match = value.match( /^(\d+([,\.]\d+)?) (\w)\w?$/ );
-        var value = parseFloat( match[1] ) * Math.pow( 1024, units.indexOf( match[3].toUpperCase() ) );
-    }
+  if( value !== Number( value ) )
+  {
+    var units = 'BKMGTPEZY';
+    var match = value.match( /^(\d+([,\.]\d+)?) (\w)\w?$/ );
+    var value = parseFloat( match[1] ) * Math.pow( 1024, units.indexOf( match[3].toUpperCase() ) );
+  }
     
-    return value;
+  return value;
 };
 
 var generate_bar = function( bar_holder, bar_data, convert_label_values )
 {
-    var bar_level = 1;
-    var max_width = Math.round( $( '.bar-max', bar_holder ).width() );
-    $( '.bar-max.val', bar_holder ).text( bar_data['max'] );
+  var bar_level = 1;
+  var max_width = Math.round( $( '.bar-max', bar_holder ).width() );
+  $( '.bar-max.val', bar_holder ).text( bar_data['max'] );
     
+  bar_level++;
+  var total_width = Math.round( ( bar_data['total'] * max_width ) / bar_data['max'] );
+  $( '.bar-total.bar', bar_holder ).width( Math.max( total_width, 1 ) );
+  $( '.bar-total.val', bar_holder ).text( bar_data['total'] );
+
+  if( bar_data['used'] )
+  {
     bar_level++;
-    var total_width = Math.round( ( bar_data['total'] * max_width ) / bar_data['max'] );
-    $( '.bar-total.bar', bar_holder ).width( Math.max( total_width, 1 ) );
-    $( '.bar-total.val', bar_holder ).text( bar_data['total'] );
+    var used_width = Math.round( ( bar_data['used'] * max_width ) / bar_data['max'] );
+    $( '.bar-used.bar', bar_holder ).width( Math.min( used_width, total_width - 1 ) );
+    $( '.bar-used.val', bar_holder ).text( bar_data['used'] );
+  }
 
-    if( bar_data['used'] )
-    {
-        bar_level++;
-        var used_width = Math.round( ( bar_data['used'] * max_width ) / bar_data['max'] );
-        $( '.bar-used.bar', bar_holder ).width( Math.min( used_width, total_width - 1 ) );
-        $( '.bar-used.val', bar_holder ).text( bar_data['used'] );
-    }
+  bar_holder
+    .addClass( 'bar-lvl-' + bar_level );
 
-    bar_holder
-        .addClass( 'bar-lvl-' + bar_level );
-
-    var percentage = ( ( ( bar_data['used'] || bar_data['total'] ) / bar_data['max'] ) * 100 ).toFixed(1);
+  var percentage = ( ( ( bar_data['used'] || bar_data['total'] ) / bar_data['max'] ) * 100 ).toFixed(1);
         
-    var hl = $( '[data-desc="' + bar_holder.attr( 'id' ) + '"]' );
+  var hl = $( '[data-desc="' + bar_holder.attr( 'id' ) + '"]' );
 
-    $( '.bar-desc', hl )
-        .remove();
+  $( '.bar-desc', hl )
+    .remove();
 
-    hl
-        .append( ' <small class="bar-desc">' + percentage + '%</small>' );
+  hl
+    .append( ' <small class="bar-desc">' + percentage + '%</small>' );
 
-    if( !!convert_label_values )
-    {
-        $( '.val', bar_holder )
-            .each
-            (
-                function()
-                {
-                    var self = $( this );
+  if( !!convert_label_values )
+  {
+    $( '.val', bar_holder )
+      .each
+      (
+        function()
+        {
+          var self = $( this );
 
-                    var unit = null;
-                    var byte_value = parseInt( self.html() );
+          var unit = null;
+          var byte_value = parseInt( self.html() );
 
-                    self
-                        .attr( 'title', 'raw: ' + byte_value + ' B' );
+          self
+            .attr( 'title', 'raw: ' + byte_value + ' B' );
 
-                    byte_value /= 1024;
-                    byte_value /= 1024;
-                    unit = 'MB';
+          byte_value /= 1024;
+          byte_value /= 1024;
+          unit = 'MB';
 
-                    if( 1024 <= byte_value )
-                    {
-                        byte_value /= 1024;
-                        unit = 'GB';
-                    }
+          if( 1024 <= byte_value )
+          {
+            byte_value /= 1024;
+            unit = 'GB';
+          }
 
-                    byte_value = byte_value.toFixed( 2 ) + ' ' + unit;
+          byte_value = byte_value.toFixed( 2 ) + ' ' + unit;
 
-                    self
-                        .text( byte_value );
-                }
-            );
-    }
+          self
+            .text( byte_value );
+        }
+      );
+  }
 };
 
 var system_info = function( element, system_data )
 {
-    // -- usage
+  // -- usage
 
-    var load_average = system_data['system']['uptime'].match( /load average: (.+)/ );
-    if( load_average && load_average[1] )
-    {
-        var hl = $( '#system h2', element );
+  var load_average = system_data['system']['uptime'].match( /load average: (.+)/ );
+  if( load_average && load_average[1] )
+  {
+    var hl = $( '#system h2', element );
 
-        $( '.bar-desc', hl )
-            .remove();
+    $( '.bar-desc', hl )
+      .remove();
 
-        hl
-            .append( ' <small class="bar-desc">' + load_average[1].split( ', ' ).join( '  ' ).esc() + '</small>' );
-    }
+    hl
+      .append( ' <small class="bar-desc">' + load_average[1].split( ', ' ).join( '  ' ).esc() + '</small>' );
+  }
 
-    // -- physical-memory-bar
+  // -- physical-memory-bar
     
-    var bar_holder = $( '#physical-memory-bar', element );
-    if( !system_data['system']['totalPhysicalMemorySize'] )
-    {
-        bar_holder.hide();
-    }
-    else
-    {
-        bar_holder.show();
+  var bar_holder = $( '#physical-memory-bar', element );
+  if( !system_data['system']['totalPhysicalMemorySize'] )
+  {
+    bar_holder.hide();
+  }
+  else
+  {
+    bar_holder.show();
     
-        var bar_data = {
-            'max' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] ),
-            'total' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] - system_data['system']['freePhysicalMemorySize'] )
-        };
-
-        generate_bar( bar_holder, bar_data, true );
-    }
-
-    // -- swap-space-bar
-    
-    var bar_holder = $( '#swap-space-bar', element );
-    if( !system_data['system']['totalSwapSpaceSize'] )
-    {
-        bar_holder.hide();
-    }
-    else
-    {
-        bar_holder.show();
-
-        var bar_data = {
-            'max' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] ),
-            'total' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] - system_data['system']['freeSwapSpaceSize'] )
-        };
-
-        generate_bar( bar_holder, bar_data, true );
-    }
-
-    // -- swap-space-bar
-    
-    var bar_holder = $( '#file-descriptor-bar', element );
-    if( !system_data['system']['maxFileDescriptorCount'] )
-    {
-        bar_holder.hide();
-    }
-    else
-    {
-        bar_holder.show();
-
-        var bar_data = {
-            'max' : parse_memory_value( system_data['system']['maxFileDescriptorCount'] ),
-            'total' : parse_memory_value( system_data['system']['openFileDescriptorCount'] )
-        };
-
-        generate_bar( bar_holder, bar_data );
-    }
-
-    0 === $( '#system div[id$="-bar"]:visible', element ).size()
-        ? $( '#system .no-info', element ).show()
-        : $( '#system .no-info', element ).hide();
-
-    // -- memory-bar
-
-    var jvm_memory = $.extend
-    (
-        {
-            'free' : null,
-            'total' : null,
-            'max' : null,
-            'used' : null,
-            'raw' : {
-                'free' : null,
-                'total' : null,
-                'max' : null,
-                'used' : null,
-                'used%' : null
-            }
-        },
-        system_data['jvm']['memory']
-    );
-    
-    var bar_holder = $( '#jvm-memory-bar', element );
     var bar_data = {
-        'max' : parse_memory_value( jvm_memory['raw']['max'] || jvm_memory['max'] ),
-        'total' : parse_memory_value( jvm_memory['raw']['total'] || jvm_memory['total'] ),
-        'used' : parse_memory_value( jvm_memory['raw']['used'] || jvm_memory['used'] )
+      'max' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] ),
+      'total' : parse_memory_value( system_data['system']['totalPhysicalMemorySize'] - system_data['system']['freePhysicalMemorySize'] )
     };
 
     generate_bar( bar_holder, bar_data, true );
+  }
+
+  // -- swap-space-bar
+    
+  var bar_holder = $( '#swap-space-bar', element );
+  if( !system_data['system']['totalSwapSpaceSize'] )
+  {
+    bar_holder.hide();
+  }
+  else
+  {
+    bar_holder.show();
+
+    var bar_data = {
+      'max' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] ),
+      'total' : parse_memory_value( system_data['system']['totalSwapSpaceSize'] - system_data['system']['freeSwapSpaceSize'] )
+    };
+
+    generate_bar( bar_holder, bar_data, true );
+  }
+
+  // -- swap-space-bar
+    
+  var bar_holder = $( '#file-descriptor-bar', element );
+  if( !system_data['system']['maxFileDescriptorCount'] )
+  {
+    bar_holder.hide();
+  }
+  else
+  {
+    bar_holder.show();
+
+    var bar_data = {
+      'max' : parse_memory_value( system_data['system']['maxFileDescriptorCount'] ),
+      'total' : parse_memory_value( system_data['system']['openFileDescriptorCount'] )
+    };
+
+    generate_bar( bar_holder, bar_data );
+  }
+
+  0 === $( '#system div[id$="-bar"]:visible', element ).size()
+    ? $( '#system .no-info', element ).show()
+    : $( '#system .no-info', element ).hide();
+
+  // -- memory-bar
+
+  var jvm_memory = $.extend
+  (
+    {
+      'free' : null,
+      'total' : null,
+      'max' : null,
+      'used' : null,
+      'raw' : {
+        'free' : null,
+        'total' : null,
+        'max' : null,
+        'used' : null,
+        'used%' : null
+      }
+    },
+    system_data['jvm']['memory']
+  );
+    
+  var bar_holder = $( '#jvm-memory-bar', element );
+  var bar_data = {
+    'max' : parse_memory_value( jvm_memory['raw']['max'] || jvm_memory['max'] ),
+    'total' : parse_memory_value( jvm_memory['raw']['total'] || jvm_memory['total'] ),
+    'used' : parse_memory_value( jvm_memory['raw']['used'] || jvm_memory['used'] )
+  };
+
+  generate_bar( bar_holder, bar_data, true );
 }
 
 // #/
 sammy.get
 (
-    /^#\/$/,
-    function( context )
-    {
-        var content_element = $( '#content' );
+  /^#\/$/,
+  function( context )
+  {
+    var content_element = $( '#content' );
 
-        $( '#index', app.menu_element )
-            .addClass( 'active' );
+    $( '#index', app.menu_element )
+      .addClass( 'active' );
 
-        content_element
-            .html( '<div id="index"></div>' );
+    content_element
+      .html( '<div id="index"></div>' );
 
-        $.ajax
-        (
-            {
-                url : 'tpl/index.html',
-                context : $( '#index', content_element ),
-                beforeSend : function( arr, form, options )
-                {
-                },
-                success : function( template )
-                {
-                    var self = this;
+    $.ajax
+    (
+      {
+        url : 'tpl/index.html',
+        context : $( '#index', content_element ),
+        beforeSend : function( arr, form, options )
+        {
+        },
+        success : function( template )
+        {
+          var self = this;
 
-                    this
-                        .html( template );
+          this
+            .html( template );
     
-                    var data = {
-                        'start_time' : app.dashboard_values['jvm']['jmx']['startTime'],
-                        'host' : app.dashboard_values['core']['host'],
-                        'dir_instance' : app.dashboard_values['core']['directory']['instance'],
-                        'dir_data' : app.dashboard_values['core']['directory']['data'],
-                        'dir_index' : app.dashboard_values['core']['directory']['index'],
-                        'jvm_version' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
-                        'processors' : app.dashboard_values['jvm']['processors'],
-                        'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
-                        'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
-                        'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
-                        'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version']
-                    };
+          var data = {
+            'start_time' : app.dashboard_values['jvm']['jmx']['startTime'],
+            'host' : app.dashboard_values['core']['host'],
+            'dir_instance' : app.dashboard_values['core']['directory']['instance'],
+            'dir_data' : app.dashboard_values['core']['directory']['data'],
+            'dir_index' : app.dashboard_values['core']['directory']['index'],
+            'jvm_version' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
+            'processors' : app.dashboard_values['jvm']['processors'],
+            'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
+            'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
+            'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
+            'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version']
+          };
 
-                    if( app.dashboard_values['core']['directory']['cwd'] )
-                    {
-                        data['dir_cwd'] = app.dashboard_values['core']['directory']['cwd'];
-                    }
+          if( app.dashboard_values['core']['directory']['cwd'] )
+          {
+            data['dir_cwd'] = app.dashboard_values['core']['directory']['cwd'];
+          }
     
-                    for( var key in data )
-                    {                                                        
-                        var value_element = $( '.' + key + ' dd', this );
+          for( var key in data )
+          {                                                        
+            var value_element = $( '.' + key + ' dd', this );
 
-                        value_element
-                            .text( data[key].esc() );
+            value_element
+              .text( data[key].esc() );
                         
-                        value_element.closest( 'li' )
-                            .show();
-                    }
+            value_element.closest( 'li' )
+              .show();
+          }
 
-                    var commandLineArgs = app.dashboard_values['jvm']['jmx']['commandLineArgs'];
-                    if( 0 !== commandLineArgs.length )
-                    {
-                        var cmd_arg_element = $( '.command_line_args dt', this );
-                        var cmd_arg_key_element = $( '.command_line_args dt', this );
-                        var cmd_arg_element = $( '.command_line_args dd', this );
+          var commandLineArgs = app.dashboard_values['jvm']['jmx']['commandLineArgs'];
+          if( 0 !== commandLineArgs.length )
+          {
+            var cmd_arg_element = $( '.command_line_args dt', this );
+            var cmd_arg_key_element = $( '.command_line_args dt', this );
+            var cmd_arg_element = $( '.command_line_args dd', this );
 
-                        for( var key in commandLineArgs )
-                        {
-                            cmd_arg_element = cmd_arg_element.clone();
-                            cmd_arg_element.text( commandLineArgs[key] );
+            for( var key in commandLineArgs )
+            {
+              cmd_arg_element = cmd_arg_element.clone();
+              cmd_arg_element.text( commandLineArgs[key] );
 
-                            cmd_arg_key_element
-                                .after( cmd_arg_element );
-                        }
-
-                        cmd_arg_key_element.closest( 'li' )
-                            .show();
-
-                        $( '.command_line_args dd:last', this )
-                            .remove();
-
-                        $( '.command_line_args dd:odd', this )
-                            .addClass( 'odd' );
-                    }
-
-                    $( '.timeago', this )
-                        .timeago();
-
-                    $( '.index-left .block li:visible:odd', this )
-                        .addClass( 'odd' );
-                    
-                    // -- system_info
-
-                    system_info( this, app.dashboard_values );
-
-                    $( '#system a.reload', this )
-                        .die( 'click' )
-                        .live
-                        (
-                            'click',
-                            function( event )
-                            {
-                                $.ajax
-                                (
-                                    {
-                                        url : environment_basepath + '/admin/system?wt=json',
-                                        dataType : 'json',
-                                        context : this,
-                                        beforeSend : function( arr, form, options )
-                                        {
-                                            loader.show( this );
-                                        },
-                                        success : function( response )
-                                        {
-                                            system_info( self, response );
-                                        },
-                                        error : function()
-                                        {
-                                        },
-                                        complete : function()
-                                        {
-                                            loader.hide( this );
-                                        }
-                                    }
-                                );
-
-                                return false;
-                            }
-                        );
-                },
-                error : function( xhr, text_status, error_thrown )
-                {
-                },
-                complete : function( xhr, text_status )
-                {
-                }
+              cmd_arg_key_element
+                .after( cmd_arg_element );
             }
-        );
-    }
+
+            cmd_arg_key_element.closest( 'li' )
+              .show();
+
+            $( '.command_line_args dd:last', this )
+              .remove();
+
+            $( '.command_line_args dd:odd', this )
+              .addClass( 'odd' );
+          }
+
+          $( '.timeago', this )
+            .timeago();
+
+          $( '.index-left .block li:visible:odd', this )
+            .addClass( 'odd' );
+                    
+          // -- system_info
+
+          system_info( this, app.dashboard_values );
+
+          $( '#system a.reload', this )
+            .die( 'click' )
+            .live
+            (
+              'click',
+              function( event )
+              {
+                $.ajax
+                (
+                  {
+                    url : environment_basepath + '/admin/system?wt=json',
+                    dataType : 'json',
+                    context : this,
+                    beforeSend : function( arr, form, options )
+                    {
+                      loader.show( this );
+                    },
+                    success : function( response )
+                    {
+                      system_info( self, response );
+                    },
+                    error : function()
+                    {
+                    },
+                    complete : function()
+                    {
+                      loader.hide( this );
+                    }
+                  }
+                );
+
+                return false;
+              }
+            );
+        },
+        error : function( xhr, text_status, error_thrown )
+        {
+        },
+        complete : function( xhr, text_status )
+        {
+        }
+      }
+    );
+  }
 );

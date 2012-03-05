@@ -1,67 +1,67 @@
 #content #index .bar-desc
 {
-    color: #c0c0c0;
-    font-weight: normal;
-    margin-left: 10px;
-    white-space: pre;
+  color: #c0c0c0;
+  font-weight: normal;
+  margin-left: 10px;
+  white-space: pre;
 }
 
 #content #index .bar-holder
 {
-    box-shadow: 5px 5px 10px #c0c0c0;
-    -moz-box-shadow: 5px 5px 10px #c0c0c0;
-    -webkit-box-shadow: 5px 5px 10px #c0c0c0;
-    height: 35px;
+  box-shadow: 5px 5px 10px #c0c0c0;
+  -moz-box-shadow: 5px 5px 10px #c0c0c0;
+  -webkit-box-shadow: 5px 5px 10px #c0c0c0;
+  height: 35px;
 }
 
 #content #index .bar-holder .bar
 {
-    height: 100%;
-    position: relative;
+  height: 100%;
+  position: relative;
 }
 
 #content #index .bar-holder div .val
 {
-    border-right: 1px solid #f00;
-    display: block;
-    padding-right: 5px;
-    position: absolute;
-    right: 0;
-    top: 35px;
-    white-space: nowrap;
+  border-right: 1px solid #f00;
+  display: block;
+  padding-right: 5px;
+  position: absolute;
+  right: 0;
+  top: 35px;
+  white-space: nowrap;
 }
 
 #content #index .bar-holder .bar-max.bar
 {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 #content #index .bar-holder .bar-max.val
 {
-    border-color: #f0f0f0;
-    color: #d6d6d6;
+  border-color: #f0f0f0;
+  color: #d6d6d6;
 }
 
 #content #index .bar-holder .bar-total.bar
 {
-    background-color: #c0c0c0;
+  background-color: #c0c0c0;
 }
 
 #content #index .bar-holder .bar-total.val
 {
-    border-color: #c0c0c0;
-    color: #c0c0c0;
+  border-color: #c0c0c0;
+  color: #c0c0c0;
 }
 
 #content #index .bar-holder .bar-used.bar
 {
-    background-color: #969696;
+  background-color: #969696;
 }
 
 #content #index .bar-holder .bar-used.val
 {
-    border-color: #969696;
-    color: #969696;
+  border-color: #969696;
+  color: #969696;
 }
 
 #content #index .bar-holder.bar-lvl-2 .bar-max.val { padding-top: 25px; }
@@ -75,60 +75,60 @@
 
 #content #index .loader
 {
-    background-position: 0 50%;
-    padding-left: 21px;
+  background-position: 0 50%;
+  padding-left: 21px;
 }
 
 #content #index .index-left
 {
-    float: left;
-    width: 55%;
+  float: left;
+  width: 55%;
 }
 
 #content #index .index-right
 {
-    float: right;
-    width: 40%;
+  float: right;
+  width: 40%;
 }
 
 #content #index .data li
 {
-    display: none;
-    padding-top: 3px;
-    padding-bottom: 3px;
+  display: none;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
 #content #index .data li.odd
 {
-    color: #c0c0c0;
+  color: #c0c0c0;
 }
 
 #content #index .data li dt
 {
-    float: left;
-    white-space: nowrap;
-    width: 20%;
+  float: left;
+  white-space: nowrap;
+  width: 20%;
 }
 
 #content #index .data li dd
 {
-    float: right;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 80%
+  float: right;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 80%
 }
 
 #content #index .data li dd.odd
 {
-    color: #999;
+  color: #999;
 }
 
 #content #index .data dt span
 {
-    background-position: 1px 50%;
-    display: block;
-    padding-left: 22px;
+  background-position: 1px 50%;
+  display: block;
+  padding-left: 22px;
 }
 
 #content #index #instance h2 { background-image: url( ../../img/ico/server.png ); }
@@ -149,47 +149,47 @@
 
 #content #index #system
 {
-    position: relative;
+  position: relative;
 }
 
 #content #index #system .reload
 {
-    background-image: url( ../../img/ico/arrow-circle.png );
-    background-position: 50% 50%;
-    display: block;
-    height: 30px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 30px;
+  background-image: url( ../../img/ico/arrow-circle.png );
+  background-position: 50% 50%;
+  display: block;
+  height: 30px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30px;
 }
 
 #content #index #system .reload.loader
 {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 #content #index #system .reload span
 {
-    display: none;
+  display: none;
 }
 
 #content #index #system .content p
 {
-    margin-top: 10px;
-    margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 5px;
 }
 
 #content #index #system .content .no-info
 {
-    color: #c0c0c0;
-    display: none;
-    font-style: italic;
+  color: #c0c0c0;
+  display: none;
+  font-style: italic;
 }
 
 #content #index #jvm-memory h2 { background-image: url( ../../img/ico/memory.png ); }
 
 #content #index #jvm-memory-bar
 {
-    margin-top: 20px;
+  margin-top: 20px;
 }
