@@ -218,11 +218,19 @@ sammy.get
                   $( '#analysis-error', analysis_element )
                     .show();
 
-                  $( '#analysis-error .head a span', analysis_element )
-                    .text( error_message[1] );
+                  if( error_message )
+                  {
+                    $( '#analysis-error .head a span', analysis_element )
+                      .text( error_message[1] );
 
-                  $( '#analysis-error .body', analysis_element )
-                    .text( error_message[2].replace( /(\s+at\s+)/g, " at\n" ) );
+                    $( '#analysis-error .body', analysis_element )
+                      .text( error_message[2].replace( /(\s+at\s+)/g, " at\n" ) );
+                  }
+                  else
+                  {
+                    $( '#analysis-error .head a span', analysis_element )
+                      .text( error_thrown );
+                  }
                 }
               },
               complete : function()

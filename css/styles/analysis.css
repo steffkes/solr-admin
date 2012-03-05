@@ -126,6 +126,12 @@
   padding-left: 35px;
 }
 
+#content #analysis .analysis-error .head a
+{
+  color: #fff;
+  cursor: auto;
+}
+
 #content #analysis #analysis-result
 {
   overflow: auto;
