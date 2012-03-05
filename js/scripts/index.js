@@ -27,8 +27,10 @@ var parse_memory_value = function( value )
   return value;
 };
 
-var generate_bar = function( bar_holder, bar_data, convert_label_values )
+var generate_bar = function( bar_container, bar_data, convert_label_values )
 {
+  bar_holder = $( '.bar-holder', bar_container );
+
   var bar_level = 1;
   var max_width = Math.round( $( '.bar-max', bar_holder ).width() );
   $( '.bar-max.val', bar_holder ).text( bar_data['max'] );
@@ -51,7 +53,7 @@ var generate_bar = function( bar_holder, bar_data, convert_label_values )
 
   var percentage = ( ( ( bar_data['used'] || bar_data['total'] ) / bar_data['max'] ) * 100 ).toFixed(1);
         
-  var hl = $( '[data-desc="' + bar_holder.attr( 'id' ) + '"]' );
+  var hl = $( '[data-desc="' + bar_container.attr( 'id' ) + '"]' );
 
   $( '.bar-desc', hl )
     .remove();
