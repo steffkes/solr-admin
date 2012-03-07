@@ -166,12 +166,15 @@
 
 #menu ul ul li.active
 {
-  background-color: #fff;
   border-right-color: #fff;
 }
 
 #menu ul ul li.active a
 {
+  background-color: #fff;
+  box-shadow: -5px 0px 10px #c0c0c0;
+  -moz-box-shadow: -5px 0px 10px #c0c0c0;
+  -webkit-box-shadow: -5px 0px 10px #c0c0c0;
   color: #333;
 }
 
