@@ -171,20 +171,20 @@ var load_terminfo = function( trigger_element, core_basepath, field, data_elemen
           histogram_element
             .sparkline
             (
-            histogram_values,
-            {
-              type : 'bar',
-              barColor : '#c0c0c0',
-              zeroColor : '#000000',
-              height : histogram_element.height(),
-              barWidth : 46,
-              barSpacing : 3
-            }
+              histogram_values,
+              {
+                type : 'bar',
+                barColor : '#c0c0c0',
+                zeroColor : '#000000',
+                height : histogram_element.height(),
+                barWidth : 46,
+                barSpacing : 3
+              }
             );
 
           1 === histogram_values.length
             ? histogram_element.addClass( 'single' )
-            : histogram_element.removClass( 'single' );
+            : histogram_element.removeClass( 'single' );
         }
 
       },
