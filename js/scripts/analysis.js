@@ -213,24 +213,21 @@ sammy.get
                 }
                 else
                 {
-                  var error_message = error_thrown.match( /^(.+Exception):\s+(.*)$/ );
-
                   $( '#analysis-error', analysis_element )
                     .show();
 
-                  if( error_message )
+                  var response = null;
+                  try
                   {
-                    $( '#analysis-error .head a span', analysis_element )
-                      .text( error_message[1] );
+                    eval( 'response = ' + xhr.responseText + ';' );
+                  }
+                  catch( e )
+                  {
+                    console.error( e );
+                  }
 
-                    $( '#analysis-error .body', analysis_element )
-                      .text( error_message[2].replace( /(\s+at\s+)/g, " at\n" ) );
-                  }
-                  else
-                  {
-                    $( '#analysis-error .head a span', analysis_element )
-                      .text( error_thrown );
-                  }
+                  $( '#analysis-error .body', analysis_element )
+                    .text( response ? response.error.msg : xhr.responseText );
                 }
               },
               complete : function()
