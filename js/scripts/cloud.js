@@ -155,6 +155,147 @@ var init_debug = function( cloud_element )
     );
 };
 
+var generate_graph = function( graph_element, graph_data )
+{
+  var st = new $jit.ST
+  (
+    {
+      injectInto: 'canvas',
+      duration: 80,
+      levelDistance: 30,
+      Navigation : {
+        enable : true,
+        panning : true
+      },
+      Node: {
+        height: 20,
+        width: 160,
+        //autoHeight : true,
+        //autoWidth : true,
+        type: 'rectangle',
+        overridable: true
+      },
+      Edge: {
+        type: 'bezier',
+        overridable: true
+      },
+      onCreateLabel : function( label, node )
+      {
+        label.onclick = function()
+        {
+          st.onClick( node.id );
+        };
+
+        var label_text = node.name;
+        if( node.data.leader )
+        {
+            label_text = label_text + ' ❖';
+        }
+
+        label.innerHTML = '&nbsp;' + label_text;
+
+        label.className += ' ' + node.data.type;
+
+        if( node.data.state )
+        {
+          label.className += ' state-' + node.data.state;
+        }
+
+        if( node.data.leader )
+        {
+          label.className += ' leader';
+        }
+
+        if( node.data.live )
+        {
+          label.className += ' live';
+        }
+      }
+    }
+  );
+
+  st.loadJSON( graph_data );
+  st.compute();
+  st.onClick( st.root );
+}
+
+var init_graph = function( graph_element )
+{
+  $.ajax
+  (
+    {
+      url : core_basepath + '/zookeeper?wt=json&detail=true&path=%2Fclusterstate.json',
+      dataType : 'json',
+      context : graph_element,
+      beforeSend : function( xhr, settings )
+      {
+        this
+          .show();
+      },
+      success : function( response, text_status, xhr )
+      {
+        var state = null;
+        eval( 'state = ' + response.znode.data + ';' );
+        
+        var collections = [];
+        for( var c in state )
+        {
+          var shards = [];
+          for( var s in state[c] )
+          {
+            var nodes = [];
+            for( var n in state[c][s] )
+            {
+              var node = {
+                id: state[c][s][n].node_name,
+                name: state[c][s][n].base_url,
+                data: {
+                  type : 'node',
+                  state : state[c][s][n].state,
+                  leader : 'true' === state[c][s][n].leader
+                }
+              };
+              nodes.push( node );
+            }
+
+            var shard = {
+              id: s,
+              name: s,
+              data: {
+                type : 'shard',
+              },
+              children: nodes
+            };
+            shards.push( shard );
+          }
+
+          var collection = {
+            id: c,
+            name: c,
+            data: {
+              type : 'collection',
+            },
+            children: shards
+          };
+          collections.push( collection );
+        }
+      
+        collections[0].children[1].children[1].data.live = true;
+
+        var graph_data = collections.shift();
+        generate_graph( graph_element, graph_data );
+      },
+      error : function( xhr, text_status, error_thrown)
+      {
+      },
+      complete : function( xhr, text_status )
+      {
+      }
+    }
+  );
+
+};
+
 var init_tree = function( tree_element )
 {
   $.ajax
@@ -340,6 +481,18 @@ sammy.get
             {
               $( this ).addClass( 'current' );
               init_tree( $( '#tree-content', cloud_element ) );
+            }
+          );
+
+        $( '.graph', navigation_element )
+          .die( 'activate' )
+          .live
+          (
+            'activate',
+            function( event )
+            {
+              $( this ).addClass( 'current' );
+              init_graph( $( '#graph-content', cloud_element ) );
             }
           );
 

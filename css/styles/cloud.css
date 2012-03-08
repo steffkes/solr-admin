@@ -23,6 +23,7 @@
 }
 
 #content #cloud #navigation .tree a { background-image: url( ../../img/ico/folder-tree.png ); }
+#content #cloud #navigation .graph a { background-image: url( ../../img/ico/molecule.png ); }
 #content #cloud #navigation .dump a { background-image: url( ../../img/ico/download-cloud.png ); }
 
 #content #cloud #navigation ul a:hover
@@ -274,4 +275,41 @@
 {
   background-color: #f0f0f0;
   color: #00f;
+}
+
+
+#content #cloud #graph-content #canvas
+{
+  height: 500px;
+}
+
+#content #cloud #graph-content .instance
+{
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 1px 3px;
+}
+
+#content #cloud #graph-content .instance.node
+{
+  background-color: #f0f0f0;
+  color: #c0c0c0;
+}
+
+#content #cloud #graph-content .instance.node.live
+{
+  background-color: #800;
+  color: #fff;
+}
+
+#content #cloud #graph-content .instance.node.live.state-active
+{
+  background-color: #080;
+}
+
+#content #cloud #graph-content .leader
+{
+  box-shadow: 0px 0px 5px #c0c0c0;
+  -moz-box-shadow: 0px 0px 5px #c0c0c0;
+  -webkit-box-shadow: 0px 0px 5px #c0c0c0;
 }
