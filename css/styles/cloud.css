@@ -1,3 +1,65 @@
+#content #cloud
+{
+  position: relative;
+}
+
+#content #cloud #navigation
+{
+  background-image: url( ../../img/div.gif );
+  background-position: 100% 0;
+  background-repeat: repeat-y;
+  position: relative;
+  width: 7%;
+}
+
+#content #cloud #navigation ul a
+{
+  background-position: 0 50%;
+  border-right: 1px solid #f0f0f0;
+  display: block;
+  margin-left: 1px;
+  padding: 3px 0;
+  padding-left: 21px;
+}
+
+#content #cloud #navigation .tree a { background-image: url( ../../img/ico/folder-tree.png ); }
+#content #cloud #navigation .dump a { background-image: url( ../../img/ico/download-cloud.png ); }
+
+#content #cloud #navigation ul a:hover
+{
+  background-color: #fafafa;
+}
+
+#content #cloud #navigation .current a
+{
+  background-color: #fff;
+  border-right-color: #fff;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  font-weight: bold;
+}
+
+#content #cloud #navigation .dump
+{
+  margin-top: 10px;
+}
+
+#content #cloud #navigation .dump a:hover
+{
+  color: #008;
+}
+
+#content #cloud #frame
+{
+  float: right;
+  width: 92%;
+}
+
+#content #cloud #frame .content
+{
+  display: none;
+}
+
 #content #cloud .loader
 {
   background-position: 0 50%;
@@ -16,46 +78,17 @@
   padding-left: 35px;
 }
 
-#content #cloud h2 { background-image: url( ../../img/ico/sitemap.png ); }
-
-#content #cloud
-{
-  position: relative;
-}
-
-#content #cloud a.debug
-{
-  background-color: #c0c0c0;
-  background-image: url( ../../img/ico/exclamation-button.png );
-  background-position: 5px 50%;
-  border-radius: 5px;
-  display: block;
-  padding: 2px 5px;
-  padding-left: 26px;
-  position: absolute;
-  left: 150px;
-  top: 3px;
-}
-
-#content #cloud a.debug:hover
-{
-  background-color: #b0b0b0;
-  box-shadow: 2px 2px 10px #c0c0c0;
-  -moz-box-shadow: 2px 2px 10px #c0c0c0;
-  -webkit-box-shadow: 2px 2px 10px #c0c0c0;
-}
-
 #content #cloud #debug
 {
   background-color: #fff;
-  box-shadow: 5px 5px 10px #c0c0c0;
-  -moz-box-shadow: 5px 5px 10px #c0c0c0;
-  -webkit-box-shadow: 5px 5px 10px #c0c0c0;
+  box-shadow: 0px 0px 10px #c0c0c0;
+  -moz-box-shadow: 0px 0px 10px #c0c0c0;
+  -webkit-box-shadow: 0px 0px 10px #c0c0c0;
   display: none;
   padding: 20px;
   position: absolute;
   left: 50px;
-  top: 50px;
+  top: 10px;
 }
 
 #content #cloud #debug ul
@@ -66,6 +99,7 @@
 #content #cloud #debug ul a
 {
   background-position: 4px 50%;
+  border-right: 0;
   display: block;
   padding: 2px 4px;
   padding-left: 25px;
