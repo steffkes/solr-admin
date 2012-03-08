@@ -39,8 +39,10 @@
 
 #content #cloud a.debug:hover
 {
-  background-color: #fff;
-  color: #00f;
+  background-color: #b0b0b0;
+  box-shadow: 2px 2px 10px #c0c0c0;
+  -moz-box-shadow: 2px 2px 10px #c0c0c0;
+  -webkit-box-shadow: 2px 2px 10px #c0c0c0;
 }
 
 #content #cloud #debug
