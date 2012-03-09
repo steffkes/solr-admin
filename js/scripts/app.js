@@ -73,15 +73,17 @@ var sammy = $.sammy
       {},
       function( context )
       {
-        $( 'li[id].active', app.menu_element )
+        var menu_wrapper = $( '#menu-wrapper' );
+
+        $( 'li[id].active', menu_wrapper )
           .removeClass( 'active' );
                 
-        $( 'ul li.active', app.menu_element )
+        $( 'li.active', menu_wrapper )
           .removeClass( 'active' );
 
         if( this.params.splat )
         {
-          var active_element = $( '#' + this.params.splat[0], app.menu_element );
+          var active_element = $( '#' + this.params.splat[0], menu_wrapper );
                     
           if( 0 === active_element.size() )
           {
@@ -129,7 +131,7 @@ var solr_admin = function( app_config )
 
   plugin_data = null,
     
-  this.menu_element = $( '#menu ul' );
+  this.menu_element = $( '#menu-selector' );
   this.config = config;
 
   this.run = function()
