@@ -427,13 +427,34 @@ var init_tree = function( tree_element )
                     }
                     else
                     {
-                      var data = response.znode.data
-                               ? '<pre>' + response.znode.data.esc() + '</pre>'
-                               : '<em>File "' + response.znode.path + '" has no Content</em>';
+                      var highlight = false;
+                      var data = '<em>File "' + response.znode.path + '" has no Content</em>';
+
+                      if( response.znode.data )
+                      {
+                        var classes = '';
+                        var path = response.znode.path.split( '.' );
+
+                        if( 1 < path.length )
+                        {
+                          highlight = true;
+                          classes = 'syntax language-' + path.pop().esc();
+                        }
+
+                        data = '<pre class="' + classes + '">'
+                             + response.znode.data.esc()
+                             + '</pre>';
+                      }
+                               
 
                       data_element
                           .show()
                           .html( data );
+
+                      if( highlight )
+                      {
+                        hljs.highlightBlock( data_element.get(0) );
+                      }
                     }
                   },
                   error : function( xhr, text_status, error_thrown)
