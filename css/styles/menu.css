@@ -35,7 +35,7 @@
 
 #menu-wrapper .active p a
 {
-  background-color: #c0c0c0; /* #a5a5a6 */
+  background-color: #c0c0c0;
   font-weight: bold;
 }
 
@@ -210,3 +210,43 @@
 #menu-selector .logging a { background-image: url( ../../img/ico/inbox-document-text.png ); }
 #menu-selector .plugins a { background-image: url( ../../img/ico/block.png ); }
 #menu-selector .dataimport a { background-image: url( ../../img/ico/document-import.png ); }
+
+
+#content #navigation
+{
+  border-right: 1px solid #e0e0e0;
+}
+
+#content #navigation a
+{
+  display: block;
+  padding: 4px 2px;
+}
+
+#content #navigation .current
+{
+  background-color: #fafafa;
+  border-color: #e0e0e0;
+  box-shadow: -5px 0px 10px #e0e0e0;
+  -moz-box-shadow: -5px 0px 10px #e0e0e0;
+  -webkit-box-shadow: -5px 0px 10px #e0e0e0;
+}
+
+#content #navigation a
+{
+  background-position: 5px 50%;
+  padding-left: 26px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#content #navigation a:hover
+{
+  background-color: #f0f0f0;
+}
+
+#content #navigation .current a
+{
+  background-color: #e0e0e0;
+  font-weight: bold;
+}

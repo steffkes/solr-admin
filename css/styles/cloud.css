@@ -5,40 +5,12 @@
 
 #content #cloud #navigation
 {
-  background-image: url( ../../img/div.gif );
-  background-position: 100% 0;
-  background-repeat: repeat-y;
-  position: relative;
-  width: 7%;
-}
-
-#content #cloud #navigation ul a
-{
-  background-position: 0 50%;
-  border-right: 1px solid #f0f0f0;
-  display: block;
-  margin-left: 1px;
-  padding: 3px 0;
-  padding-left: 21px;
+  width: 10%;
 }
 
 #content #cloud #navigation .tree a { background-image: url( ../../img/ico/folder-tree.png ); }
 #content #cloud #navigation .graph a { background-image: url( ../../img/ico/molecule.png ); }
 #content #cloud #navigation .dump a { background-image: url( ../../img/ico/download-cloud.png ); }
-
-#content #cloud #navigation ul a:hover
-{
-  background-color: #fafafa;
-}
-
-#content #cloud #navigation .current a
-{
-  background-color: #fff;
-  border-right-color: #fff;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  font-weight: bold;
-}
 
 #content #cloud #navigation .dump
 {
@@ -53,7 +25,7 @@
 #content #cloud #frame
 {
   float: right;
-  width: 92%;
+  width: 89%;
 }
 
 #content #cloud #frame .content
