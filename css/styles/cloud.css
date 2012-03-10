@@ -278,38 +278,16 @@
 }
 
 
-#content #cloud #graph-content #canvas
+#content #graph-content .node circle
 {
-  height: 500px;
+  fill: #f0f0f0;
+  stroke: #c0c0c0;
+  stroke-width: 1.5px;
 }
 
-#content #cloud #graph-content .instance
+#content #graph-content .link
 {
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  padding: 1px 3px;
-}
-
-#content #cloud #graph-content .instance.node
-{
-  background-color: #f0f0f0;
-  color: #c0c0c0;
-}
-
-#content #cloud #graph-content .instance.node.live
-{
-  background-color: #800;
-  color: #fff;
-}
-
-#content #cloud #graph-content .instance.node.live.state-active
-{
-  background-color: #080;
-}
-
-#content #cloud #graph-content .leader
-{
-  box-shadow: 0px 0px 5px #c0c0c0;
-  -moz-box-shadow: 0px 0px 5px #c0c0c0;
-  -webkit-box-shadow: 0px 0px 5px #c0c0c0;
+  fill: none;
+  stroke: #c0c0c0;
+  stroke-width: 1.5px;
 }

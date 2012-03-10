@@ -28,7 +28,7 @@ require
     'lib/order!lib/jquery.timeago',
     'lib/order!lib/highlight',
     'lib/order!lib/ZeroClipboard',
-    'lib/order!lib/jit',
+    'lib/order!lib/d3',
     'lib/order!scripts/app',
 
     'lib/order!scripts/analysis',

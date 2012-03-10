@@ -157,67 +157,86 @@ var init_debug = function( cloud_element )
 
 var generate_graph = function( graph_element, graph_data )
 {
-  var st = new $jit.ST
-  (
-    {
-      injectInto: 'canvas',
-      duration: 80,
-      levelDistance: 30,
-      Navigation : {
-        enable : true,
-        panning : true
-      },
-      Node: {
-        height: 20,
-        width: 160,
-        //autoHeight : true,
-        //autoWidth : true,
-        type: 'rectangle',
-        overridable: true
-      },
-      Edge: {
-        type: 'bezier',
-        overridable: true
-      },
-      onCreateLabel : function( label, node )
-      {
-        label.onclick = function()
-        {
-          st.onClick( node.id );
-        };
+  var w = 900,
+      h = 300;
 
-        var label_text = node.name;
-        if( node.data.leader )
-        {
-            label_text = label_text + ' ❖';
-        }
+  var tree = d3.layout.tree()
+      .size([h, w - 400]);
 
-        label.innerHTML = '&nbsp;' + label_text;
+  var diagonal = d3.svg.diagonal()
+      .projection(function(d) { return [d.y, d.x]; });
 
-        label.className += ' ' + node.data.type;
+  var vis = d3.select("#canvas").append("svg")
+      .attr("width", w)
+      .attr("height", h)
+    .append("g")
+      .attr("transform", "translate(100, 0)");
 
-        if( node.data.state )
-        {
-          label.className += ' state-' + node.data.state;
-        }
+  var nodes = tree.nodes(graph_data);
 
-        if( node.data.leader )
-        {
-          label.className += ' leader';
-        }
+  var link = vis.selectAll("path.link")
+      .data(tree.links(nodes))
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", diagonal);
 
-        if( node.data.live )
-        {
-          label.className += ' live';
-        }
-      }
-    }
-  );
+  var node = vis.selectAll("g.node")
+      .data(nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
-  st.loadJSON( graph_data );
-  st.compute();
-  st.onClick( st.root );
-}
+  node.append("circle")
+      .attr("r", 4.5);
+
+  node.append("text")
+      .attr("dx", function(d) { return d.children ? -8 : 8; })
+      .attr("dy", 3)
+      .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
+      .text(function(d) { return d.name; });
+
+  /*
+  var r = 860 / 2;
+
+  var tree = d3.layout.tree()
+      .size([360, r - 120])
+      .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+
+  var diagonal = d3.svg.diagonal.radial()
+      .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+
+  var vis = d3.select("#canvas").append("svg")
+      .attr("width", r * 2)
+      .attr("height", r * 2 - 150)
+    .append("g")
+      .attr("transform", "translate(" + r + "," + r + ")");
+
+  var nodes = tree.nodes(graph_data);
+
+  var link = vis.selectAll("path.link")
+      .data(tree.links(nodes))
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", diagonal);
+
+  var node = vis.selectAll("g.node")
+      .data(nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+
+  node.append("circle")
+      .attr("r", 4.5);
+
+  node.append("text")
+      .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
+      .attr("dy", ".31em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
+      .text(function(d) { return d.name; });
+  //*/
+
+};
 
 var init_graph = function( graph_element )
 {
