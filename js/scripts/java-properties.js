@@ -45,6 +45,12 @@ sammy.get
           var properties_content = [];
           var properties_order = [];
 
+          var workaround = xhr.responseText.match( /"(line\.separator)"\s*:\s*"(.+?)"/ );
+          if( workaround && workaround[2] )
+          {
+            system_properties[workaround[1]] = workaround[2];
+          }
+
           for( var key in system_properties )
           {
             var displayed_key = key.replace( /\./g, '.&#8203;' );
