@@ -122,7 +122,7 @@
 #content #cloud #debug .debug
 {
   border: 1px solid #f0f0f0;
-  max-height: 400px;
+  max-height: 350px;
   overflow: auto;
   padding: 5px;
   width: 500px;
