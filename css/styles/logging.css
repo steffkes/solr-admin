@@ -81,10 +81,11 @@
 #content #logging .jstree li li li li .selector-holder { left: 386px; }
 #content #logging .jstree li li li li li .selector-holder { left: 368px; }
 #content #logging .jstree li li li li li li .selector-holder { left: 350px; }
+#content #logging .jstree li li li li li li li .selector-holder { left: 342px; }
 
 #content #logging .jstree .selector
 {
-  border: 1px solid #fff;
+  border: 1px solid transparent;
   position: relative;
 }
 
