@@ -298,8 +298,6 @@ var init_graph = function( graph_element )
           };
           collections.push( collection );
         }
-      
-        collections[0].children[1].children[1].data.live = true;
 
         var graph_data = collections.shift();
         generate_graph( graph_element, graph_data );
