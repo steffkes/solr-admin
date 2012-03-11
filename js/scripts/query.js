@@ -15,13 +15,55 @@
  limitations under the License.
 */
 
+var core_basepath = null;
+
+var load_searchhandler = function( query_form )
+{
+  $.ajax
+  (
+    {
+      url : core_basepath + '/admin/mbeans?cat=QUERYHANDLER&wt=json',
+      dataType : 'json',
+      beforeSend : function( xhr, settings )
+      {
+      },
+      success : function( response, text_status, xhr )
+      {
+        var handlers = response['solr-mbeans'][1];
+        var search_handlers = [];
+
+        for( var key in handlers )
+        {
+          if( handlers[key]['class'] !== key &&
+            handlers[key]['class'] === 'org.apache.solr.handler.component.SearchHandler' )
+          {
+            search_handlers.push( '<option value="' + key.esc() + '">' + key.esc() + '</option>' );
+          }
+        }
+
+        $( '#qt', query_form )
+          .html( search_handlers.join( "\n" ) );
+
+        $( '#qt option[value="/select"]', query_form )
+          .attr( 'selected', 'selected' );
+      },
+      error : function( xhr, text_status, error_thrown)
+      {
+      },
+      complete : function( xhr, text_status )
+      {
+      }
+    }
+  );
+}
+
 // #/:core/query
 sammy.get
 (
   /^#\/([\w\d-]+)\/(query)$/,
   function( context )
   {
-    var core_basepath = this.active_core.attr( 'data-basepath' );
+    core_basepath = this.active_core.attr( 'data-basepath' );
     var content_element = $( '#content' );
         
     $.get
@@ -37,6 +79,8 @@ sammy.get
         var url_element = $( '#url', query_element );
         var result_element = $( '#result', query_element );
         var response_element = $( '#response iframe', result_element );
+
+        load_searchhandler( query_form );
 
         url_element
           .die( 'change' )
@@ -135,8 +179,15 @@ sammy.get
                 form_values.push( all_form_values[i] );
               }
 
+              var handler_path = $( '#qt', query_form ).val();
+              if( '/' !== handler_path[0] )
+              {
+                form_values.push( { name : 'qt', value : handler_path.esc() } );
+                handler_path = '/select';
+              }
+
               var query_url = window.location.protocol + '//' + window.location.host
-                            + core_basepath + '/select?' + $.param( form_values );
+                            + core_basepath + handler_path + '?' + $.param( form_values );
                             
               url_element
                 .attr( 'href', query_url )
