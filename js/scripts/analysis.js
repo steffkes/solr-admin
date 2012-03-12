@@ -289,8 +289,8 @@ sammy.get
                   var colspan = 1;
                   var elements = analysis_data[type][i+1];
                   var elements_count = global_elements_count;
-                                    
-                  if( !elements[0].positionHistory )
+                  
+                  if( !elements[0] || !elements[0].positionHistory )
                   {
                     colspan = elements_count;
                     elements_count = 1;
