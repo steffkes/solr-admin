@@ -96,10 +96,7 @@ var sammy = $.sammy
                     
           if( 0 === active_element.size() )
           {
-            var first_core = $( 'li[data-basepath]', app.menu_element ).attr( 'id' );
-            var first_core_url = context.path.replace( new RegExp( '/' + this.params.splat[0] + '/' ), '/' + first_core + '/' );
-
-            context.redirect( first_core_url );
+            this.app.error( 'There exists no core with name "' + this.params.splat[0] + '"' );
             return false;
           }
 
