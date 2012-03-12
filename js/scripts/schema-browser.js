@@ -1145,9 +1145,9 @@ sammy.get
         data_element
           .hide();
       };
-
-      delete app.schema_browser_data;
     }
+
+    delete app.schema_browser_data;
 
     sammy.trigger
     (
