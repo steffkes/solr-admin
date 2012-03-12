@@ -15,6 +15,7 @@
  limitations under the License.
 */
 
+var current_core = null;
 var cookie_name = 'schema-browser_autoload';
 
 var luke_array_to_struct = function( array )
@@ -110,11 +111,12 @@ var load_terminfo = function( trigger_element, core_basepath, field, data_elemen
 
             topterms_frq_last = topterms[i+1];
             topterms_content += '<li class="clearfix">'
-                                             +  '<p><span>' + topterms_frq_last.esc() + '</span></p>' + "\n"
-                                             +  '<ul>' + "\n";
+                             +  '<p><span>' + topterms_frq_last.esc() + '</span></p>' + "\n"
+                             +  '<ul>' + "\n";
             }
 
-            topterms_content += '<li><span>' + topterms[i].esc() + '</span></li>' + "\n";
+            var target = '#/' + current_core + '/query?q=' + field.esc() + ':' + encodeURIComponent( topterms[i] );
+            topterms_content += '<li><a href="' + target + '">' + topterms[i].esc() + '</a></li>' + "\n";
           }
 
           topterms_content += '</li>';
@@ -660,6 +662,7 @@ sammy.get
   function( context )
   {
     var core_basepath = this.active_core.attr( 'data-basepath' );
+    current_core = context.params.splat[0];
 
     var trigger_params = {
       active_core : this.active_core
