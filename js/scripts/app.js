@@ -66,6 +66,15 @@ var sammy = $.sammy
         }
       }
     );
+
+    this.bind
+    (
+      'error',
+      function( message, original_error )
+      {
+        alert( original_error.message );
+      }
+    );
         
     // activate_core
     this.before
