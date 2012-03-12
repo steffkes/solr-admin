@@ -15,9 +15,6 @@
 {
   background-color: #fafafa;
   border-color: #c0c0c0;
-  box-shadow: -5px 0px 10px #c0c0c0;
-  -moz-box-shadow: -5px 0px 10px #c0c0c0;
-  -webkit-box-shadow: -5px 0px 10px #c0c0c0;
 }
 
 #menu-wrapper p a
@@ -177,9 +174,6 @@
 {
   background-color: #d0d0d0;
   border-color: #d0d0d0;
-  box-shadow: -5px 0px 10px #c0c0c0;
-  -moz-box-shadow: -5px 0px 10px #c0c0c0;
-  -webkit-box-shadow: -5px 0px 10px #c0c0c0;
   color: #333;
 }
 
@@ -227,9 +221,6 @@
 {
   background-color: #fafafa;
   border-color: #e0e0e0;
-  box-shadow: -5px 0px 10px #e0e0e0;
-  -moz-box-shadow: -5px 0px 10px #e0e0e0;
-  -webkit-box-shadow: -5px 0px 10px #e0e0e0;
 }
 
 #content #navigation a
