@@ -120,8 +120,7 @@ sammy.get
             active_core : context.active_core,
             callback :  function( dataimport_handlers )
             {
-
-              var handlers_element = $( '.handler', form_element );
+              var handlers_element = $( '#navigation ul', form_element );
               var handlers = [];
 
               for( var i = 0; i < dataimport_handlers.length; i++ )
@@ -134,13 +133,13 @@ sammy.get
                 );
               }
 
-              $( 'ul', handlers_element )
+              $( handlers_element )
                 .html( handlers.join( "\n") ) ;
                             
-              $( 'a[href="' + context.path + '"]', handlers_element ).parent()
-                .addClass( 'active' );
-                            
-              handlers_element
+              $( 'a[href="' + context.path + '"]', handlers_element ).closest( 'li' )
+                .addClass( 'current' );
+
+              $( 'form', form_element )
                 .show();
             }
           }
@@ -249,6 +248,7 @@ sammy.get
                   beforeSend : function( xhr, settings )
                   {
                     this
+                      .removeClass( 'error' )
                       .addClass( 'loader' );
                   },
                   success : function( response, text_status, xhr )
@@ -420,6 +420,9 @@ sammy.get
               error : function( xhr, text_status, error_thrown )
               {
                 console.debug( arguments );
+
+                reload_config_element
+                  .addClass( 'error' );
               },
               complete : function( xhr, text_status )
               {
@@ -439,10 +442,11 @@ sammy.get
               dataType : 'xml',
               beforeSend : function( xhr, settings )
               {
+                $( 'form button', form_element )
+                  .addClass( 'loader' );
               },
               success : function( response, text_status, xhr )
               {
-                console.debug( response );
                 dataimport_fetch_status();
               },
               error : function( xhr, text_status, error_thrown )
@@ -451,6 +455,8 @@ sammy.get
               },
               complete : function( xhr, text_status )
               {
+                $( 'form button', form_element )
+                  .removeClass( 'loader' );
               }
             }
           );
