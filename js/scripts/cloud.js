@@ -488,10 +488,10 @@ var init_tree = function( tree_element )
   );
 };
 
-// #/cloud
+// #/~cloud
 sammy.get
 (
-  /^#\/(cloud)$/,
+  /^#\/~(cloud)$/,
   function( context )
   {
     core_basepath = $( 'li[data-basepath]', app.menu_element ).attr( 'data-basepath' );

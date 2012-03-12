@@ -96,10 +96,10 @@ sammy.bind
   }
 );
 
-// #/cores
+// #/~cores
 sammy.get
 (
-  /^#\/(cores)$/,
+  /^#\/~(cores)$/,
   function( context )
   {
     delete app.cores_template;

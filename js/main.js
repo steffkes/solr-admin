@@ -35,6 +35,7 @@ require
     'lib/order!scripts/cloud',
     'lib/order!scripts/cores',
     'lib/order!scripts/dataimport',
+    'lib/order!scripts/dashboard',
     'lib/order!scripts/file',
     'lib/order!scripts/index',
     'lib/order!scripts/java-properties',
@@ -44,9 +45,7 @@ require
     'lib/order!scripts/query',
     'lib/order!scripts/replication',
     'lib/order!scripts/schema-browser',
-    'lib/order!scripts/threads',
-
-    'lib/order!scripts/dashboard'
+    'lib/order!scripts/threads'
   ],
   function( $ )
   {
