@@ -464,6 +464,18 @@ sammy.get
                   array.push( { name : 'entity', value: entity } );
                 }
 
+                var start = parseInt( $( '#start', form ).val(), 10 );
+                if( start )
+                {
+                  array.push( { name : 'start', value: start } );
+                }
+
+                var rows = parseInt( $( '#rows', form ).val(), 10 );
+                if( rows )
+                {
+                  array.push( { name : 'rows', value: rows } );
+                }
+
                 var custom_parameters = $( '#custom_parameters', form ).val();
                 if( custom_parameters.length )
                 {
