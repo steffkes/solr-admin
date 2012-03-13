@@ -170,19 +170,19 @@ sammy.get
                   .addClass( 'hidden' );
 
 
-                var entities = [];
+                var entities = [ '<option value=""></option>' ];
 
                 $( 'document > entity', config )
                   .each
                   (
                     function( i, element )
                     {
-                      entities.push( '<option>' + $( element ).attr( 'name' ) + '</option>' );
+                      entities.push( '<option>' + $( element ).attr( 'name' ).esc() + '</option>' );
                     }
                   );
                                 
                 $( '#entity', form_element )
-                  .append( entities.join( "\n" ) );
+                  .html( entities.join( "\n" ) );
               },
               error : function( xhr, text_status, error_thrown )
               {
