@@ -355,7 +355,8 @@ sammy.get
                   }
 
                   details_element
-                    .html( details.join( ', ' ) );
+                    .html( details.join( ', ' ) )
+                    .show();
                 }
 
                 state_element
@@ -372,8 +373,14 @@ sammy.get
                     .addClass( 'failure' )
                     .show();
 
+                  $( '.time', state_element )
+                    .hide();
+
                   $( '.info strong', state_element )
                     .text( $( 'str[name=""]', response ).text() );
+
+                  $( '.info .details', state_element )
+                    .hide();
                                     
                   console.debug( 'rollback @ ', rollback_element.text() );
                 }
@@ -385,7 +392,8 @@ sammy.get
 
                   $( '.time', state_element )
                     .text( started_at )
-                    .timeago();
+                    .timeago()
+                    .show();
 
                   $( '.info strong', state_element )
                     .text( $( 'str[name=""]', response ).text() );
@@ -400,7 +408,8 @@ sammy.get
 
                   $( '.time', state_element )
                     .text( started_at )
-                    .timeago();
+                    .timeago()
+                    .show();
 
                   $( '.info', state_element )
                     .addClass( 'loader' );
