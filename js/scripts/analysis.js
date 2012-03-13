@@ -88,6 +88,9 @@ sammy.get
 
               $( 'option[value="fieldname\=' + response.schema.defaultSearchField + '"]', this )
                 .attr( 'selected', 'selected' );
+
+              this
+                .chosen();
             },
             error : function( xhr, text_status, error_thrown)
             {
