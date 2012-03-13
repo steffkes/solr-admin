@@ -454,6 +454,20 @@ sammy.get
                 $( 'form button', form_element )
                   .addClass( 'loader' );
               },
+              beforeSubmit : function( array, form, options )
+              {
+                var entity = $( '#entity', form ).val();
+                if( entity.length )
+                {
+                  array.push( { name : 'entity', value: entity } );
+                }
+
+                var custom_parameters = $( '#custom_parameters', form ).val();
+                if( custom_parameters.length )
+                {
+                  array.push( { name : 'custom_parameters', value: custom_parameters } );
+                }
+              },
               success : function( response, text_status, xhr )
               {
                 dataimport_fetch_status();
