@@ -258,6 +258,9 @@ sammy.bind
       $( 'option[value="' + params.route_params.path + '"]', related_select_element )
         .attr( 'selected', 'selected' );
 
+      related_select_element
+        .trigger( 'liszt:updated' );
+
       if( 'field' === type )
       {
         navigation_data.fields.push( value );
@@ -607,7 +610,8 @@ sammy.bind
 
                     related_select_element
                       .attr( 'rel', '#/' + $( 'p a', params.active_core ).html() + '/schema-browser' )
-                      .append( related_options );
+                      .append( related_options )
+                      .chosen();
                                             
                     related_select_element
                       .die( 'change' )
