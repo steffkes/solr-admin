@@ -374,7 +374,9 @@ sammy.get
                     .show();
 
                   $( '.time', state_element )
-                    .hide();
+                    .text( rollback_element.text() )
+                    .timeago()
+                    .show();
 
                   $( '.info strong', state_element )
                     .text( $( 'str[name=""]', response ).text() );
