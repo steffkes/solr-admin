@@ -15,6 +15,49 @@
  limitations under the License.
 */
 
+var convert_duration_to_seconds = function( str )
+{
+  var ret = 0;
+  var parts = new String( str ).split( '.' ).shift().split( ':' ).reverse();
+  var parts_count = parts.length;
+    
+  for( var i = 0; i < parts_count; i++ )
+  {
+    ret += parseInt( parts[i], 10 ) * Math.pow( 60, i );
+  }
+
+  return ret;
+}
+
+var convert_seconds_to_readable_time = function( value )
+{
+  var text = [];
+  value = parseInt( value );
+
+  var minutes = Math.floor( value / 60 );
+  var hours = Math.floor( minutes / 60 );
+
+  if( 0 !== hours )
+  {
+    text.push( hours + 'h' );
+    value -= hours * 60 * 60;
+    minutes -= hours * 60;
+  }
+
+  if( 0 !== minutes )
+  {
+    text.push( minutes + 'm' );
+    value -= minutes * 60;
+  }
+
+  if( 0 !== value )
+  {
+    text.push( value + 's' );
+  }
+
+  return text.join( ' ' );
+}
+
 sammy.bind
 (
   'dataimport_queryhandler_load',
@@ -314,8 +357,8 @@ sammy.get
                 {
                   var details = [];
                                     
-                  var requests = parseInt( $( 'str[name="Total Requests made to DataSource"]', response ).text() );
-                  if( NaN !== requests )
+                  var requests = parseInt( $( 'str[name="Total Requests made to DataSource"]', response ).text(), 10 );
+                  if( requests )
                   {
                     details.push
                     (
@@ -324,8 +367,8 @@ sammy.get
                     );
                   }
 
-                  var fetched = parseInt( $( 'str[name="Total Rows Fetched"]', response ).text() );
-                  if( NaN !== fetched )
+                  var fetched = parseInt( $( 'str[name="Total Rows Fetched"]', response ).text(), 10 );
+                  if( fetched )
                   {
                     details.push
                     (
@@ -334,8 +377,8 @@ sammy.get
                     );
                   }
 
-                  var skipped = parseInt( $( 'str[name="Total Documents Skipped"]', response ).text() );
-                  if( NaN !== requests )
+                  var skipped = parseInt( $( 'str[name="Total Documents Skipped"]', response ).text(), 10 );
+                  if( requests )
                   {
                     details.push
                     (
@@ -344,8 +387,8 @@ sammy.get
                     );
                   }
 
-                  var processed = parseInt( $( 'str[name="Total Documents Processed"]', response ).text() );
-                  if( NaN !== processed )
+                  var processed = parseInt( $( 'str[name="Total Documents Processed"]', response ).text(), 10 );
+                  if( processed )
                   {
                     details.push
                     (
@@ -416,8 +459,17 @@ sammy.get
                   $( '.info', state_element )
                     .addClass( 'loader' );
 
+                  var indexing_text = 'Indexing ...';
+
+                  var time_elapsed_text = $( 'str[name="Time Elapsed"]', response ).text();
+                  time_elapsed_text = convert_seconds_to_readable_time( convert_duration_to_seconds( time_elapsed_text ) );
+                  if( time_elapsed_text.length )
+                  {
+                    indexing_text = 'Indexing since ' + time_elapsed_text
+                  }
+
                   $( '.info strong', state_element )
-                    .text( 'Indexing ...' );
+                    .text( indexing_text );
                                     
                   dataimport_compute_details( response, $( '.info .details', state_element ) );
 
