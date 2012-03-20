@@ -155,7 +155,9 @@ var solr_admin = function( app_config )
         success : function( response )
         {
           self.cores_data = response.status;
-          is_multicore = 'undefined' === typeof response.status[''];
+
+          var core_count = 0; for( var i in response.status ) { core_count++; }
+          is_multicore = core_count > 1;
 
           if( is_multicore )
           {
