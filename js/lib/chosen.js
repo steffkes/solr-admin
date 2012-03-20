@@ -332,7 +332,6 @@ Copyright (c) 2011 by Harvest
         this.selected_item = this.container.find('.chzn-single').first();
         sf_width = dd_width - get_side_border_padding(this.search_container) - get_side_border_padding(this.search_field);
         sf_width = dd_width - get_side_border_padding(this.search_container);
-        console.debug( dd_width, get_side_border_padding(this.search_container), get_side_border_padding(this.search_field), sf_width );
         this.search_field.css({
           "width": sf_width + "px"
         });
