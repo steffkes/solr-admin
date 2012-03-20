@@ -126,15 +126,15 @@ sammy.get
   }
 );
 
-// #/cores
+// #/~cores
 sammy.get
 (
-  /^#\/(cores)\//,
+  /^#\/~(cores)\//,
   function( context )
   {
     var content_element = $( '#content' );
 
-    var path_parts = this.path.match( /^(.+\/cores\/)(.*)$/ );
+    var path_parts = this.path.match( /^(.+\/~cores\/)(.*)$/ );
     var current_core = path_parts[2];
 
     sammy.trigger
