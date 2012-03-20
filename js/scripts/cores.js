@@ -59,7 +59,12 @@ sammy.bind
 
     for( var core in params.cores )
     {
-      navigation_content.push( '<li><a href="' + params.basepath + core + '">' + core + '</a></li>' );
+      var core_name = core;
+      if( !core_name )
+      {
+        core_name = '<em>(empty)</em>';
+      }
+      navigation_content.push( '<li><a href="' + params.basepath + core + '">' + core_name + '</a></li>' );
     }
 
     params.navigation_element
