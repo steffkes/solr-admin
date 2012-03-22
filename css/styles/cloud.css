@@ -5,11 +5,12 @@
 
 #content #cloud #navigation
 {
-  width: 10%;
+  width: 11%;
 }
 
 #content #cloud #navigation .tree a { background-image: url( ../../img/ico/folder-tree.png ); }
 #content #cloud #navigation .graph a { background-image: url( ../../img/ico/molecule.png ); }
+#content #cloud #navigation .rgraph a { background-image: url( ../../img/ico/asterisk.png ); }
 #content #cloud #navigation .dump a { background-image: url( ../../img/ico/download-cloud.png ); }
 
 #content #cloud #navigation .dump
@@ -25,7 +26,7 @@
 #content #cloud #frame
 {
   float: right;
-  width: 89%;
+  width: 88%;
 }
 
 #content #cloud #frame .content
@@ -249,17 +250,63 @@
   color: #00f;
 }
 
+#content #graph-content .node
+{
+  fill: #333;
+}
 
 #content #graph-content .node circle
 {
-  fill: #f0f0f0;
+  fill: #fff;
   stroke: #c0c0c0;
   stroke-width: 1.5px;
+}
+
+#content #graph-content .node.lvl-2 text
+{
+  cursor: pointer;
+}
+
+#content #graph-content .node.lvl-2:hover text
+{
+  fill: #008 !important;
 }
 
 #content #graph-content .link
 {
   fill: none;
-  stroke: #c0c0c0;
+  stroke: #e0e0e0;
   stroke-width: 1.5px;
+}
+
+#content #graph-content .node.pending circle
+{
+  stroke: #f0f0f0;
+}
+
+#content #graph-content .node.pending text
+{
+  fill: #f0f0f0;
+}
+
+#content #graph-content .link.pending
+{
+  stroke: #f0f0f0;
+}
+
+#content #graph-content .node.leader circle
+{
+  fill: #fff;
+  stroke: #000;
+}
+
+#content #graph-content .node.leader text
+{
+  fill: #000;
+}
+
+#content #graph-content .link.lvl-1,
+#content #graph-content .link.leader
+{
+  stroke: #c0c0c0;
 }
