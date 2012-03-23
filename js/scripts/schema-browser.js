@@ -61,12 +61,12 @@ var load_terminfo = function( trigger_element, core_basepath, field, data_elemen
       context : terminfo_element,
       beforeSend : function( xhr, settings )
       {
-        trigger_element
+        $( 'span', trigger_element )
           .addClass( 'loader' );
       },
       success : function( response, text_status, xhr )
       {
-        trigger_element
+        $( 'span', trigger_element )
           .removeClass( 'loader' );
 
         var field_data = response.fields[field];

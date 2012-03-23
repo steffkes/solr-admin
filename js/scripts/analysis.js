@@ -173,7 +173,7 @@ sammy.get
               dataType : 'json',
               beforeSubmit : function( array, form, options )
               {
-                loader.show( button );
+                loader.show( $( 'span', button ) );
                 button.attr( 'disabled', true );
                                 
                 array.push( { name: 'analysis.showmatch', value: 'true' } );
@@ -234,7 +234,7 @@ sammy.get
               },
               complete : function()
               {
-                loader.hide( $( 'button', analysis_form ) );
+                loader.hide( $( 'span', button ) );
                 button.removeAttr( 'disabled' );
               }
             }
