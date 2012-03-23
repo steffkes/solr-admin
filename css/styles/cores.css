@@ -5,15 +5,12 @@
 #content #cores #frame
 {
   float: right;
-  width: 78%;
+  width: 86%;
 }
 
 #content #cores #navigation
 {
-  background-image: url( ../../img/div.gif );
-  background-position: 100% 0;
-  background-repeat: repeat-y;
-  width: 20%;
+  width: 12%;
 }
 
 #content #cores #list
@@ -23,26 +20,9 @@
   width: 100%;
 }
 
-#content #cores #list a
+#content #cores #navigation a
 {
-  border-right: 1px solid #f0f0f0;
-  display: block;
-  margin-left: 1px;
-  padding: 3px 0;
-}
-
-#content #cores #list a:hover
-{
-  background-color: #fafafa;
-}
-
-#content #cores #list .current a
-{
-  background-color: #fff;
-  border-right-color: #fff;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-  font-weight: bold;
+  padding-left: 5px;
 }
 
 #content #cores #frame .actions
