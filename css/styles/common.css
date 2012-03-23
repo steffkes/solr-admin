@@ -91,11 +91,7 @@ ul
 #header #wip-notice
 {
   background-color: #eceffa;
-  background-image: url( ../../img/ico/information-button.png );
-  background-position: 8px 7px;
   border: 1px solid #4465cb;
-  padding: 5px 10px;
-  padding-left: 31px;
   left: 212px;
   position: absolute;
   top: 0;
@@ -103,7 +99,11 @@ ul
 
 #header #wip-notice a
 {
+  background-image: url( ../../img/ico/information-button.png );
+  background-position: 8px 7px;
   display: block;
+  padding: 5px 10px;
+  padding-left: 31px;
 }
 
 #header #wip-notice span
