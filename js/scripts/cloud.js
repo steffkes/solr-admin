@@ -191,6 +191,45 @@ var helper_node_class = function( d )
   return classes.join( ' ' );
 };
 
+var helper_data = {
+  protocol: [],
+  host: [],
+  hostname: [],
+  port: [],
+  pathname: []
+};
+
+var helper_node_text = function( d )
+{
+  if( !d.data.uri )
+  {
+    return d.name;
+  }
+
+  var name = d.data.uri.hostname;
+  console.debug( name );
+
+  if( 1 !== helper_data.protocol.length )
+  {
+    name = d.data.uri.protocol + '//' + name;
+    console.debug( name );
+  }
+
+  if( 1 !== helper_data.port.length )
+  {
+    name += ':' + d.data.uri.port;
+    console.debug( name );
+  }
+
+  if( 1 !== helper_data.pathname.length )
+  {
+    name += d.data.uri.pathname;
+    console.debug( name );
+  }
+
+  return name;
+};
+
 var generate_graph = function( graph_element, graph_data, leaf_count )
 {
   var w = graph_element.width(),
@@ -230,7 +269,7 @@ var generate_graph = function( graph_element, graph_data, leaf_count )
     .attr( 'dy', function( d ) { return 5; } )
     .attr( 'text-anchor', function( d ) { return 0 === d.depth ? 'end' : 'start'; } )
     .attr( 'data-href', function( d ) { return d.name; } )
-    .text( function( d ) { return d.name; } );
+    .text( helper_node_text );
 
   $( 'text[data-href*="//"]', graph_element )
     .die( 'click' )
@@ -284,7 +323,7 @@ var generate_rgraph = function( graph_element, graph_data, leaf_count )
     .attr( 'text-anchor', function(d) { return d.x < 180 ? 'start' : 'end'; } )
     .attr( 'transform', function(d) { return d.x < 180 ? null : 'rotate(180)'; } )
     .attr( 'data-href', function( d ) { return d.name; } )
-    .text( function(d) { return d.name; } );
+    .text( helper_node_text );
 
   $( 'text[data-href*="//"]', graph_element )
     .die( 'click' )
@@ -327,12 +366,30 @@ var prepare_graph = function( graph_element, callback )
             for( var n in state[c][s] )
             {
               leaf_count++;
+
+              var uri = state[c][s][n].base_url;
+              var parts = uri.match( /^(\w+:)\/\/(([\w\d\.-]+)(:(\d+))?)(.+)$/ );
+              var uri_parts = {
+                protocol: parts[1],
+                host: parts[2],
+                hostname: parts[3],
+                port: parseInt( parts[5] || 80, 10 ),
+                pathname: parts[6]
+              };
+              
+              helper_data.protocol.push( uri_parts.protocol );
+              helper_data.host.push( uri_parts.host );
+              helper_data.hostname.push( uri_parts.hostname );
+              helper_data.port.push( uri_parts.port );
+              helper_data.pathname.push( uri_parts.pathname );
+
               var node = {
-                name: state[c][s][n].base_url,
+                name: uri,
                 data: {
                   type : 'node',
                   state : state[c][s][n].state,
-                  leader : 'true' === state[c][s][n].leader
+                  leader : 'true' === state[c][s][n].leader,
+                  uri : uri_parts
                 }
               };
               nodes.push( node );
@@ -359,6 +416,13 @@ var prepare_graph = function( graph_element, callback )
         }
 
         var graph_data = collections.shift();
+        
+        helper_data.protocol = $.unique( helper_data.protocol );
+        helper_data.host = $.unique( helper_data.host );
+        helper_data.hostname = $.unique( helper_data.hostname );
+        helper_data.port = $.unique( helper_data.port );
+        helper_data.pathname = $.unique( helper_data.pathname );
+
         callback( graph_element, graph_data, leaf_count );
       },
       error : function( xhr, text_status, error_thrown)
