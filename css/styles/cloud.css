@@ -267,6 +267,11 @@
   cursor: pointer;
 }
 
+#content #graph-content .node.lvl-2:hover circle
+{
+  stroke: #008 !important;
+}
+
 #content #graph-content .node.lvl-2:hover text
 {
   fill: #008 !important;
@@ -296,7 +301,7 @@
 
 #content #graph-content .node.leader circle
 {
-  fill: #fff;
+  fill: #c0c0c0;
   stroke: #000;
 }
 

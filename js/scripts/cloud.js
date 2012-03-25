@@ -202,30 +202,30 @@ var generate_graph = function( graph_element, graph_data, leaf_count )
   var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-  var vis = d3.select("#canvas").append("svg")
-    .attr('width', w)
-    .attr('height', h)
-    .append('g')
-      .attr('transform', 'translate(100, 0)');
+  var vis = d3.select( '#canvas' ).append( 'svg' )
+    .attr( 'width', w )
+    .attr( 'height', h)
+    .append( 'g' )
+      .attr( 'transform', 'translate(100, 0)' );
 
-  var nodes = tree.nodes(graph_data);
+  var nodes = tree.nodes( graph_data );
 
-  var link = vis.selectAll('path.link')
-    .data(tree.links(nodes))
-    .enter().append('path')
+  var link = vis.selectAll( 'path.link' )
+    .data( tree.links( nodes ) )
+    .enter().append( 'path' )
       .attr( 'class', helper_path_class )
-      .attr('d', diagonal);
+      .attr( 'd', diagonal );
 
-  var node = vis.selectAll('g.node')
-    .data(nodes)
-    .enter().append('g')
+  var node = vis.selectAll( 'g.node' )
+    .data( nodes )
+    .enter().append( 'g' )
       .attr( 'class', helper_node_class )
-      .attr('transform', function(d) { return 'translate(' + d.y + ',' + d.x + ')'; })
+      .attr( 'transform', function(d) { return 'translate(' + d.y + ',' + d.x + ')'; } )
 
-  node.append('circle')
-    .attr('r', 4.5);
+  node.append( 'circle' )
+    .attr( 'r', 4.5 );
 
-  node.append('text')
+  node.append( 'text' )
     .attr( 'dx', function( d ) { return 0 === d.depth ? -8 : 8; } )
     .attr( 'dy', function( d ) { return 5; } )
     .attr( 'text-anchor', function( d ) { return 0 === d.depth ? 'end' : 'start'; } )
@@ -246,45 +246,56 @@ var generate_graph = function( graph_element, graph_data, leaf_count )
 
 var generate_rgraph = function( graph_element, graph_data, leaf_count )
 {
-  var r = graph_element.width() / 2;
+  var max_val = Math.min( graph_element.width(), $( 'body' ).height() )
+  var r = max_val / 2;
 
-  var tree = d3.layout.tree()
-    .size([360, r - 120])
-    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+  var cluster = d3.layout.cluster()
+    .size([360, r - 160]);
 
   var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
-  var vis = d3.select('#canvas').append('svg')
-    .attr('width', r * 2)
-    .attr('height', r * 2 - 150)
-    .append('g')
-      .attr('transform', 'translate(' + r + ',' + r + ')');
+  var vis = d3.select( '#canvas' ).append( 'svg' )
+    .attr( 'width', r * 2 )
+    .attr( 'height', r * 2 )
+    .append( 'g' )
+      .attr( 'transform', 'translate(' + r + ',' + r + ')' );
 
-  var nodes = tree.nodes(graph_data);
+  var nodes = cluster.nodes( graph_data );
 
-  var link = vis.selectAll('path.link')
-    .data(tree.links(nodes))
-    .enter().append('path')
+  var link = vis.selectAll( 'path.link' )
+    .data( cluster.links( nodes ) )
+    .enter().append( 'path' )
       .attr( 'class', helper_path_class )
-      .attr('d', diagonal);
+      .attr( 'd', diagonal );
 
-  var node = vis.selectAll('g.node')
-    .data(nodes)
-    .enter().append('g')
+  var node = vis.selectAll( 'g.node' )
+    .data( nodes )
+    .enter().append( 'g' )
       .attr( 'class', helper_node_class )
-      .attr('transform', function(d) { return 'rotate(' + (d.x - 90) + ')translate(' + d.y + ')'; })
+      .attr( 'transform', function(d) { return 'rotate(' + (d.x - 90) + ')translate(' + d.y + ')'; } )
 
-  node.append('circle')
-    .attr('r', 4.5);
+  node.append( 'circle' )
+    .attr( 'r', 4.5 );
 
-  node.append('text')
-    .attr('dx', function(d) { return d.x < 180 ? 8 : -8; })
-    .attr('dy', '.31em')
-    .attr('text-anchor', function(d) { return d.x < 180 ? 'start' : 'end'; })
-    .attr('transform', function(d) { return d.x < 180 ? null : 'rotate(180)'; })
+  node.append( 'text' )
+    .attr( 'dx', function(d) { return d.x < 180 ? 8 : -8; } )
+    .attr( 'dy', '.31em' )
+    .attr( 'text-anchor', function(d) { return d.x < 180 ? 'start' : 'end'; } )
+    .attr( 'transform', function(d) { return d.x < 180 ? null : 'rotate(180)'; } )
     .attr( 'data-href', function( d ) { return d.name; } )
-    .text(function(d) { return d.name; });
+    .text( function(d) { return d.name; } );
+
+  $( 'text[data-href*="//"]', graph_element )
+    .die( 'click' )
+    .live
+    (
+      'click',
+      function()
+      {
+        location.href = $( this ).data( 'href' );
+      }
+    );
 };
 
 var prepare_graph = function( graph_element, callback )
