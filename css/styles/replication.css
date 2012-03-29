@@ -449,10 +449,8 @@
 
 #content #replication #navigation button
 {
-  /* background-position: 2px 50%; */
   display: block;
   margin-bottom: 10px;
-  /* padding-left: 21px; */
 }
 
 #content #replication #navigation button.optional
