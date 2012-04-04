@@ -99,7 +99,7 @@ var system_info = function( element, system_data )
 {
   // -- usage
 
-  var load_average = system_data['system']['uptime'].match( /load average: (.+)/ );
+  var load_average = ( system_data['system']['uptime'] || '' ).match( /load average: (.+)/ );
   if( load_average && load_average[1] )
   {
     var hl = $( '#system h2', element );
