@@ -239,10 +239,10 @@ sammy.get
             'dir_index' : app.dashboard_values['core']['directory']['index'],
             'jvm_version' : app.dashboard_values['jvm']['name'] + ' (' + app.dashboard_values['jvm']['version'] + ')',
             'processors' : app.dashboard_values['jvm']['processors'],
-            'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'],
-            'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'],
-            'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'],
-            'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version']
+            'solr_spec_version' : app.dashboard_values['lucene']['solr-spec-version'] || '-',
+            'solr_impl_version' : app.dashboard_values['lucene']['solr-impl-version'] || '-',
+            'lucene_spec_version' : app.dashboard_values['lucene']['lucene-spec-version'] || '-',
+            'lucene_impl_version' : app.dashboard_values['lucene']['lucene-impl-version'] || '-'
           };
 
           if( app.dashboard_values['core']['directory']['cwd'] )
