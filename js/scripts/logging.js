@@ -136,8 +136,16 @@ var logging_handler = function( response, text_status, xhr )
         {
           var selector = $( '.selector-holder', element.closest( 'li' ) );
 
-          $( 'a.trigger', selector )
+          var trigger = $( 'a.trigger', selector );
+
+          trigger
             .text( level.esc() );
+
+          if( element.hasClass( 'set' ) )
+          {
+            trigger
+              .addClass( 'set' );
+          }
 
           $( 'ul a[data-level="' + level + '"]', selector ).first()
             .addClass( 'level' );
