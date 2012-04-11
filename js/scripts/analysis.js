@@ -86,11 +86,29 @@ sammy.get
               this
                 .html( content );
 
-              $( 'option[value="fieldname\=' + response.schema.defaultSearchField + '"]', this )
+              $( 'option[value="fieldname\=' + ( context.params['type_or_name'] || response.schema.defaultSearchField ) + '"]', this )
                 .attr( 'selected', 'selected' );
 
               this
-                .chosen();
+                .chosen()
+                .trigger( 'change' );
+
+              var fields = 0;
+              for( var key in context.params )
+              {
+                if( 'string' === typeof context.params[key] )
+                {
+                  fields++;
+                  $( '[name="' + key + '"]', analysis_form )
+                    .val( context.params[key] );
+                }
+              }
+
+              if( 0 !== fields )
+              {
+                analysis_form
+                  .trigger( 'submit' );
+              }
             },
             error : function( xhr, text_status, error_thrown)
             {
