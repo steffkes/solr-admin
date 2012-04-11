@@ -153,6 +153,7 @@
   margin-right: 5px;
   text-align: right;
   width: 100px;
+  white-space: pre;
 }
 
 #content #schema-browser #data #field .field-options .analyzer a
