@@ -326,6 +326,25 @@
   color: #008;
 }
 
+#content #schema-browser #data #field .topterms-holder .head #query_link
+{
+  background-image: url( ../../img/ico/question-white.png );
+  background-position: 0 50%;
+  color: #c0c0c0;
+  padding-left: 21px;
+  margin-left: 5px;
+}
+
+#content #schema-browser #data #field .topterms-holder .head #query_link span
+{
+  visibility: hidden;
+}
+
+#content #schema-browser #data #field .topterms-holder .head #query_link:hover span
+{
+  visibility: visible;
+}
+
 #content #schema-browser .topterms-holder li
 {
   border-top: 1px solid  #999;

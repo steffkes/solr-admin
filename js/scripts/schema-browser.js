@@ -104,15 +104,15 @@ var load_terminfo = function( trigger_element, core_basepath, field, data_elemen
           {
             if( topterms_frq_last !== topterms[i+1] )
             {
-            if( topterms_frq_last )
-            {
-              topterms_content += '</ul></li>' + "\n";
-            }
+              if( topterms_frq_last )
+              {
+                topterms_content += '</ul></li>' + "\n";
+              }
 
-            topterms_frq_last = topterms[i+1];
-            topterms_content += '<li class="clearfix">'
-                             +  '<p><span>' + topterms_frq_last.esc() + '</span></p>' + "\n"
-                             +  '<ul>' + "\n";
+              topterms_frq_last = topterms[i+1];
+              topterms_content += '<li class="clearfix">'
+                               +  '<p><span>' + topterms_frq_last.esc() + '</span></p>' + "\n"
+                               +  '<ul>' + "\n";
             }
 
             var target = '#/' + current_core + '/query?q=' + field.esc() + ':' + encodeURIComponent( topterms[i] );
@@ -134,6 +134,9 @@ var load_terminfo = function( trigger_element, core_basepath, field, data_elemen
 
           $( 'p.head .max', topterms_holder_element )
             .html( field_data.distinct );
+
+          $( 'p.head #query_link', topterms_holder_element )
+            .attr( 'href', '#/' + current_core + '/query?q=' + field.esc() + ':[* TO *]' );
 
           $( 'ul li:even', topterms_table_element )
             .addClass( 'odd' );
