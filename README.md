@@ -1,8 +1,1 @@
-# solr admin
-
-> The idea was to create a new, fresh (and hopefully clean) Solr Admin Interface.
-https://issues.apache.org/jira/browse/SOLR-3162
-
-## License
-
-http://www.apache.org/licenses/LICENSE-2.0.html
+This Repository is no longer in use -- check [Apache's JIRA for 'web gui' Issues](https://issues.apache.org/jira/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+SOLR+AND+component+%3D+%22web+gui%22+AND+status+%3D+Open+ORDER+BY+priority+DESC&mode=hide)
